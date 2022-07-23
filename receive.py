@@ -1,31 +1,40 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.animation import FuncAnimation
 import serial
-import re
 import asyncio
 import struct
 
 
 
-#s = serial.Serial("/dev/ttyACM1", 115200)
+COM = serial.Serial("/dev/ttyACM1", 115200)
+#SOCK = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-def read_serial(serial, buffer):
-    if serial.in_waiting > 12:
-        buffer =  serial.read(12)
-        return True
-    else:
-        return False
-
-async def update_data(data, serial):
+async def update_data(serial, interval):
     buffer = bytearray(12)
+    _, writer = await asyncio.open_connection("localhost", 10501)
     while True:
-        readIn = read_serial(serial, buffer)
-        if readIn:
-            u,temp,time = struct.unpack_from("3f", buffer)
-            data[0].append(u)
-            data[1].append(temp)
-            data[2].append(time)
+        if serial.in_waiting > 16:
+            buffer = serial.read(16)
+            writer.write(buffer)
+            await writer.drain()
+            u,temp,time = struct.unpack_from("3f", buffer[0:12])
+            config = buffer[12:]
             print("u: {0:0.3f}, temp: {1:0.3f}, time: {2:0.3f}\n".format(u, temp, time))
-        await asyncio.sleep(0.05)
+            print("DTA: {}, Target temperature: {}, Target heat output: {}".format(config[0]//128, config[1], config[2]/16))
+            await asyncio.sleep(interval)
+            
+
+async def update_config(serial, interval):
+    reader, _ = await asyncio.open_connection("localhost", 10501)
+    data = await reader.read(4)
+    if data:
+       serial.write(data)
+    print("Config: {}".format(data))
+    await asyncio.sleep(interval)
+
+        
     
+async def main(com):
+    data_task = asyncio.create_task(update_data(com, 0.05))
+    config_task = asyncio.create_task(update_config(com, 0.05))
+    await asyncio.gather(data_task, config_task)
+    
+asyncio.run(main(COM))
