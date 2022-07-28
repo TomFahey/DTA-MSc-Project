@@ -1,6 +1,19 @@
-microcontroller/*.bak
-./cookies
-*.ipynb_checkpoints
-*.pyc:w
-launch.json
-*.txt
+./cookies//test/BrowserMetrics/BrowserMetrics-62C9E2F5-61EB.pma
+./cookies//test/BrowserMetrics/BrowserMetrics-62C9E3A0-6419.pma
+./cookies//test/BrowserMetrics/BrowserMetrics-62C9E330-62FE.pma
+./cookies//test/BrowserMetrics/BrowserMetrics-62C9E400-6510.pma
+./cookies//test/Default/Preferences
+./cookies//test/Local State
+./cookies//test/First Run
+./cookies//test/CrashpadMetrics-active.pma
+./cookies//test/chrome_debug.log
+.ipynb_checkpoints/graph-checkpoint.py
+.vscode/launch.json
+__pycache__/configure.cpython-37.pyc
+__pycache__/graph.cpython-37.pyc
+__pycache__/imaging.cpython-37.pyc
+__pycache__/receive.cpython-37.pyc
+__pycache__/settings.cpython-37.pyc
+microcontroller/main.bak.py
+microcontroller/main.bak2.py
+microcontroller/lib/adafruit_max31865_other.py
