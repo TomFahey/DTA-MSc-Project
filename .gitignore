@@ -1,1 +1,6 @@
-./microcontroller/*.bak
+microcontroller/*.bak
+cookies/
+*.ipynb_checkpoints
+*.pyc:w
+launch.json
+*.txt
