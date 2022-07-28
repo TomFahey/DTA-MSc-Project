@@ -17,3 +17,4 @@ __pycache__/settings.cpython-37.pyc
 microcontroller/main.bak.py
 microcontroller/main.bak2.py
 microcontroller/lib/adafruit_max31865_other.py
+./cookies/
