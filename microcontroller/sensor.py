@@ -73,7 +73,3 @@ class PIDSensor(Sensor):
         
     def read(self):
         return self.PID.u
-    
-    def reset(self):
-        self.PID.u = 0
-        return True
