@@ -1,4 +1,3 @@
-
 # Configuration tab for changing the DTA settings
 # Defines a number of slider/text input widgets for adjusting settings
 # such as target temperature and heating rate
@@ -9,6 +8,7 @@ from ipywidgets.widgets import FloatSlider, Button, IntSlider, Tab, Accordion
 from ipywidgets.widgets import Layout, HBox
 from IPython.core.display import display, HTML # IPython Notebook functions
 
+import asyncio
 
 # Import global settings, to be able to change the config
 import settings
@@ -16,18 +16,18 @@ from utils import Programme, ResponsiveDict, ResponsiveList
 
 class ProgrammeTab(widgets.Tab):
     def __init__(self,  **kwargs):
-        self.programme = settings.programme
         super().__init__(
             children =
             [
-                *[StageTab(stage) for stage in self.programme.stages],
+                *[StageTab(stage) for stage in settings.programme.stages],
                 StageTab()
             ],
             **kwargs
         )
-        for i, _ in enumerate(self.programme.stages):
+        for i, _ in enumerate(settings.programme.stages):
             self.set_title(i, 'Stage {}:'.format(i+1))
-        self.set_title(len(self.programme.stages), '+')
+        self.set_title(len(settings.programme.stages), '+')
+        self.selected_index = 0
         self.observe(self.new_tab_callback, names='selected_index')
 
     def new_tab_callback(self, change):
@@ -37,16 +37,19 @@ class ProgrammeTab(widgets.Tab):
         
 
     def add_tab(self):
-        if len(self.programme.stages) > 0:
-            self.programme.add_stage(self.programme.stages[-1].copy())
+        if len(settings.programme.stages) > 0:
+            settings.programme.add_stage(settings.programme.stages.copy()[-1])
         else:
-            self.programme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
-        tabs = [StageTab(stage) for stage in self.programme.stages]
+            settings.programme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
+        tabs = [StageTab(stage) for stage in settings.programme.stages]
         self.children = [*tabs, StageTab()]
-        for i, stage in enumerate(self.programme.stages):
+        for i, stage in enumerate(settings.programme.stages):
             self.set_title(i, 'Stage {}'.format(i+1))
-        self.set_title(len(self.programme.stages), '+')
+        self.set_title(len(settings.programme.stages), '+')
         self.selected_index = len(self.children) - 2
+
+    def reset(self):
+        self.__init__()
 
 
 class StageTab(widgets.Accordion):
@@ -134,3 +137,13 @@ app = ProgrammeTab(
                   padding='0 0 0 0')
 )
     
+
+async def work(app):
+    while True:
+        if not settings.connected:
+            #app = ProgrammeTab(
+            #    layout=Layout(margin='0 0 0 0',maxwidth='260px',maxheight='200px',
+            #                  padding='0 0 0 0')
+            #)
+            app.__init__()
+        await asyncio.sleep(0.2)
