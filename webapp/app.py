@@ -1,25 +1,30 @@
 ### Import external libraries
 import asyncio # Needed for asynchronous, non-blocking processing
-import struct  # Module for converting byte representation of variables to Python objects
-from IPython.core.display import display, HTML # IPython Notebook library functions
-from ipywidgets import Tab, Layout # IPyWidgets - the widgets used for the UI e.g buttons, boxes, etc.
+from IPython.core.display import display, HTML # IPython Notebook functions
+from ipywidgets import Tab, Layout # IPyWidgets - widgets used for UI e.g 
+                                   # buttons, boxes, etc.
+import ast
 import numpy as np
+from numpy import array
 
 ### Import local modules - the pages of the UI app
 import graph # Main page, with controls and graph of deltaT
 import configure # Configuration page, for changing DTA settings
-import imaging # Displays view from thermal imaging camera
-import webapp.settings as settings # Not a page - this module holds the global variables (data, config)
-                # accessed by the other ones
+#import imaging # Displays view from thermal imaging camera
+import settings # Not a page - this module holds the global variables 
+                # (data, config) accessed by the other ones
 
 ### Setup top-level widget environment
-tab = Tab(layout=Layout(margin='0 0 0 0')) # Tab widget - provides ability to switch between children 'tabs'
-# Add .app variables from the imported pages, containing their respective widgets 
-tab.children = [graph.app, configure.app, imaging.app]
+tab = Tab(layout=Layout(margin='0 0 0 0',maxwidth="300",maxheight="220")) # Tab widget - allows switching 
+                                           # between children 'tabs'
+
+# Add .app variables from the imported pages, containing their 
+# respective widgets 
+tab.children = [graph.app, configure.app]#, imaging.app]
 # Set the titles for each page
 tab.set_title(0, 'Main')
 tab.set_title(1, 'Config')
-tab.set_title(2, 'Imaging')
+#tab.set_title(2, 'Imaging')
 
 # Some annoying CSS settings to make sure the UI fills the entire screen, without margins
 display(HTML("<style>.jp-Cell { padding: 0 !important; }</style>"))
@@ -31,38 +36,81 @@ display(HTML("<style>.html { margin: 0 !important; }</style>"))
 # Adds the 'tab' python object to the HTML webpage, populating it with our app
 display(tab)
 
-# This is the routine that the run 
-async def work(reader, writer):
-    while True:
-        bytedata = await reader.read(16)
-        u,temp,time = struct.unpack_from("3f", bytedata[0:12])
-        settings.data = np.append(settings.data, [[u, temp, time]],axis=0)
-        device_config = bytedata[12:]
-        command_config = bytearray([
-                settings.config['Power']*128,
-                settings.config['TargetTemp'],
-                settings.config['TargetHeat']*16,
-                0
-            ])
-        if device_config != command_config:
-            writer.write(command_config)
-            await writer.drain()
-        await asyncio.sleep(0.05)
+# This is the routine that handles the datastream from the microcontroller,
+# reading in uploaded sensor data and storing it in the global variables,
+# as well as monitoring the microcontroller configuration, to ensure it
+# is in sync with the DTA Programme that has been programmed.
 
+async def work(reader, writer):
+    config = settings.config.copy()
+    while True:
+        try:
+            if config != settings.config:
+                config = settings.config.copy()
+                writer.write(b'CONFIG:' + str(config).encode('utf-8') +b'\n')
+            #await writer.drain()
+            writer.write(b'HISTORY:{}\n' if config['RUN'] else b'QUERY:{}\n')
+            await writer.drain()
+            msg = await reader.readline()
+            msg = msg.split(b'\n')[0].decode('utf-8')
+            data = ast.literal_eval(msg)
+            if settings.config['RUN']:
+                for key,val in data.items():
+                    if key in settings.data:
+                        settings.data[key] = val
+                    if key in settings.reading:
+                        settings.reading[key] = val[-1]
+            else:
+                for key,val in data.items():
+                    if key in settings.data:
+                        if type(val) == list:
+                            settings.data[key][-1] = val[-1]
+                        else:
+                            settings.data[key][-1] = val
+                settings.reading = data
+            await asyncio.sleep(0.2)
+        except:
+            print('Error in main loop')
+            await asyncio.sleep(0.2)
+        #await asyncio.sleep(0.2)
+
+#async def write(writer):
+#    while True:
+#        config = settings.config.copy()
+#        writer.write(bytes('CONFIG:' + str(config) +'\n', 'utf-8'))
+#        writer.write(b'HISTORY:{}\n' if config['RUN'] else b'QUERY:{}\n')
+#        await writer.drain()
+#        await asyncio.sleep(0.5)
+
+# This main function is called when the program is run, and sets up the
+# TCP connection to the forwarding server that reads the data from the
+# microcontroller over the serial port and forwards it over a TCP connection.
 async def main():
-    server = await asyncio.start_server(work, 'localhost', 10501)
-    addrs = ', '.join(str(addr) for addr in server.sockets)
-    print(f'Serving on {addrs}')
+    reader, writer = await asyncio.open_connection('localhost', 10501)
+    print('Connected to server')
+    #worktask = await work(reader, writer)
+    print('Entered main')
+    #loop.run_until_complete(work(reader,writer))
+    loop.create_task(work(reader, writer))
+    #coros = asyncio.gather(worktask)
+    #await coros
     
-    async with server:
-        await server.serve_forever()
 
 
 try:
     loop = asyncio.get_running_loop()
 except RuntimeError:
     loop = None
+    print('RuntimeError: No running loop found')
+
 
 if loop and loop.is_running():
+    #loop.set_debug(True)
     asyncio.run_coroutine_threadsafe(main(), loop)
     asyncio.run_coroutine_threadsafe(graph.work(), loop)
+    asyncio.run_coroutine_threadsafe(settings.work(), loop)
+    #loop.create_task(main())
+    #loop.create_task(graph.work())
+    #loop.create_task(settings.work())
+else:
+    print('Exited')
