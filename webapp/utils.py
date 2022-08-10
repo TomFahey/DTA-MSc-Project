@@ -11,11 +11,11 @@ class ResponsiveDict(UserDict):
     
     This callback function is then called whenever the __setitem__
     operation is performed on the corresponding key:value pair, for
-    a ResponsiveDict object. 
+    a ResponsiveDict object. E.g:
     
+    myResponsiveDict['somekey'] = some_new_value
     # Callback function associated with 'somekey' is called,
     # during assignment
-    myResponsiveDict['somekey'] = some_new_value
     
     When the callback function is called, it is automatically
     provided with two parameters:
