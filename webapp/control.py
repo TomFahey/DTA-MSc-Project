@@ -15,6 +15,14 @@ def callback_handler(button):
         args = ["xdotool", "key", "F5"]
         env = {'DISPLAY': ":0"}
         subprocess.Popen(args, env=env)
+    if button==btn3:
+        args = ["xdotool", "key", "Up"]
+        env = {'DISPLAY': ":0"}
+        subprocess.Popen(args, env=env)
+    if button==btn4:
+        args = ["xdotool", "key", "Down"]
+        env = {'DISPLAY': ":0"}
+        subprocess.Popen(args, env=env)
 
 def btn_callback(button):
     if loop is None:
