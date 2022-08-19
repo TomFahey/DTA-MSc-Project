@@ -1,16 +1,17 @@
 from sensor import Sensor
-from utils import Config
+from utils import ResponsiveDict
+#import asyncio
 
 class Log:
     
     def __init__(self, interval, sensors=[]):
         
         self.sensors = {sensor.name:sensor for sensor in sensors}
-        self.config = Config({'LOG': False})
+        self.config = ResponsiveDict({'LOG': False, 'INTERVAL': 0.25})
         self.config.set_callback('LOG', lambda vals, args :
                                  self.start() if vals[0]==False and vals[1]==True else
                                  self.reset() if vals[0]==True and vals[1]==False else
-                                 None)
+                                 print('Log callback called'))
         self.readings = {sensor.name:[sensor.read()] for sensor in sensors}
         self.interval = interval
         self.interval_ns = round(interval*1E9, 1)
@@ -49,10 +50,12 @@ class Log:
         return (readings, num_return)
     
     def start(self):
+        print('Started')
         if 'TIME' in self.sensors:
             self.sensors['TIME'].start()
 
     def reset(self, interval=None):
+        print('Log reset')
         _ = [sensor.reset() for sensor in self.sensors.values()]
         self.readings = {sensor.name:[sensor.read()] for sensor in self.sensors.values()}
         if interval:

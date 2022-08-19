@@ -3,12 +3,12 @@ import time
 def timeit(func, args):
     startTime = time.monotonic_ns()
     func(args)
-    return round((time.monotonic_ns()-startTime)/1e9, 1)
+    return round((time.monotonic_ns()-startTime)/1e9, 4)
 
 def timeit_ms(func, args):
     startTime = time.monotonic_ns()
     func(args)
-    return round((time.monotonic_ns()-startTime)/1e6, 1)
+    return round((time.monotonic_ns()-startTime)/1e6, 3)
 
 class ResponsiveDict(object):
     """

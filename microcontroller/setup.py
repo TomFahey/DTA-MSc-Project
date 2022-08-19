@@ -3,7 +3,9 @@ import board
 import busio
 from adafruit_bus_device.spi_device import SPIDevice
 import digitalio
-import adafruit_max31865
+#import adafruit_max31865
+from adafruit_max31865 import MAX31865
+from adafruit_max31856 import ThermocoupleType, MAX31856
 import pwmio
 
 # Define hardware connections
@@ -12,7 +14,8 @@ import pwmio
 SPI_MISO_PIN = board.GP12
 SPI_MOSI_PIN = board.GP11
 SPI_SCLK_PIN = board.GP14
-SPI_CS_PIN = board.GP10
+SPI_CS_PIN_1 = board.GP10 # MAX31865
+SPI_CS_PIN_2 = board.GP13 # MAX31856
 SPI_BAUDRATE = 5_000_000 # 5 MHz max clock for ICs
 
 ## PWM pin definitions and configuration
@@ -25,18 +28,29 @@ PWM_FREQ = 30_000 # 30 kHz PWM frequency
 
 # Setup SPI bus
 SPI = busio.SPI(SPI_SCLK_PIN, MISO=SPI_MISO_PIN, MOSI=SPI_MOSI_PIN)
-CS = digitalio.DigitalInOut(SPI_CS_PIN)
+CS_1 = digitalio.DigitalInOut(SPI_CS_PIN_1)
+CS_2 = digitalio.DigitalInOut(SPI_CS_PIN_2)
 
 ## Setup SPI devices
 
 ### Setup MAX31865 RTD temperature sensor breakout boards
+
 RTD_NOMINAL_RES_PT100 = 100.0
 RTD_NOMINAL_RES_PT1000 = 1000.0
 RTD_REF_RESISTOR_PT100 = 430.0
 RTD_REF_RESISTOR_PT1000 = 4300.0
-max31865 = adafruit_max31865.MAX31865(SPI, CS, rtd_nominal=RTD_NOMINAL_RES_PT100, \
-                                        ref_resistor=RTD_REF_RESISTOR_PT100, \
-                                        wires=4,baudrate=SPI_BAUDRATE)
+
+
+
+max31865 = MAX31865(
+        SPI,
+        CS_1,
+        rtd_nominal=RTD_NOMINAL_RES_PT100, 
+        ref_resistor=RTD_REF_RESISTOR_PT100,
+        wires=4,
+        baudrate=SPI_BAUDRATE
+    )
+
 ## Configure MAX31865 to run with voltage bias always on and continuous conversion mode
 max31865.auto_convert = True
 max31865.bias = True
@@ -46,9 +60,20 @@ print(max31865._read_u8(0x00))
 max31865._write_u8(0x00, 0xC0)
 print(max31865._read_u8(0x00))
 
-### Setup MAX31856 thermocouple temperature sensor breakout board:
-###TODO: Add support for MAX31856
 
+### Setup MAX31856 thermocouple temperature sensor breakout board:
+
+max31856 = MAX31856(
+        SPI,
+        CS_2,
+        ThermocoupleType.G32,
+        filter_frequency=50,
+        auto_conversion=True,
+        cj_disable=True,
+        baudrate=SPI_BAUDRATE
+    )
+
+print(max31856._read_register(0x00, 2))
 
 
 # Setup PWM output for controlling TEC modules

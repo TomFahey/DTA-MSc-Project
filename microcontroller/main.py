@@ -18,16 +18,26 @@ class Supervisor:
         self.PID = PID
         self.log = log
     
-        self.config = ResponsiveDict({'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 23})
+        self.config = ResponsiveDict(
+            {
+                'RUN': False,
+                'MODE': False,
+                'LOG': False,
+                'TARGET': 23,
+                'PID': [1.0,0.0,0.0],
+                'INTERVAL':0.25
+            }
+        )
         
     def pull_config(self):
-        for msg in list(self.client.buf_in):
+        for msg in self.client.buf_in.copy():
             try:
                 config = eval(msg.decode('utf-8'))
                 for key,val in zip(config.keys(), config.values()):
                     for component in self.components:
                         if key in component.config.keys():
-                            component.config[key] = val
+                            if component.config[key] != val:
+                                component.config[key] = val
                     self.config[key] = val
                 self.client.write(b'ACK:'+str(self.config.data).encode('utf-8')+b'\n')
                 self.client.buf_in.remove(msg)
@@ -46,41 +56,55 @@ class Supervisor:
             message_len = len(message_string)
             self.client.buf_out[bytesFree-message_len:bytesFree] = message_string
             self.client.buf_out_bytes_free -= message_len
+        
 
     def run(self):
-        while True:
-            lastTimeStamp = time.monotonic_ns()
-            self.log.update()
-            self.PID.update()
-            self.client.update()
-            self.pull_config()
-            self.push_data()
-            self.wait(lastTimeStamp)
+        lastTimeStamp = time.monotonic_ns()
+        _ = [component.update() for component in self.components]
+        self.pull_config()
+        self.push_data()
+        self.wait(lastTimeStamp)
+        #coros = [
+        #    asyncio.create_task(component.update()) for component in self.components
+        #]
+        #coros.append(asyncio.create_task(self.pull_config()))
+        #coros.append(asyncio.create_task(self.push_data()))
+        #await asyncio.gather(*coros)
+        
+            
+            
             
     def wait(self, lastTimeStamp):
-        while(time.monotonic_ns()-lastTimeStamp<25E7):
+        while(time.monotonic_ns()-lastTimeStamp<self.config['INTERVAL']*1E9):
             time.sleep(0.001)
             
-thisPID = PIDState(max31865,kp=3.0, ki=3.0, kd=0.2)
+thisPID = PIDState(max31865,kp=7.0, ki=2.5, kd=0.1)
 
 tempSensor = TempSensor('TEMP', max31865)
+dTempSensor = TempSensor('DTEMP', max31856)
 timeSensor = TimeSensor('TIME')
 pidSensor = PIDSensor('PID', thisPID)
 
-thisLog = Log(0.25, [ pidSensor, tempSensor, timeSensor])
-thisLog.write()
+thisLog = Log(0.25, [ pidSensor, tempSensor, dTempSensor, timeSensor])
 
 thisClient = SerialClient()
 
 thisSupervisor = Supervisor(thisClient, thisPID, thisLog)
         
 
+
 #async def main():
+#    while True:
+#        await thisSupervisor.run()
 def main():
+    while True:
+        thisSupervisor.run()
 
     
-
-    thisSupervisor.run()
+    #while True:
+    #    lastTimeStamp = time.monotonic_ns()
+    #    thisSupervisor.run()
+    #    thisSupervisor.wait(lastTimeStamp)
 
     #PID_task = asyncio.create_task(PIDControl(thisPID, 0.5, thisEvent_a))
     #logread_task = asyncio.create_task(logread(thisPID, thisLogger, thisEvent_b, thisEvent_a))

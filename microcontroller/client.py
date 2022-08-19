@@ -1,4 +1,5 @@
 import usb_cdc
+#import asyncio
 from utils import ResponsiveDict
 
 class SerialClient:
@@ -26,9 +27,9 @@ class SerialClient:
         
     def update(self):
         if self.serial.in_waiting > 0:
-                msg = self.read()
-                if (len(msg) > 0 and msg.count(b'\n') < 1): # Timed out reading message
-                    msg += self.serial.readline()
+            msg = self.read()
+            if (len(msg) > 0 and msg.count(b'\n') < 1): # Timed out reading message
+                msg += self.serial.readline()
                 self.buf_in.append(msg)
         mv = memoryview(self.buf_out)
         self.buf_out_bytes_free += self.write(mv[self.buf_out_bytes_free:])
