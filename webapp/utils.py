@@ -42,7 +42,7 @@ class ResponsiveDict(UserDict):
     def __setitem__(self, key, item) -> None:
         super().__setitem__(key, item)
         if self.callbacks[key] is not None:
-            self.callbacks[key](item)
+            self.callbacks[key](key, item)
 
     def set_callback(self, key, callback):
         try:
@@ -59,7 +59,7 @@ class ResponsiveList(UserList):
     def __setitem__(self, index, item):
         super().__setitem__(index, item)
         if self.callbacks[index] is not None:
-            self.callbacks[index](item)
+            self.callbacks[index]((index, item))
 
     def set_callback(self, index, callback):
         try:
@@ -94,7 +94,8 @@ class Programme(object):
         )
         self.startingTemp = 23.
         self.x = np.array([0.])
-        self.y = np.array([0.])
+        self.y_temp = np.array([0.])
+        self.y_heat = np.array([0.])
 
     @property
     def current_stage(self):
@@ -113,8 +114,11 @@ class Programme(object):
         self.stages.remove(stage)
         self.update_xy()
 
-    def update_stage(self, arg):
-        self.update_xy()
+    def update_stage(self, *args):
+        if (self.current_stage['TEMP'] > self.startingTemp) and \
+           (self.current_stage['HEAT'] > 0):
+           self.update_sign()
+           self.update_xy()
 
 
     #def next_stage(self):
@@ -130,6 +134,12 @@ class Programme(object):
 
     def next_stage(self):
         self.__current_stage = next(self.__iterator)
+    
+    def update_sign(self):
+        for stage_n, stage_n_1 in zip(self.stages[1:], self.stages[:-1]):
+            if stage_n['TEMP'] < stage_n_1['TEMP']:
+                stage_n.data['HEAT'] = -1*abs(stage_n['HEAT'])
+
 
     def update_xy(self):
         """
@@ -138,15 +148,13 @@ class Programme(object):
         """
         stage_temps = [self.startingTemp, *[stage['TEMP'] for stage in self.stages]]
         stage_heats = [stage['HEAT'] for stage in self.stages]
-        # Need to guard against potential divide by zero errors
-        stage_heats = np.maximum(stage_heats, 0.1*len(stage_heats))
         hold_times = [stage['HOLD'] for stage in self.stages]
         temp_diffs = np.ediff1d(stage_temps)
         stage_times = np.cumsum((60*(temp_diffs/stage_heats) + hold_times))
         time_marks = np.array(
             [
                 [time_mark - hold_time, time_mark] for time_mark, hold_time 
-                                            in zip(stage_times, hold_times)
+                    in zip(stage_times, hold_times)
             ]
             ,dtype=np.int32
             ).flatten()
@@ -156,7 +164,8 @@ class Programme(object):
         time_steps = np.zeros(int(total_time))
         for i, time_slice in enumerate(heat_times[::2]):
                 time_steps[time_slice] = stage_heats[i]/60
-        self.y = self.startingTemp + np.cumsum(time_steps)
+        self.y_heat = time_steps
+        self.y_temp = self.startingTemp + np.cumsum(time_steps)
         self.x = np.arange(total_time)
 
 
