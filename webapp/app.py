@@ -6,6 +6,8 @@ from ipywidgets import Tab, Layout # IPyWidgets - widgets used for UI e.g
 import ast
 import numpy as np
 from numpy import array
+import logging
+import traceback
 
 ### Import local modules - the pages of the UI app
 import graph # Main page, with controls and graph of deltaT
@@ -43,11 +45,13 @@ display(tab)
 
 async def work(reader, writer):
     config = settings.config.copy()
-    while True:
+    while settings.connected:
         try:
             if config != settings.config:
+                update = {key:settings.config[key] for key in settings.config.keys()
+                    if config[key] != settings.config[key]}
+                writer.write(b'CONFIG:' + str(update).encode('utf-8') +b'\n')
                 config = settings.config.copy()
-                writer.write(b'CONFIG:' + str(config).encode('utf-8') +b'\n')
             #await writer.drain()
             writer.write(b'HISTORY:{}\n' if config['RUN'] else b'QUERY:{}\n')
             await writer.drain()
@@ -69,9 +73,13 @@ async def work(reader, writer):
                             settings.data[key][-1] = val
                 settings.reading = data
             await asyncio.sleep(0.2)
-        except:
+        except Exception as e:
             print('Error in main loop')
+            print(Exception)
+            logging.error(traceback.format_exc())
             await asyncio.sleep(0.2)
+    writer.close()
+    await writer.wait_closed()
         #await asyncio.sleep(0.2)
 
 #async def write(writer):
@@ -86,14 +94,23 @@ async def work(reader, writer):
 # TCP connection to the forwarding server that reads the data from the
 # microcontroller over the serial port and forwards it over a TCP connection.
 async def main():
-    reader, writer = await asyncio.open_connection('localhost', 10501)
-    print('Connected to server')
-    #worktask = await work(reader, writer)
-    print('Entered main')
-    #loop.run_until_complete(work(reader,writer))
-    loop.create_task(work(reader, writer))
-    #coros = asyncio.gather(worktask)
-    #await coros
+    global tab
+    while True:
+        reader, writer = await asyncio.open_connection('localhost', 10501)
+        settings.connected = True
+        #tab.children = [graph.app, configure.app]#, imaging.app]
+        # Set the titles for each page
+        #tab.set_title(0, 'Main')
+        #tab.set_title(1, 'Config')
+        print('Connected to server')
+        #worktask = await work(reader, writer)
+        print('Entered main')
+        #loop.create_task(work(reader,writer))
+        await work(reader, writer)
+        tab.children[1].reset()
+        await asyncio.sleep(2)
+        #coros = asyncio.gather(worktask)
+        #await coros
     
 
 
@@ -109,6 +126,7 @@ if loop and loop.is_running():
     asyncio.run_coroutine_threadsafe(main(), loop)
     asyncio.run_coroutine_threadsafe(graph.work(), loop)
     asyncio.run_coroutine_threadsafe(settings.work(), loop)
+    #asyncio.run_coroutine_threadsafe(configure.work(tab.children[1]), loop)
     #loop.create_task(main())
     #loop.create_task(graph.work())
     #loop.create_task(settings.work())
