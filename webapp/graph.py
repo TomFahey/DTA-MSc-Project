@@ -6,6 +6,7 @@ import asyncio
 
 
 import settings
+from utils import Programme
 
 
 b_start = Button(
@@ -22,18 +23,38 @@ b_stop = Button(
     layout=Layout(width='135px', height='30px')
 )
 
+b_reset = Button(
+    description='Reset',
+    icon='restart',
+    button_style='warning',
+    layout=Layout(width='135px', height='30px')
+)
+
 def start_click(b):
     settings.config['RUN'] = True
     
 def stop_click(b):
     settings.config['RUN'] = False
 
+def reset_click(b):
+    settings.programme.__init__()
+    settings.connected = False
+    settings.data['PID'] = np.array([0.])
+    settings.data['TEMP'] = np.array([0.]) 
+    settings.data['TIME'] = np.array([0.])
+    settings.config['RUN'] = False
+    settings.config['MODE'] = False
+    settings.config['LOG'] = False
+    settings.config['TARGET'] = 25
+    settings.config['PID'] = [1.0, 0.0, 0.0]
+
 b_start.on_click(start_click)
 b_stop.on_click(stop_click)
+b_reset.on_click(reset_click)
 
 command_box = HBox(
-    children=(b_start, b_stop),
-    layout=Layout(width='260px', height='30px')
+    children=(b_start, b_stop, b_reset),
+    layout=Layout(width='405px', height='30px')
 )
 
 w1 = FloatProgress(
@@ -91,9 +112,9 @@ TempLine = bq.Lines(
     colors=['#ff000f'],
 )
 
-ProgrammeLine = bq.Lines(
+ProgrammeTempLine = bq.Lines(
     x=settings.programme.x,
-    y=settings.programme.y,
+    y=settings.programme.y_temp,
     scales={'x': x_sc, 'y': y_sc_l},
     colors=['#3c9dd0'],
 )
@@ -106,10 +127,24 @@ HeatLine = bq.Lines(
     opacities=[0.6]
 )
 
+ProgrammeHeatLine = bq.Lines(
+    x=settings.programme.x,
+    y=settings.programme.y_heat,
+    scales={'x': x_sc, 'y': y_sc_r},
+    colors=['#46ff33'],
+)
+
+DeltaTLine = bq.Lines(
+    x=settings.data['TIME'],
+    y=settings.data['DTEMP'],
+    scales={'x': x_sc, 'y': y_sc_r},
+    colors=['#ff0c0f'],
+)
+
 fig = bq.Figure(
     layout=Layout(width='900px', height='800px'),
     axes=[x_ax, y_ax_left, y_ax_right],
-    marks=[TempLine, ProgrammeLine,HeatLine],
+    marks=[TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine],
     fig_margin=dict(top=25, bottom=50, left=50, right=70)
 )
 
@@ -121,27 +156,40 @@ app = VBox(
 
 async def work():
     while True:
-        temp = settings.reading['TEMP']
-        temps = settings.data['TEMP']
-        times = settings.data['TIME']
-        w2.value = F"Current temp: {str(np.round(temp,2))} \u00b0 C"
-        w1.value = 0
-        TempLine.x = times
-        TempLine.y = temps
-        ProgrammeLine.x = settings.programme.x
-        ProgrammeLine.y = settings.programme.y
-        HeatLine.x = times[1:]
-        if len(temps) > 10:
-            temps = np.array(temps)[np.array(times) > 0.0]
-            times = np.array(times)[np.array(times) > 0.0]
-            HeatLine.y = 60*((temps-temps[0])/times)
-            y_sc_r.max = min(np.max(HeatLine.y),30)
-            y_sc_r.min = max(np.min(HeatLine.y),-30)
-        x_sc.max = float(max(max(TempLine.x), max(ProgrammeLine.x)))
-        x_sc.min = 0.
-        y_sc_l.max = float(max(max(TempLine.y), max(ProgrammeLine.y)))
-        y_sc_l.min = float(min(min(TempLine.y), min(ProgrammeLine.y)))
-        fig.marks = [TempLine, ProgrammeLine,HeatLine]
-        fig.axes = [x_ax, y_ax_left, y_ax_right]
+        try:
+            temp = settings.reading['TEMP']
+            temps = settings.data['TEMP']
+            times = settings.data['TIME']
+            dtemps = settings.data['DTEMP']
+            w2.value = F"Current temp: {str(np.round(temp,2))} \u00b0 C"
+            w1.value = 0
+            TempLine.x = times
+            TempLine.y = temps
+            DeltaTLine.x = times
+            DeltaTLine.y = dtemps
+            ProgrammeTempLine.x = settings.programme.x
+            ProgrammeTempLine.y = settings.programme.y_temp
+            ProgrammeHeatLine.x = settings.programme.x
+            ProgrammeHeatLine.y = 60*settings.programme.y_heat
 
-        await asyncio.sleep(0.2)
+            HeatLine.x = times[1:]
+            if len(temps) > 10:
+                temps = np.array(temps)[np.array(times) > 0.0]
+                times = np.array(times)[np.array(times) > 0.0]
+                HeatLine.y = 60*((temps-temps[0])/times)
+                y_sc_r.max = min(np.max(HeatLine.y),30)
+                y_sc_r.min = max(np.min(HeatLine.y),-30)
+            else:
+                y_sc_r.max = 30
+                y_sc_r.min = -30
+            x_sc.max = float(max(max(TempLine.x), max(ProgrammeTempLine.x)))
+            x_sc.min = 0.
+            y_sc_l.max = float(max(max(TempLine.y), max(ProgrammeTempLine.y)))
+            y_sc_l.min = float(min(min(TempLine.y), min(ProgrammeTempLine.y)))
+            fig.marks = [TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine]
+            fig.axes = [x_ax, y_ax_left, y_ax_right]
+
+            await asyncio.sleep(0.2)
+        except:
+            print('Graph work error')
+            await asyncio.sleep(0.2)
