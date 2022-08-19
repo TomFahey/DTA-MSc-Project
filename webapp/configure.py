@@ -7,6 +7,8 @@ from ipywidgets import widgets
 from ipywidgets.widgets import FloatSlider, Button, IntSlider, Tab, Accordion
 from ipywidgets.widgets import Layout, HBox
 from IPython.core.display import display, HTML # IPython Notebook functions
+from importlib import reload
+
 
 import asyncio
 
@@ -16,6 +18,7 @@ from utils import Programme, ResponsiveDict, ResponsiveList
 
 class ProgrammeTab(widgets.Tab):
     def __init__(self,  **kwargs):
+        global settings
         super().__init__(
             children =
             [
@@ -38,7 +41,8 @@ class ProgrammeTab(widgets.Tab):
 
     def add_tab(self):
         if len(settings.programme.stages) > 0:
-            settings.programme.add_stage(settings.programme.stages.copy()[-1])
+            new_stage =settings.programme.stages[-1].copy()
+            settings.programme.add_stage(new_stage)
         else:
             settings.programme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
         tabs = [StageTab(stage) for stage in settings.programme.stages]
@@ -49,6 +53,8 @@ class ProgrammeTab(widgets.Tab):
         self.selected_index = len(self.children) - 2
 
     def reset(self):
+        global settings
+        reload(settings)
         self.__init__()
 
 
@@ -79,8 +85,8 @@ class StageTab(widgets.Accordion):
         self.children[0].min=24
         self.children[0].max=200
         self.set_title(1, 'Heating rate')
-        self.children[1].value=self.stage['HEAT']
-        self.children[1].min=0
+        self.children[1].value=abs(self.stage['HEAT'])
+        self.children[1].min=0.001
         self.children[1].max=30
         self.set_title(2, 'Hold Time')
         self.children[2].value=self.stage['HOLD']
@@ -128,7 +134,6 @@ class ControlSlider(widgets.IntSlider):
 # It takes as its parameters the callback function to call when a change is
 # detected, as well as the value passed to that callback function
 
-    
 # Finally, define a horizontal box container for the slider widgets in the app
 # This just serves to place the two widgets next to each other, as well as allowing
 # us to wrap the page in a single container object, ready to pass to app.py
@@ -136,14 +141,3 @@ app = ProgrammeTab(
     layout=Layout(margin='0 0 0 0',maxwidth='260px',maxheight='200px',
                   padding='0 0 0 0')
 )
-    
-
-async def work(app):
-    while True:
-        if not settings.connected:
-            #app = ProgrammeTab(
-            #    layout=Layout(margin='0 0 0 0',maxwidth='260px',maxheight='200px',
-            #                  padding='0 0 0 0')
-            #)
-            app.__init__()
-        await asyncio.sleep(0.2)
