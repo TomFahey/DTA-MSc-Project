@@ -8,10 +8,14 @@ import numpy as np
 from numpy import array
 import logging
 import traceback
+from importlib import reload
+import copy
 
 ### Import local modules - the pages of the UI app
 import graph # Main page, with controls and graph of deltaT
-import configure # Configuration page, for changing DTA settings
+import programme # Configuration page, for changing DTA settings
+import config
+import file
 #import imaging # Displays view from thermal imaging camera
 import settings # Not a page - this module holds the global variables 
                 # (data, config) accessed by the other ones
@@ -22,10 +26,12 @@ tab = Tab(layout=Layout(margin='0 0 0 0',maxwidth="300",maxheight="220")) # Tab 
 
 # Add .app variables from the imported pages, containing their 
 # respective widgets 
-tab.children = [graph.app, configure.app]#, imaging.app]
+tab.children = [graph.app, programme.app, config.app, file.app]#, imaging.app]
 # Set the titles for each page
 tab.set_title(0, 'Main')
-tab.set_title(1, 'Config')
+tab.set_title(1, 'Programme')
+tab.set_title(2, 'Config')
+tab.set_title(3, 'Save')
 #tab.set_title(2, 'Imaging')
 
 # Some annoying CSS settings to make sure the UI fills the entire screen, without margins
@@ -44,16 +50,18 @@ display(tab)
 # is in sync with the DTA Programme that has been programmed.
 
 async def work(reader, writer):
-    config = settings.config.copy()
+    #breakpoint()
+    config = copy.deepcopy(settings.config)
     while settings.connected:
         try:
+            #breakpoint()
             if config != settings.config:
                 update = {key:settings.config[key] for key in settings.config.keys()
                     if config[key] != settings.config[key]}
                 writer.write(b'CONFIG:' + str(update).encode('utf-8') +b'\n')
                 config = settings.config.copy()
-            #await writer.drain()
-            writer.write(b'HISTORY:{}\n' if config['RUN'] else b'QUERY:{}\n')
+            msg = b'HISTORY:{}\n' if config['RUN'] else b'QUERY:{}\n'
+            writer.write(msg)
             await writer.drain()
             msg = await reader.readline()
             msg = msg.split(b'\n')[0].decode('utf-8')
@@ -61,9 +69,11 @@ async def work(reader, writer):
             if settings.config['RUN']:
                 for key,val in data.items():
                     if key in settings.data:
-                        settings.data[key] = val
+                        settings.data[key] = np.append(settings.data[key], val)
+                        #settings.data[key] = val
                     if key in settings.reading:
-                        settings.reading[key] = val[-1]
+                        settings.reading[key] = val[-1] if len(val) > 0 else \
+                                                settings.reading[key] 
             else:
                 for key,val in data.items():
                     if key in settings.data:
@@ -71,8 +81,8 @@ async def work(reader, writer):
                             settings.data[key][-1] = val[-1]
                         else:
                             settings.data[key][-1] = val
-                settings.reading = data
-            await asyncio.sleep(0.2)
+                        settings.reading[key] = val
+            await asyncio.sleep(2*settings.config['INTERVAL'])
         except Exception as e:
             print('Error in main loop')
             print(Exception)
@@ -107,7 +117,17 @@ async def main():
         print('Entered main')
         #loop.create_task(work(reader,writer))
         await work(reader, writer)
+        settings.programme.__init__()
+        settings.data['PID'] = np.array([0.])
+        settings.data['TEMP'] = np.array([0.]) 
+        settings.data['TIME'] = np.array([0.])
+        settings.config['RUN'] = False
+        settings.config['MODE'] = False
+        settings.config['LOG'] = False
+        settings.config['TARGET'] = 25
+        settings.config['PID'] = [1.0, 0.0, 0.0]
         tab.children[1].reset()
+        tab.children[2].reset()
         await asyncio.sleep(2)
         #coros = asyncio.gather(worktask)
         #await coros
