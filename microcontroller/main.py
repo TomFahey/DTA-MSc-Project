@@ -18,16 +18,16 @@ class Supervisor:
         self.PID = PID
         self.log = log
     
-        self.config = ResponsiveDict(
-            {
-                'RUN': False,
-                'MODE': False,
-                'LOG': False,
-                'TARGET': 23,
-                'PID': [1.0,0.0,0.0],
-                'INTERVAL':0.25
+        self.config = {
+             'RUN': False,
+             'MODE': False,
+             'LOG': False,
+             'TARGET': 23,
+             'KP': 35.0,
+             'KD': 2.0,
+             'KI': 3.5,
+             'INTERVAL':0.25
             }
-        )
         
     def pull_config(self):
         for msg in self.client.buf_in.copy():
@@ -39,7 +39,7 @@ class Supervisor:
                             if component.config[key] != val:
                                 component.config[key] = val
                     self.config[key] = val
-                self.client.write(b'ACK:'+str(self.config.data).encode('utf-8')+b'\n')
+                self.client.write(b'ACK:'+str(self.config).encode('utf-8')+b'\n')
                 self.client.buf_in.remove(msg)
             except NameError as err:
                 self.client.buf_in.remove(msg)
