@@ -1,5 +1,5 @@
 import numpy as np
-from utils import Programme
+from utils import Programme,ResponsiveList
 import asyncio
 
 global config
@@ -7,11 +7,11 @@ global data
 global programme
 global reading
 global connected
-config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'PID': [1.0, 0.0, 0.0]}
+config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
 programme = Programme()
 data = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
 reading = {'PID': 0, 'TEMP': 0, 'TIME': 0}
-connect = False
+connected = False
 
 async def work():
     global config
