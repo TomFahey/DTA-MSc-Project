@@ -23,10 +23,11 @@ class PicoDAServer(asyncio.Protocol):
         self.serial_reader = None
         self.serial_writer = None
         self.data = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
-        self.push_config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'PID': [1.0, 0.0, 0.0]}
-        self.pull_config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'PID': [1.0, 0.0, 0.0]}
-        self.device_status = {'PID': 0, 'TEMP': 0, 'TIME': 0}
+        self.push_config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
+        self.pull_config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 0.0, 'INTERVAL': 0.25}
+        self.device_status = {'PID': 0, 'TEMP': 0, 'DTEMP':0, 'TIME': 0}
         self.background_task = None
+        self.counter = 0
 
     def connection_made(self, transport):
         self.transport = transport
@@ -40,6 +41,7 @@ class PicoDAServer(asyncio.Protocol):
     def connection_lost(self, exc):
         self.config['tcp_status'] = False
         self.background_task.cancel()
+        self.counter = 0
 
 
     async def setup_serial_connection(self):
@@ -75,7 +77,6 @@ class PicoDAServer(asyncio.Protocol):
                         data = ast.literal_eval(msg)
                         for key,val in zip(data.keys(), data.values()):
                             if key in self.data.keys():
-                                #if self.config['LOG']:
                                 if self.pull_config['LOG']:
                                     self.data[key] = np.append(self.data[key], val)
                                 self.device_status[key] = val
@@ -128,12 +129,19 @@ class PicoDAServer(asyncio.Protocol):
                 elif 'HISTORY:' in line:
                     line = line.split('HISTORY:')[1]
                     data = ast.literal_eval(line)
-                    response = {
+                    response =  \
+                        {
                             key:self.data[key].tolist() for key in data.keys() 
                                                if key in self.data 
-                        } if data.keys() else  \
-                        {key:val.tolist() for key,val in self.data.items()}
+                        } if data.keys() else \
+                        {
+                            key:val.tolist()[self.counter:] for key,val in self.data.items()
+                        } 
+                        # {
+                        #     key:val.tolist() for key,val in self.data.items()
+                        # } 
                     self.write_data(str(response).encode('utf-8')+b'\n')
+                    self.counter += len(response['TIME'] if response.items() else [])
 
 async def forward(reader, writer):
     try:
