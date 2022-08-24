@@ -12,7 +12,7 @@ def load_data(filepath):
         data = pkl.load(f)
     return data
 
-def fetch_data():
+def fetch_data(file_path):
     global x_prog_time
     global y_prog_temp
     global y_prog_heat
@@ -20,12 +20,11 @@ def fetch_data():
     global y_read_temp
     global y_read_heat
     
-    file_path = './data/10-08/data-PID-tune-20.0-2.8-0.0-TEMP-{}-HEAT-{}'.format(tempSelection.value, heatSelection.value)
     data = load_data(file_path)
-    stages, readings, config = data
-    stage = ast.literal_eval(stages)
+    stages = [ast.literal_eval(item) for item in data if type(item) is str]
+    readings, config = [item for item in data if type(item) is dict]
 
-    x_prog_time, y_prog_temp, y_prog_heat = get_programme([stage], readings)
+    x_prog_time, y_prog_temp, y_prog_heat = get_programme(stages, readings)
     x_read_data = np.array(readings['TIME'])
     y_read_data = np.array(readings['TEMP'])
     x_read_time = x_read_data[x_read_data > 0.0]
@@ -39,7 +38,7 @@ def get_programme(stages, readings):
         Generates a plot of the temperature over time for the current programme
         Called each time a stage is added, removed, or has its paramaters updated
         """
-        startingTemp = readings['TEMP'][1]
+        startingTemp = readings['TEMP'][2]
         stage_temps = [startingTemp, *[stage['TEMP'] for stage in stages]]
         stage_heats = [stage['HEAT'] for stage in stages]
         # Need to guard against potential divide by zero errors
@@ -105,6 +104,13 @@ heatSelection = widgets.Dropdown(
     value="10",
     description='Target heat rate:',
 )
+
+filenameSelection = widgets.Text(
+    value=None,
+    PlaceHolder='Enter filepath',
+    disabled=False
+)
+    
 
 (x_prog_time, y_prog_temp, y_prog_heat, x_read_time, y_read_temp, y_read_heat) = fetch_data()
 
@@ -183,15 +189,23 @@ fig = bq.Figure(
 
 def select_callback(change):
     global app
-    data = fetch_data()
+    file_path = './data/10-08/data-PID-tune-20.0-2.8-0.0-TEMP-{}-HEAT-{}'.format(tempSelection.value, heatSelection.value)
+    data = fetch_data(file_path)
+    app.children = (controls, update_graph(*data))
+    
+def filename_callback(change):
+    global app
+    breakpoint()
+    data = fetch_data(change['new'])
     app.children = (controls, update_graph(*data))
 
 
 tempSelection.observe(select_callback, names='value')
 heatSelection.observe(select_callback, names='value')
+filenameSelection.observe(filename_callback, names='value')
 
 data = fetch_data()
-controls = HBox(children = (tempSelection, heatSelection))
+controls = HBox(children = (tempSelection, heatSelection, filenameSelection))
 app = VBox(children = (controls, update_graph(*data)))
  
 display(app)
