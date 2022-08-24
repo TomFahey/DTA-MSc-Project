@@ -7,11 +7,15 @@ class PIDState:
     
     def __init__(self, sensor, kp=1.0, ki=0., kd=0., Ts=0.25):
         self._sensor = sensor
-        self.config = ResponsiveDict({'RUN': False,'MODE': False, 'TARGET': self.temp, 'PID': [kp, ki, kd]})
+        self.config = ResponsiveDict({'RUN': False,'MODE': False, 'TARGET': self.temp, 'KP': kp, 'KI':ki, 'KD':kd})
         self.config.set_callback('MODE', lambda vals, args :
-                                 self.reset() if vals[0]!=vals[1] else None)
-        self.config.set_callback('PID', lambda vals, args :
-                                 self.reset(vals[1]) if vals[0]!=vals[1] else None)
+                                 self.reset('MODE') if vals[0]!=vals[1] else None)
+        self.config.set_callback('KP', lambda vals, args :
+                                 self.reset('KP') if vals[0]!=vals[1] else None)
+        self.config.set_callback('KD', lambda vals, args :
+                                 self.reset('KD') if vals[0]!=vals[1] else None)
+        self.config.set_callback('KI', lambda vals, args :
+                                 self.reset('KI') if vals[0]!=vals[1] else None)
         self.e = 0.
         self.e1 = 0.
         self.e2 = 0.
@@ -30,18 +34,20 @@ class PIDState:
     def temp(self):
         return self._sensor.temperature
     
-    def reset(self, PID=None):
-        print('Reset!')
+    def reset(self, callback=None):
+        msg = 'Reset!'
+        if callback:
+            msg += ' Due to {}'.format(callback)
+        print(msg)
         self.e = 0.
         self.e1 = 0.
         self.e2 = 0.
         self.delta_u = 0.
         self.u = 0.
-        if PID is not None:
-            self.k1 = PID[0] + PID[1]*self.Ts + PID[2]/self.Ts
-            self.k2 = -PID[0] - 2*PID[2]/self.Ts
-            self.k3 = PID[2]/self.Ts
-            print(PID)
+        self.k1 = self.config['KP'] + self.config['KI']*self.Ts + max(self.config['KD'],0.001)/self.Ts
+        self.k2 = -self.config['KP'] - 2*max(self.config['KD'],0.001)/self.Ts
+        self.k3 = max(self.config['KD'],0.001)/self.Ts
+        print(self.config['KP'], self.config['KI'], self.config['KD'])
         self.time0 = time.monotonic()
         self.time1 = time.monotonic()
         self.Temp0 = self.temp
