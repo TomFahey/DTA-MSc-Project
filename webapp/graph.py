@@ -6,8 +6,6 @@ import asyncio
 
 
 import settings
-from utils import Programme
-
 
 b_start = Button(
     description='Run',
@@ -37,16 +35,7 @@ def stop_click(b):
     settings.config['RUN'] = False
 
 def reset_click(b):
-    settings.programme.__init__()
     settings.connected = False
-    settings.data['PID'] = np.array([0.])
-    settings.data['TEMP'] = np.array([0.]) 
-    settings.data['TIME'] = np.array([0.])
-    settings.config['RUN'] = False
-    settings.config['MODE'] = False
-    settings.config['LOG'] = False
-    settings.config['TARGET'] = 25
-    settings.config['PID'] = [1.0, 0.0, 0.0]
 
 b_start.on_click(start_click)
 b_stop.on_click(stop_click)
