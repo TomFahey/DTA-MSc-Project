@@ -51,38 +51,27 @@ display(tab)
 
 async def work(reader, writer):
     #breakpoint()
-    config = copy.deepcopy(settings.config)
-    while settings.connected:
+    config = copy.deepcopy(settings.appConfig)
+    while settings.appConnected:
         try:
-            #breakpoint()
-            if config != settings.config:
-                update = {key:settings.config[key] for key in settings.config.keys()
-                    if config[key] != settings.config[key]}
+            if config != settings.appConfig:
+                update = {key:settings.appConfig[key] for key in settings.appConfig.keys()
+                    if config[key] != settings.appConfig[key]}
                 writer.write(b'CONFIG:' + str(update).encode('utf-8') +b'\n')
-                config = settings.config.copy()
+                config = settings.appConfig.copy()
             msg = b'HISTORY:{}\n' if config['RUN'] else b'QUERY:{}\n'
             writer.write(msg)
             await writer.drain()
             msg = await reader.readline()
             msg = msg.split(b'\n')[0].decode('utf-8')
             data = ast.literal_eval(msg)
-            if settings.config['RUN']:
-                for key,val in data.items():
-                    if key in settings.data:
-                        settings.data[key] = np.append(settings.data[key], val)
-                        #settings.data[key] = val
-                    if key in settings.reading:
-                        settings.reading[key] = val[-1] if len(val) > 0 else \
-                                                settings.reading[key] 
-            else:
-                for key,val in data.items():
-                    if key in settings.data:
-                        if type(val) == list:
-                            settings.data[key][-1] = val[-1]
-                        else:
-                            settings.data[key][-1] = val
-                        settings.reading[key] = val
-            await asyncio.sleep(2*settings.config['INTERVAL'])
+            for key,val in data.items():
+                if key in settings.appData:
+                    if settings.appConfig['RUN']:
+                        settings.appData[key] = np.append(settings.appData[key], val)
+                    else:
+                        settings.appData[key] = np.array(val).reshape(1,) if val else settings.appData[key]
+            await asyncio.sleep(2*settings.appConfig['INTERVAL'])
         except Exception as e:
             print('Error in main loop')
             print(Exception)
@@ -105,9 +94,11 @@ async def work(reader, writer):
 # microcontroller over the serial port and forwards it over a TCP connection.
 async def main():
     global tab
+    global settings
     while True:
+        breakpoint()
         reader, writer = await asyncio.open_connection('localhost', 10501)
-        settings.connected = True
+        settings.appConnected = True
         #tab.children = [graph.app, configure.app]#, imaging.app]
         # Set the titles for each page
         #tab.set_title(0, 'Main')
@@ -117,18 +108,20 @@ async def main():
         print('Entered main')
         #loop.create_task(work(reader,writer))
         await work(reader, writer)
-        settings.programme.__init__()
-        settings.data['PID'] = np.array([0.])
-        settings.data['TEMP'] = np.array([0.]) 
-        settings.data['TIME'] = np.array([0.])
-        settings.config['RUN'] = False
-        settings.config['MODE'] = False
-        settings.config['LOG'] = False
-        settings.config['TARGET'] = 25
-        settings.config['PID'] = [1.0, 0.0, 0.0]
+        breakpoint()
+        settings.appProgramme.__init__()
+        settings.appData['PID'] = np.array([0.])
+        settings.appData['TEMP'] = np.array([0.]) 
+        settings.appData['TIME'] = np.array([0.])
+        settings.appConfig['RUN'] = False
+        settings.appConfig['MODE'] = False
+        settings.appConfig['LOG'] = False
+        settings.appConfig['TARGET'] = 25
+        settings.appConfig['PID'] = [1.0, 0.0, 0.0]
+        #reload(settings)
         tab.children[1].reset()
+        breakpoint()
         tab.children[2].reset()
-        await asyncio.sleep(2)
         #coros = asyncio.gather(worktask)
         #await coros
     
