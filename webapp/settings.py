@@ -1,46 +1,44 @@
 import numpy as np
 from utils import Programme,ResponsiveList
-import asyncio
+from asyncio import sleep as asleep
 
-global config
-global data
-global programme
-global reading
-global connected
-config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
-programme = Programme()
-data = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
-reading = {'PID': 0, 'TEMP': 0, 'TIME': 0}
-connected = False
+global appConfig
+global appData
+global appProgramme
+global appReading
+global appConnected
+appConfig = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
+appProgramme = Programme()
+appData = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
+appConnected = False
 
 async def work():
-    global config
-    global data
-    global programme
-    global reading
+    global appConfig
+    global appData
+    global appProgramme
     while True:
         try:
-            if (config['RUN']):
-                config['LOG'] = True
-                while abs(reading['TEMP'] - programme.current_stage['TEMP']) > 0.1:
-                    config['MODE'] = True
-                    config['TARGET'] = programme.current_stage['HEAT']
-                    await asyncio.sleep(0.5)
-                holdTime = reading['TIME'] + programme.current_stage['HOLD']
-                while reading['TIME'] < holdTime:
-                    config['MODE'] = False
-                    config['TARGET'] = programme.current_stage['TEMP']
-                    await asyncio.sleep(0.5)
-                programme.next_stage()
-            elif (not config['RUN']):
-                config['LOG'] = False
-                config['MODE'] = False
-                config['TARGET'] = programme.current_stage['TEMP']
-                programme.startingTemp = reading['TEMP']
-                data['TEMP'][0] = programme.startingTemp
-                if len(programme.stages) > 1:
-                    programme.update_xy()
-                await asyncio.sleep(0.5)
+            if (appConfig['RUN']):
+                appConfig['LOG'] = True
+                while abs(appData['TEMP'][-1] - appProgramme.current_stage['TEMP']) > 0.1:
+                    appConfig['MODE'] = True
+                    appConfig['TARGET'] = appProgramme.current_stage['HEAT']
+                    await asleep(0.5)
+                holdTime = appData['TIME'][-1] + appProgramme.current_stage['HOLD']
+                while appData['TIME'][-1] < holdTime:
+                    appConfig['MODE'] = False
+                    appConfig['TARGET'] = appProgramme.current_stage['TEMP']
+                    await asleep(0.5)
+                appProgramme.next_stage()
+            elif (not appConfig['RUN']):
+                appConfig['LOG'] = False
+                appConfig['MODE'] = False
+                appConfig['TARGET'] = appProgramme.current_stage['TEMP']
+                appProgramme.startingTemp = appData['TEMP'][-1]
+                appData['TEMP'][0] = appProgramme.startingTemp
+                if len(appProgramme.stages) > 1:
+                    appProgramme.update_xy()
+                await asleep(0.5)
         except:
-            await asyncio.sleep(0.5)
+            await asleep(0.5)
         #await asyncio.sleep(0.5)
