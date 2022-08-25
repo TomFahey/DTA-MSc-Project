@@ -9,7 +9,7 @@ import settings
 
 class ConfigTab(widgets.Accordion):
     def __init__(self, config=
-        settings.config,
+        settings.appConfig,
         **kwargs
     ):
         self.config = config
@@ -47,10 +47,11 @@ class ConfigTab(widgets.Accordion):
 
     def reset(self):
         global settings
-        reload(settings)
+        #settings = reset
+        #reload(settings)
         self.__init__()
         for child in self.children:
-            child.config = settings.config
+            child.config = settings.appConfig
 
 
 class ControlSlider(FloatSlider):
