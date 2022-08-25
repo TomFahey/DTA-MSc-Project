@@ -2,8 +2,7 @@ from ipywidgets.widgets import Label, FloatProgress, Button
 from ipywidgets.widgets import Layout, HBox, VBox
 import numpy as np
 import bqplot as bq
-import asyncio
-
+from asyncio import sleep as asleep
 
 import settings
 
@@ -29,13 +28,13 @@ b_reset = Button(
 )
 
 def start_click(b):
-    settings.config['RUN'] = True
+    settings.appConfig['RUN'] = True
     
 def stop_click(b):
-    settings.config['RUN'] = False
+    settings.appConfig['RUN'] = False
 
 def reset_click(b):
-    settings.connected = False
+    settings.appConnected = False
 
 b_start.on_click(start_click)
 b_stop.on_click(stop_click)
@@ -56,7 +55,7 @@ w1 = FloatProgress(
 )
 
 w2 = Label(
-    value=F"Current temp: {str(np.round(settings.data['TEMP'][-1],2))} \u00b0 C",
+    value=F"Current temp: {str(np.round(settings.appData['TEMP'][-1],2))} \u00b0 C",
     layout=Layout(width='230px', height='30px')
 )
 
@@ -95,37 +94,37 @@ y_ax_right = bq.Axis(
 )
 
 TempLine = bq.Lines(
-    x=settings.data['TIME'],
-    y=settings.data['TEMP'],
+    x=settings.appData['TIME'],
+    y=settings.appData['TEMP'],
     scales={'x': x_sc, 'y': y_sc_l},
     colors=['#ff000f'],
 )
 
 ProgrammeTempLine = bq.Lines(
-    x=settings.programme.x,
-    y=settings.programme.y_temp,
+    x=settings.appProgramme.x,
+    y=settings.appProgramme.y_temp,
     scales={'x': x_sc, 'y': y_sc_l},
     colors=['#3c9dd0'],
 )
 
 HeatLine = bq.Lines(
-    x=settings.data['TIME'][1:],
-    y=np.diff(settings.data['TEMP'], axis=0),
+    x=settings.appData['TIME'][1:],
+    y=np.diff(settings.appData['TEMP'], axis=0),
     scales={'x': x_sc, 'y': y_sc_r},
     colors=['#fa7e04'],
     opacities=[0.6]
 )
 
 ProgrammeHeatLine = bq.Lines(
-    x=settings.programme.x,
-    y=settings.programme.y_heat,
+    x=settings.appProgramme.x,
+    y=settings.appProgramme.y_heat,
     scales={'x': x_sc, 'y': y_sc_r},
     colors=['#46ff33'],
 )
 
 DeltaTLine = bq.Lines(
-    x=settings.data['TIME'],
-    y=settings.data['DTEMP'],
+    x=settings.appData['TIME'],
+    y=settings.appData['DTEMP'],
     scales={'x': x_sc, 'y': y_sc_r},
     colors=['#ff0c0f'],
 )
@@ -146,20 +145,19 @@ app = VBox(
 async def work():
     while True:
         try:
-            temp = settings.reading['TEMP']
-            temps = settings.data['TEMP']
-            times = settings.data['TIME']
-            dtemps = settings.data['DTEMP']
-            w2.value = F"Current temp: {str(np.round(temp,2))} \u00b0 C"
+            temps = settings.appData['TEMP']
+            times = settings.appData['TIME']
+            dtemps = settings.appData['DTEMP']
+            w2.value = F"Current temp: {str(np.round(temps[-1],2))} \u00b0 C"
             w1.value = 0
             TempLine.x = times
             TempLine.y = temps
             DeltaTLine.x = times
             DeltaTLine.y = dtemps
-            ProgrammeTempLine.x = settings.programme.x
-            ProgrammeTempLine.y = settings.programme.y_temp
-            ProgrammeHeatLine.x = settings.programme.x
-            ProgrammeHeatLine.y = 60*settings.programme.y_heat
+            ProgrammeTempLine.x = settings.appProgramme.x
+            ProgrammeTempLine.y = settings.appProgramme.y_temp
+            ProgrammeHeatLine.x = settings.appProgramme.x
+            ProgrammeHeatLine.y = 60*settings.appProgramme.y_heat
 
             HeatLine.x = times[1:]
             if len(temps) > 10:
@@ -178,7 +176,8 @@ async def work():
             fig.marks = [TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine]
             fig.axes = [x_ax, y_ax_left, y_ax_right]
 
-            await asyncio.sleep(0.2)
-        except:
+            await asleep(0.2)
+        except Exception as e:
             print('Graph work error')
-            await asyncio.sleep(0.2)
+            print(e)
+            await asleep(0.2)
