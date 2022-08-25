@@ -10,8 +10,6 @@ from IPython.core.display import display, HTML # IPython Notebook functions
 from importlib import reload
 
 
-import asyncio
-
 # Import global settings, to be able to change the config
 import settings
 from utils import ResponsiveDict
@@ -22,14 +20,14 @@ class ProgrammeTab(widgets.Tab):
         super().__init__(
             children =
             [
-                *[StageTab(stage) for stage in settings.programme.stages],
+                *[StageTab(stage) for stage in settings.appProgramme.stages],
                 StageTab()
             ],
             **kwargs
         )
-        for i, _ in enumerate(settings.programme.stages):
+        for i, _ in enumerate(settings.appProgramme.stages):
             self.set_title(i, 'Stage {}:'.format(i+1))
-        self.set_title(len(settings.programme.stages), '+')
+        self.set_title(len(settings.appProgramme.stages), '+')
         self.selected_index = 0
         self.observe(self.new_tab_callback, names='selected_index')
 
@@ -40,25 +38,24 @@ class ProgrammeTab(widgets.Tab):
         
 
     def add_tab(self):
-        if len(settings.programme.stages) > 0:
-            new_stage =settings.programme.stages[-1].copy()
-            settings.programme.add_stage(new_stage)
+        if len(settings.appProgramme.stages) > 0:
+            new_stage =settings.appProgramme.stages[-1].copy()
+            settings.appProgramme.add_stage(new_stage)
         else:
-            settings.programme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
-        tabs = [StageTab(stage) for stage in settings.programme.stages]
+            settings.appProgramme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
+        tabs = [StageTab(stage) for stage in settings.appProgramme.stages]
         self.children = [*tabs, StageTab()]
-        for i, stage in enumerate(settings.programme.stages):
+        for i, stage in enumerate(settings.appProgramme.stages):
             self.set_title(i, 'Stage {}'.format(i+1))
-        self.set_title(len(settings.programme.stages), '+')
+        self.set_title(len(settings.appProgramme.stages), '+')
         self.selected_index = len(self.children) - 2
 
     def reset(self):
         global settings
-        reload(settings)
+        breakpoint()
+        #reload(settings)
         self.__init__()
-        for index, child in enumerate(self.children):
-            if child.stage is not settings.programme.stages[index]:
-                child.stage = settings.programme.stages[index]
+        #self.children = [StageTab(stage) for stage in settings.appProgramme.stages]
 
 
 class StageTab(widgets.Accordion):
