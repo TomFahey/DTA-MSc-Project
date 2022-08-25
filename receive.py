@@ -99,7 +99,7 @@ class PicoDAServer(asyncio.Protocol):
                 #except:
                 #    print('Unknown error')
                 #    print('Message: ' + msg)
-                await asyncio.sleep(0.05)
+                await asyncio.sleep(self.pull_config['INTERVAL']*0.5)
 
     def write_data(self, data):
         self.transport.write(data)
