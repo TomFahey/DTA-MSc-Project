@@ -112,7 +112,7 @@ filenameSelection = widgets.Text(
 )
     
 
-(x_prog_time, y_prog_temp, y_prog_heat, x_read_time, y_read_temp, y_read_heat) = fetch_data()
+(x_prog_time, y_prog_temp, y_prog_heat, x_read_time, y_read_temp, y_read_heat) = fetch_data('./data/10-08/data-PID-tune-20.0-2.8-0.0-TEMP-70-HEAT-10')
 
 x_scale = bq.LinearScale(min=0)
 y_left_scale = bq.LinearScale(max=max(max(y_read_temp), max(y_prog_temp)), min=min(min(y_read_temp), min(y_prog_temp)))
@@ -204,7 +204,7 @@ tempSelection.observe(select_callback, names='value')
 heatSelection.observe(select_callback, names='value')
 filenameSelection.observe(filename_callback, names='value')
 
-data = fetch_data()
+data = fetch_data('./data/24-08/data-PID-tune-35.0-2.0-3.5-multistage')
 controls = HBox(children = (tempSelection, heatSelection, filenameSelection))
 app = VBox(children = (controls, update_graph(*data)))
  
