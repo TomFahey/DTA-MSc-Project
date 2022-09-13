@@ -10,21 +10,21 @@ b_start = Button(
     description='Run',
     icon='play',
     button_style='warning',
-    layout=Layout(width='135px', height='30px')
+    layout=Layout(width='90px', height='25px')
 )
 
 b_stop = Button(
     description='Stop',
     icon='stop',
     button_style='warning',
-    layout=Layout(width='135px', height='30px')
+    layout=Layout(width='90px', height='25px')
 )
 
 b_reset = Button(
     description='Reset',
     icon='restart',
     button_style='warning',
-    layout=Layout(width='135px', height='30px')
+    layout=Layout(width='90px', height='25px')
 )
 
 def start_click(b):
@@ -42,7 +42,7 @@ b_reset.on_click(reset_click)
 
 command_box = HBox(
     children=(b_start, b_stop, b_reset),
-    layout=Layout(width='405px', height='30px')
+    layout=Layout(width='280px', height='30px')
 )
 
 w1 = FloatProgress(
@@ -51,17 +51,17 @@ w1 = FloatProgress(
     max=639,
     description='Heating run:',
     style={'description_width': 'initial'},
-    layout=Layout(width='180px', height='30px')
+    layout=Layout(width='180px', height='25px')
 )
 
 w2 = Label(
     value=F"Current temp: {str(np.round(settings.appData['TEMP'][-1],2))} \u00b0 C",
-    layout=Layout(width='230px', height='30px')
+    layout=Layout(width='230px', height='25px')
 )
 
 info_box = VBox(
     children=(w1,w2),
-    layout=Layout(width='240px', height='90px')
+    layout=Layout(width='240px', height='55px')
 )
 
 x_sc = bq.LinearScale(min=0)
@@ -130,15 +130,15 @@ DeltaTLine = bq.Lines(
 )
 
 fig = bq.Figure(
-    layout=Layout(width='900px', height='800px'),
+    layout=Layout(width='320px', height='180px'),
     axes=[x_ax, y_ax_left, y_ax_right],
     marks=[TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine],
-    fig_margin=dict(top=25, bottom=50, left=50, right=70)
+    fig_margin=dict(top=25, bottom=50, left=45, right=70)
 )
 
 app = VBox(
     children=(command_box, fig, info_box),
-    layout=Layout(width='1000px', height='1000px', margin='0 0 0 0')
+    layout=Layout(width='320', height='300px', margin='0 0 0 0')
 )
 
 
