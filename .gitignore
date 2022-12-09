@@ -7,6 +7,7 @@
 ./cookies//test/First Run
 ./cookies//test/CrashpadMetrics-active.pma
 ./cookies//test/chrome_debug.log
+/cookies//
 .ipynb_checkpoints/graph-checkpoint.py
 .vscode/launch.json
 __pycache__/configure.cpython-37.pyc
