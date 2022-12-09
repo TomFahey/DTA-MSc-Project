@@ -8,6 +8,7 @@
 ./cookies//test/CrashpadMetrics-active.pma
 ./cookies//test/chrome_debug.log
 /cookies/
+/assets/
 .ipynb_checkpoints/graph-checkpoint.py
 .vscode/launch.json
 __pycache__/configure.cpython-37.pyc
@@ -18,4 +19,8 @@ __pycache__/settings.cpython-37.pyc
 microcontroller/main.bak.py
 microcontroller/main.bak2.py
 microcontroller/lib/adafruit_max31865_other.py
-./cookies/
+Pi-Pico-Prototype.code-workspace
+*-checkpoint.ipynb
+*.pyc
+__pycache__
+app_mock.py
