@@ -159,7 +159,7 @@ async def work():
             times = settings.appData['TIME']
             dtemps = settings.appData['DTEMP']
             w2.value = F"Current temp: {str(np.round(temps[-1],2))} \u00b0 C"
-            w3.value = F"Current \u0394T: {str(np.round(dtemps[1],2))} \u00b0 C"
+            w3.value = F"Current \u0394T: {str(np.round(dtemps[-1],2))} \u00b0 C"
             w1.value = 0
             TempLine.x = times
             TempLine.y = temps
