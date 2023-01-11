@@ -10,30 +10,35 @@ b_start = Button(
     description='Run',
     icon='play',
     button_style='warning',
-    layout=Layout(width='90px', height='25px')
+    layout=Layout(width='28%', height='100%')
 )
 
 b_stop = Button(
     description='Stop',
     icon='stop',
     button_style='warning',
-    layout=Layout(width='90px', height='25px')
+    layout=Layout(width='28%', height='100%')
 )
 
 b_reset = Button(
     description='Reset',
     icon='restart',
     button_style='warning',
-    layout=Layout(width='90px', height='25px')
+    layout=Layout(width='28%', height='100%')
 )
 
 def start_click(b):
+    breakpoint()
     settings.appConfig['RUN'] = True
     
 def stop_click(b):
+    breakpoint()
     settings.appConfig['RUN'] = False
 
+
 def reset_click(b):
+    breakpoint()
+    settings.appConfig['RUN'] = False
     settings.appConnected = False
 
 b_start.on_click(start_click)
@@ -42,7 +47,7 @@ b_reset.on_click(reset_click)
 
 command_box = HBox(
     children=(b_start, b_stop, b_reset),
-    layout=Layout(width='280px', height='30px')
+    layout=Layout(width='87.5%', height='10%')
 )
 
 w1 = FloatProgress(
@@ -51,17 +56,22 @@ w1 = FloatProgress(
     max=639,
     description='Heating run:',
     style={'description_width': 'initial'},
-    layout=Layout(width='180px', height='25px')
+    layout=Layout(width='56%', height='33%')
 )
 
 w2 = Label(
     value=F"Current temp: {str(np.round(settings.appData['TEMP'][-1],2))} \u00b0 C",
-    layout=Layout(width='230px', height='25px')
+    layout=Layout(width='72%', height='33%')
+)
+
+w3 = Label(
+    value=F"Current \u0394T: {str(np.round(settings.appData['DTEMP'][-1],2))} \u00b0 C",
+    layout=Layout(width='72%', height='33%')
 )
 
 info_box = VBox(
-    children=(w1,w2),
-    layout=Layout(width='240px', height='55px')
+    children=(w1,w2,w3),
+    layout=Layout(width='75%', height='15%')
 )
 
 x_sc = bq.LinearScale(min=0)
@@ -130,7 +140,7 @@ DeltaTLine = bq.Lines(
 )
 
 fig = bq.Figure(
-    layout=Layout(width='320px', height='180px'),
+    layout=Layout(width='100%', height='25em'),
     axes=[x_ax, y_ax_left, y_ax_right],
     marks=[TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine],
     fig_margin=dict(top=25, bottom=50, left=45, right=70)
@@ -138,7 +148,7 @@ fig = bq.Figure(
 
 app = VBox(
     children=(command_box, fig, info_box),
-    layout=Layout(width='320', height='300px', margin='0 0 0 0')
+    layout=Layout(width='100%', height='100%', margin='0 0 0 0')
 )
 
 
@@ -149,6 +159,7 @@ async def work():
             times = settings.appData['TIME']
             dtemps = settings.appData['DTEMP']
             w2.value = F"Current temp: {str(np.round(temps[-1],2))} \u00b0 C"
+            w3.value = F"Current \u0394T: {str(np.round(dtemps[1],2))} \u00b0 C"
             w1.value = 0
             TempLine.x = times
             TempLine.y = temps
