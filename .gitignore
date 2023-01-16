@@ -46,3 +46,4 @@ webapp/__pycache__/utils.cpython-37.pyc
 webapp/data/data_view.py
 webapp/data/.ipynb_checkpoints/data_view-checkpoint.py
 microcontroller/lib/pyRTOS/task.py
+app_mock.py
