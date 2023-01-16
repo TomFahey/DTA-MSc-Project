@@ -142,40 +142,45 @@ class MAX31856:
     # Tony says this isn't re-entrant or thread safe!
     _BUFFER = bytearray(4)
 
-    def __init__(self, spi, cs, thermocouple_type=ThermocoupleType.K):
+    def __init__(self,
+            spi,
+            cs,
+            thermocouple_type=ThermocoupleType.K,
+            filter_frequency=50, # UK default
+            auto_conversion=True,
+            cj_disable=True,
+            baudrate=1_000_000
+        ):
         self._device = SPIDevice(
             spi,
             cs,
-            baudrate=1_000_000,
+            baudrate=baudrate,
             polarity=0,
             phase=1,
-            filter_frequency=50, # UK default
-            auto_conversion=True,
-            cj_disable=True
             )
+        self._config = 0x00
 
         # assert on any fault
-        config = 0x00
-        self._write_u8(_MAX31856_MASK_REG, 0x0)
+        self._write_u8(_MAX31856_MASK_REG, self._config)
         # configure open circuit faults
-        config |=  _MAX31856_CR0_OCFAULT0
+        self._config |=  _MAX31856_CR0_OCFAULT0
          # Set 50Hz or 60Hz filter.
         if filter_frequency not in (50, 60):
             raise ValueError("Filter_frequency must be a value of 50 or 60!")
-            config = self._read_u8(_MAX31856_CR0_REG)
+            self._config = self._read_u8(_MAX31856_CR0_REG)
         elif filter_frequency == 50:
-            config |= _MAX31856_CONFIG_FILT50HZ
+            self._config |= _MAX31856_CONFIG_FILT50HZ
         else:
-            config &= ~_MAX31856_CONFIG_FILT50HZ
+            self._config &= ~_MAX31856_CONFIG_FILT50HZ
         if auto_conversion:
-            config |= _MAX31856_CR0_AUTOCONVERT
+            self._config |= _MAX31856_CR0_AUTOCONVERT
         else:
-            config &= ~ _MAX31856_CR0_AUTOCOVERT
+            self._config &= ~ _MAX31856_CR0_AUTOCOVERT
         if cj_disable:
-            config |= _MAX31856_CR0_CJ
+            self._config |= _MAX31856_CR0_CJ
         else:
-            config &= ~ _MAX31856_CR_CJ
-        self._write_u8(_MAX31856_CR0_REG, config)
+            self._config &= ~ _MAX31856_CR_CJ
+        self._write_u8(_MAX31856_CR0_REG, self._config)
 
         # set thermocouple type
         # get current value of CR1 Reg
@@ -190,7 +195,8 @@ class MAX31856:
     def temperature(self):
         """Measure the temperature of the sensor and wait for the result.
         Return value is in degrees Celsius. (read-only)"""
-        self._perform_one_shot_measurement()
+        if not (self._config | _MAX31856_CR0_AUTOCONVERT):
+            self._perform_one_shot_measurement()
         return self.unpack_temperature()
 
     def unpack_temperature(self) -> float:
