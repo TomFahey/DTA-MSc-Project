@@ -1,5 +1,5 @@
 import numpy as np
-import settings
+#import shared.appState as appState
 from collections import UserDict, UserList
 
 class ResponsiveDict(UserDict):

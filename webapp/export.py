@@ -4,21 +4,23 @@ from datetime import datetime
 import pandas as pd
 import os
 
+from shared import appState
 
-import settings
+MOUNTDIR = '/media/pi/'
+LOCALDIR = '/home/pi/data/'
+
+
 
 def detect_mountpoints():
-    mountpoints = os.listdir('/media/pi/')
-    if 'CIRCUITPY' in mountpoints: 
-        mountpoints.remove('CIRCUITPY')
-    return mountpoints if len(mountpoints) > 0 else None
+    mountpoints = [(dir, "/media/pi/" + dir) for dir in os.listdir(MOUNTDIR) if dir != "CIRCUITPY"]
+    return mountpoints
     
 label1 = Label('Mounted storage drives:')
 drive_select = Select(
-    options=detect_mountpoints(),
+    options=[('Local storage', LOCALDIR)] + detect_mountpoints(),
     value=None,
     disabled=False,
-    layout=Layout(width='280px', height='70px',margin='0 0 0 0')
+    layout=Layout(width='87.5%', height='29.15%',margin='0 0 0 0')
 )
 
 label2 = Label('Filename:')
@@ -26,13 +28,13 @@ filename_input = Text(
     value='DATA-{}.csv'.format(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')),
     PlaceHolder='Enter filename',
     disabled=False,
-    layout=Layout(width='280px')
+    layout=Layout(width='87.5%')
 )
 
 
 input_boxes = VBox(
     children=(label1, drive_select, label2, filename_input),
-    layout=Layout(width='290px', height='180px', margin='0 0 0 0')
+    layout=Layout(width='90.5%', height='75%', margin='0 0 0 0')
 )
 
 
@@ -53,23 +55,27 @@ eject_button = Button(
 )
 
 def save_click(b):
-    pass
+    path = drive_select.value + filename_input.value
+    with open(path,'w') as f:
+        f.write('PID,TEMP,DTEMP,TIME\n')
+        for row in appState.runs:
+            f.write(','.join([str(x) for x in row]) + '\n')
     
 def eject_click(b):
-    settings.config['RUN'] = False
+    pass
 
 save_button.on_click(save_click)
 eject_button.on_click(eject_click)
 
 command_buttons = HBox(
     children=(save_button, eject_button),
-    layout=Layout(width='290px', height='50px', margin='0 0 0 0')
+    layout=Layout(width='90.5%', height='21%', margin='0 0 0 0')
 )
 
 
 app = VBox(
     children=(input_boxes, command_buttons),
-    layout=Layout(width='300px', height='240x', margin='0 0 0 0')
+    layout=Layout(width='94%', height='100%', margin='0 0 0 0')
 )
    
 

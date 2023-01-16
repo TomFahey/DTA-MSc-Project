@@ -11,23 +11,22 @@ from importlib import reload
 
 
 # Import global settings, to be able to change the config
-import settings
+from shared import appState
 from utils import ResponsiveDict
 
 class ProgrammeTab(widgets.Tab):
     def __init__(self,  **kwargs):
-        global settings
+        global appState
         super().__init__(
             children =
             [
-                *[StageTab(stage) for stage in settings.appProgramme.stages],
+                *[StageTab(stage) for stage in appState.programme.stages],
                 StageTab()
-            ],
-            **kwargs
+            ]
         )
-        for i, _ in enumerate(settings.appProgramme.stages):
+        for i, _ in enumerate(appState.programme.stages):
             self.set_title(i, 'Stage {}:'.format(i+1))
-        self.set_title(len(settings.appProgramme.stages), '+')
+        self.set_title(len(appState.programme.stages), '+')
         self.selected_index = 0
         self.observe(self.new_tab_callback, names='selected_index')
 
@@ -38,24 +37,23 @@ class ProgrammeTab(widgets.Tab):
         
 
     def add_tab(self):
-        if len(settings.appProgramme.stages) > 0:
-            new_stage =settings.appProgramme.stages[-1].copy()
-            settings.appProgramme.add_stage(new_stage)
+        global appState
+        if len(appState.programme.stages) > 0:
+            new_stage = appState.programme.stages[-1].copy()
+            appState.programme.add_stage(new_stage)
         else:
-            settings.appProgramme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
-        tabs = [StageTab(stage) for stage in settings.appProgramme.stages]
+            appState.programme.add_stage({'TEMP:': 23, 'HEAT': 0, 'HOLD': 0})
+        tabs = [StageTab(stage) for stage in appState.programme.stages]
         self.children = [*tabs, StageTab()]
-        for i, stage in enumerate(settings.appProgramme.stages):
+        for i, stage in enumerate(appState.programme.stages):
             self.set_title(i, 'Stage {}'.format(i+1))
-        self.set_title(len(settings.appProgramme.stages), '+')
+        self.set_title(len(appState.programme.stages), '+')
         self.selected_index = len(self.children) - 2
 
     def reset(self):
-        global settings
-        breakpoint()
-        #reload(settings)
+        #breakpoint()
         self.__init__()
-        #self.children = [StageTab(stage) for stage in settings.appProgramme.stages]
+        #self.children = [StageTab(stage) for stage in appState.programme.stages]
 
 
 class StageTab(widgets.Accordion):
@@ -77,12 +75,12 @@ class StageTab(widgets.Accordion):
                 ControlSlider(self.stage, 'HEAT'),
                 ControlSlider(self.stage, 'HOLD')
             ],
-            layout=Layout(width='240px'),
+            layout=Layout(width='100%'),
             **kwargs
         )
         self.set_title(0, 'Target Temperature')
         self.children[0].value=self.stage['TEMP']
-        self.children[0].min=24
+        self.children[0].min=0
         self.children[0].max=200
         self.set_title(1, 'Heating rate')
         self.children[1].value=abs(self.stage['HEAT'])
@@ -105,7 +103,7 @@ class ControlSlider(widgets.IntSlider):
             orientation='horizontal',
             readout=True,
             readout_format='d',
-            layout=Layout(width='200px'),
+            layout=Layout(width='100%'),
             **kwargs
             )
         self.stage = stage
@@ -137,7 +135,8 @@ class ControlSlider(widgets.IntSlider):
 # Finally, define a horizontal box container for the slider widgets in the app
 # This just serves to place the two widgets next to each other, as well as allowing
 # us to wrap the page in a single container object, ready to pass to app.py
+
 app = ProgrammeTab(
-    layout=Layout(margin='0 0 0 0',maxwidth='260px',maxheight='200px',
+            layout=Layout(margin='0 0 0 0',maxwidth='81.25%',maxheight='83.33%',
                   padding='0 0 0 0')
 )

@@ -1,44 +1,82 @@
-import numpy as np
-from utils import Programme,ResponsiveList
-from asyncio import sleep as asleep
 
-global appConfig
-global appData
-global appProgramme
-global appReading
-global appConnected
-appConfig = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
-appProgramme = Programme()
-appData = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
-appConnected = False
+from ipywidgets import widgets
+from ipywidgets.widgets import FloatSlider, Button, IntSlider, Tab, Accordion
+from ipywidgets.widgets import Layout, HBox
+from IPython.core.display import display, HTML # IPython Notebook functions
+from importlib import reload
+from shared import appState
 
-async def work():
-    global appConfig
-    global appData
-    global appProgramme
-    while True:
-        try:
-            if (appConfig['RUN']):
-                appConfig['LOG'] = True
-                while abs(appData['TEMP'][-1] - appProgramme.current_stage['TEMP']) > 0.1:
-                    appConfig['MODE'] = True
-                    appConfig['TARGET'] = appProgramme.current_stage['HEAT']
-                    await asleep(0.5)
-                holdTime = appData['TIME'][-1] + appProgramme.current_stage['HOLD']
-                while appData['TIME'][-1] < holdTime:
-                    appConfig['MODE'] = False
-                    appConfig['TARGET'] = appProgramme.current_stage['TEMP']
-                    await asleep(0.5)
-                appProgramme.next_stage()
-            elif (not appConfig['RUN']):
-                appConfig['LOG'] = False
-                appConfig['MODE'] = False
-                appConfig['TARGET'] = appProgramme.current_stage['TEMP']
-                appProgramme.startingTemp = appData['TEMP'][-1]
-                appData['TEMP'][0] = appProgramme.startingTemp
-                if len(appProgramme.stages) > 1:
-                    appProgramme.update_xy()
-                await asleep(0.5)
-        except:
-            await asleep(0.5)
-        #await asyncio.sleep(0.5)
+
+class ConfigTab(widgets.Accordion):
+    def __init__(self, config=
+        appState.config,
+        **kwargs
+    ):
+        self.config = config
+        super().__init__(
+            children= 
+            [
+                ControlSlider(self.config, 'KP'), 
+                ControlSlider(self.config, 'KD'),
+                ControlSlider(self.config, 'KI'),
+                ControlSlider(self.config, 'INTERVAL')
+            ],
+            #layout=Layout(width='240px'),
+            **kwargs
+        )
+        self.set_title(0, 'Proportional gain')
+        self.children[0].value=self.config['KP']
+        self.children[0].min=0
+        self.children[0].step=0.5
+        self.children[0].max=100
+        self.set_title(1, 'Integral gain')
+        self.children[1].value=self.config['KD']
+        self.children[1].min=0
+        self.children[1].step=0.5
+        self.children[1].max=100
+        self.set_title(2, 'Derivative gain')
+        self.children[2].value=self.config['KI']
+        self.children[2].min=0
+        self.children[2].step=0.5
+        self.children[2].max=100
+        self.set_title(3, 'Time interval')
+        self.children[3].value=self.config['INTERVAL']
+        self.children[3].min=0
+        self.children[3].step=0.05
+        self.children[3].max=5
+
+    def reset(self):
+        self.__init__()
+        for child in self.children:
+            child.config = appState.config
+
+
+class ControlSlider(FloatSlider):
+    def __init__(self, config, target, **kwargs):
+        super().__init__(
+            value=1,
+            min=0,
+            max=100,
+            step=0.05,
+            disabled=False,
+            continuous_update=False,
+            orientation='horizontal',
+            readout=True,
+            readout_format='.2f',
+            layout=Layout(width='62.5%'),
+            **kwargs
+            )
+        self.config = config
+        self.target = target
+        self.observe(self.handle_slider_change, names='value')
+    
+    def handle_slider_change(self, change):
+        self.config[self.target] = change['new']
+
+# Define a slider widget for the target temperature
+# Options are largely self-explanatory
+
+app = ConfigTab(
+    layout=Layout(margin='0 0 0 0',maxwidth='81.25%',maxheight='83.33%',
+                  padding='0 0 0 0')
+)
