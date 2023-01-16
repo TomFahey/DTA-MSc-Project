@@ -14,12 +14,15 @@ class Sensor:
     
 class TempSensor(Sensor):
     
-    def __init__(self, name, device):
+    def __init__(self, name, device, precision=1):
         super().__init__(name)
         self.device = device
+        self.precision = precision
         
     def read(self):
-        return round(self.device.temperature, 1)
+        return round(self.device.temperature, self.precision)
+    
+    #(struct.unpack(">i", max31856a._read_register(0x0C, 3) + bytes(1))[0] >> 13) / (32*1.6*2**17)) * 1000
     
 class TimeSensor(Sensor):
     
