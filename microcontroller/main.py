@@ -59,11 +59,10 @@ class Supervisor:
         
 
     def run(self):
-        lastTimeStamp = time.monotonic_ns()
         _ = [component.update() for component in self.components]
         self.pull_config()
         self.push_data()
-        self.wait(lastTimeStamp)
+        
         #coros = [
         #    asyncio.create_task(component.update()) for component in self.components
         #]
@@ -71,21 +70,20 @@ class Supervisor:
         #coros.append(asyncio.create_task(self.push_data()))
         #await asyncio.gather(*coros)
         
-            
-            
-            
     def wait(self, lastTimeStamp):
         while(time.monotonic_ns()-lastTimeStamp<self.config['INTERVAL']*1E9):
             time.sleep(0.001)
+        return time.monotonic_ns()
             
-thisPID = PIDState(max31865,kp=7.0, ki=2.5, kd=0.1)
+thisPID = PIDState(max31865b,kp=7.0, ki=2.5, kd=0.1)
 
-tempSensor = TempSensor('TEMP', max31865)
-dTempSensor = TempSensor('DTEMP', max31856)
+tempSensorA = TempSensor('TEMP', max31865a)
+tempSensorB = TempSensor('TEMP', max31865b)
+dTempSensor = TempSensor('DTEMP', max31856a, precision=2)
 timeSensor = TimeSensor('TIME')
 pidSensor = PIDSensor('PID', thisPID)
 
-thisLog = Log(0.25, [ pidSensor, tempSensor, dTempSensor, timeSensor])
+thisLog = Log(0.25, [ pidSensor, tempSensorA, tempSensorB, dTempSensor, timeSensor])
 
 thisClient = SerialClient()
 
@@ -97,8 +95,10 @@ thisSupervisor = Supervisor(thisClient, thisPID, thisLog)
 #    while True:
 #        await thisSupervisor.run()
 def main():
+    lastTimeStamp = time.monotonic_ns()
     while True:
         thisSupervisor.run()
+        lastTimeStamp = thisSupervisor.wait(lastTimeStamp)
 
     
     #while True:
@@ -125,4 +125,5 @@ def main():
 
 #timer = Timer(period=1000, mode=Timer.PERIODIC, callback=lambda x: x)
 #asyncio.run(main())
+#main()
 
