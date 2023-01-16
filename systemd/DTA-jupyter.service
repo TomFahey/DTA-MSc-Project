@@ -1,0 +1,18 @@
+[Unit]
+Description=Jupyter server instance serving web accessible GUI for connected DTA instrument
+After=network.target syslog.target nss-lookup.target
+
+[Service]
+Type=simple
+PIDFile=/run/DTA-jupyter.pid
+User=pi
+Group=pi
+ExecStart=/home/pi/.local/bin/jupyter-server /home/pi/Pi-Pico-Prototype
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s QUIT $MAINPID
+Restart=always
+RestartSec=15
+
+[Install]
+WantedBy=multi-user.target
+Also=DTA-interface.service
