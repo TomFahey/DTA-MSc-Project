@@ -22,6 +22,7 @@ microcontroller/lib/adafruit_max31865_other.py
 Pi-Pico-Prototype.code-workspace
 *-checkpoint.ipynb
 *.pyc
+*.mpy
 __pycache__
 app_mock.py
 PID-run.txt
