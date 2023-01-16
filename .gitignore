@@ -24,3 +24,6 @@ Pi-Pico-Prototype.code-workspace
 *.pyc
 __pycache__
 app_mock.py
+PID-run.txt
+microcontroller/pyRTOS.mpy
+server.py
