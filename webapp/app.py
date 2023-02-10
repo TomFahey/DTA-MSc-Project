@@ -93,7 +93,10 @@ async def main():
         await work(reader, writer)
         appState.programme.__init__()
         appState.data['PID'] = np.array([0.])
-        appState.data['TEMP'] = np.array([0.]) 
+        appState.data['TEMPA'] = np.array([0.]) 
+        appState.data['TEMPB'] = np.array([0.]) 
+        appState.data['TEMPC'] = np.array([0.]) 
+        appState.data['DTEMP'] = np.array([0.]) 
         appState.data['TIME'] = np.array([0.])
         appState.config['RUN'] = False
         appState.config['MODE'] = False
