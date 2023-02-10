@@ -22,10 +22,10 @@ class PicoDAServer(asyncio.Protocol):
             }
         self.serial_reader = None
         self.serial_writer = None
-        self.data = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
+        self.data = {'PID': np.array([0.]) ,'TEMPA': np.array([0.]), 'TEMPB': np.array([0.]), 'TEMPC': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
         self.push_config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
         self.pull_config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 0.0, 'INTERVAL': 0.25}
-        self.device_status = {'PID': 0, 'TEMP': 0, 'DTEMP':0, 'TIME': 0}
+        self.device_status = {'PID': 0, 'TEMPA': 0, 'TEMPB': 0, 'TEMPC': 0, 'DTEMP':0, 'TIME': 0}
         self.background_task = None
         self.counter = 0
 
