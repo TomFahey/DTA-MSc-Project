@@ -36,7 +36,7 @@ def stop_click(b):
 
 def reset_click(b):
     global appState
-    breakpoint()
+    #breakpoint()
     appState.config['RUN'] = False
     appState.connected = False
 
@@ -59,7 +59,7 @@ w1 = FloatProgress(
 )
 
 w2 = Label(
-    value=F"Current temp: {str(np.round(appState.data['TEMP'][-1],2))} \u2103",
+    value=F"Current temp: {str(np.round(appState.data['TEMPA'][-1],2))} \u2103",
     layout=Layout(width='72%', height='33%')
 )
 
@@ -101,28 +101,46 @@ y_ax_right = bq.Axis(
     side='right'
 )
 
-TempLine = bq.Lines(
+MeasuredTempLine = bq.Lines(
     x=appState.data['TIME'],
-    y=appState.data['TEMP'],
+    y=appState.data['TEMPA'],
     scales={'x': x_sc, 'y': y_sc_l},
     colors=['#ff000f'],
     display_legend=True,
-    labels=['Temperature']
+    labels=['Measured']
+)
+
+SampleTempLine = bq.Lines(
+    x=appState.data['TIME'],
+    y=appState.data['TEMPB'],
+    scales={'x': x_sc, 'y': y_sc_l},
+    colors=['#0000ff'],
+    display_legend=True,
+    labels=['Sample']
+)
+
+ReferenceTempLine = bq.Lines(
+    x=appState.data['TIME'],
+    y=appState.data['TEMPC'],
+    scales={'x': x_sc, 'y': y_sc_l},
+    colors=['#3c9dd0'],
+    display_legend=True,
+    labels=['Reference']
 )
 
 ProgrammeTempLine = bq.Lines(
     x=appState.programme.x,
     y=appState.programme.y_temp,
     scales={'x': x_sc, 'y': y_sc_l},
-    colors=['#3c9dd0'],
     line_style='dashed',
+    colors=['#ff000f'],
     display_legend=True,
     labels=['Programme']
 )
 
 HeatLine = bq.Lines(
     x=appState.data['TIME'][1:],
-    y=np.diff(appState.data['TEMP'], axis=0),
+    y=np.diff(appState.data['TEMPA'], axis=0),
     scales={'x': x_sc, 'y': y_sc_r},
     colors=['#f7a500'],
     opacities=[0.6]
@@ -148,7 +166,7 @@ DeltaTLine = bq.Lines(
 fig = bq.Figure(
     layout=Layout(width='100%', height='25em'),
     axes=[x_ax, y_ax_left, y_ax_right],
-    marks=[TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine],
+    marks=[MeasuredTempLine, ProgrammeTempLine,ProgrammeHeatLine, DeltaTLine],
     fig_margin=dict(top=25, bottom=50, left=45, right=70),
     legend_location='top-right'
 )
@@ -163,14 +181,26 @@ async def work():
     global appState
     while True:
         try:
-            temps = appState.data['TEMP']
+
+            # Values to be updated
+            TempA = appState.data['TEMPA']  # RTD 1 - measuring reference temperature
+            TempB = appState.data['TEMPB']  # RTD 2 - measuring sample temperature
+            TempC = appState.data['TEMPC']  # TC 1 - measuring plate temperature
+            dtemps = appState.data['DTEMP'] # TC 2 - measuring sample-reference delta
             times = appState.data['TIME']
-            dtemps = appState.data['DTEMP']
-            w2.value = F"Current temp: {str(np.round(temps[-1],2))} \u2103"
+
+            # Update labels
+            w1.value = 0 # TODO
+            w2.value = F"Current temp: {str(np.round(TempC[-1],2))} \u2103"
             w3.value = F"Current \u0394T: {str(np.round(dtemps[-1],2))} K"
-            w1.value = 0
-            TempLine.x = times
-            TempLine.y = temps
+
+            # Update plot lines
+            MeasuredTempLine.x = times
+            MeasuredTempLine.y = TempC
+            SampleTempLine.x = times
+            SampleTempLine.y = TempB
+            ReferenceTempLine.x = times
+            ReferenceTempLine.y = TempA
             DeltaTLine.x = times
             DeltaTLine.y = dtemps
             ProgrammeTempLine.x = appState.programme.x
@@ -178,23 +208,27 @@ async def work():
             ProgrammeHeatLine.x = appState.programme.x
             ProgrammeHeatLine.y = 60*appState.programme.y_heat
 
+
             HeatLine.x = times[1:]
-            if len(temps) > 10:
-                temps = np.array(temps)[np.array(times) > 0.0]
+            if len(TempC) > 10:
+                TempA = np.array(TempA)[np.array(times) > 0.0]
+                TempB = np.array(TempB)[np.array(times) > 0.0]
+                TempC = np.array(TempC)[np.array(times) > 0.0]
                 times = np.array(times)[np.array(times) > 0.0]
-                HeatLine.y = 60*((temps-temps[0])/times)
+                #HeatLine.y = 60*((TempA-TempA[0])/times)
                 y_sc_r.max = max(min(np.max(HeatLine.y),30), 1)
                 y_sc_r.min = min(max(np.min(HeatLine.y),-30), -1)
             else:
                 y_sc_r.max = 30
                 y_sc_r.min = -30
-            x_sc.max = float(max(max(TempLine.x), max(ProgrammeTempLine.x)))
+            x_sc.max = float(max(max(MeasuredTempLine.x), max(ProgrammeTempLine.x)))
             x_sc.min = 0.
-            y_sc_l.max = float(max(max(TempLine.y), max(ProgrammeTempLine.y)))
-            y_sc_l.min = float(min(min(TempLine.y), min(ProgrammeTempLine.y)))
-            fig.marks = [TempLine, ProgrammeTempLine,HeatLine,ProgrammeHeatLine, DeltaTLine]
+            y_sc_l.max = float(max(max(MeasuredTempLine.y), max(ProgrammeTempLine.y)))
+            y_sc_l.min = float(min(min(MeasuredTempLine.y), min(ProgrammeTempLine.y)))
+            fig.marks = [MeasuredTempLine, SampleTempLine, ReferenceTempLine, ProgrammeTempLine, ProgrammeHeatLine, DeltaTLine]
             fig.axes = [x_ax, y_ax_left, y_ax_right]
-
+            await asleep(0.2)
+        except ValueError:
             await asleep(0.2)
         except Exception as e:
             print('Graph work error')
