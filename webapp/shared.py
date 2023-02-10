@@ -9,20 +9,37 @@ from asyncio import sleep as asleep
 #global appConnected
 class AppState:
     def __init__(self):
-        self.config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
+        self.config = {
+            'RUN': False, 
+            'MODE': False, 
+            'LOG': False, 
+            'TARGET': 25, 
+            'KP': 35.0, 
+            'KD': 2.0, 
+            'KI': 3.5, 
+            'INTERVAL': 0.25
+            }
         self.programme = Programme()
-        self.data = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
-        self.runs = []
+        self.data = {
+            'PID': np.array([0.]) ,
+            'TEMPA': np.array([0.]), # RTD 1 - reference temperature
+            'TEMPB': np.array([0.]), # RTD 2 - sample temperature
+            'TEMPC': np.array([0.]), # TC 1 - plate temperature
+            'DTEMP': np.array([0.]), # TC 2 - sample-reference delta
+            'TIME': np.array([0.])
+            }
+        self.run = []
         self.connected = False
         
     async def work(self):
         while True:
+            #breakpoint()
             try:
-                #breakpoint()
                 if (self.config['RUN']):
                     self.config['LOG'] = True
     
-                    while abs(self.data['TEMP'][-1] - self.programme.current_stage['TEMP']) > 0.1:
+                    while abs(self.data['TEMPC'][-1] - self.programme.current_stage['TEMP']) > 0.1:
+                        breakpoint()
                         if not self.connected:
                             break
                         elif (self.config['RUN']):
@@ -30,7 +47,7 @@ class AppState:
                             self.config['TARGET'] = self.programme.current_stage['HEAT']
                         else:
                             self.config['MODE'] = False
-                            self.config['TARGET'] = self.data['TEMP'][-1]
+                            self.config['TARGET'] = self.data['TEMPC'][-1]
                         await asleep(0.5)
     
                     holdTime = self.data['TIME'][-1] + self.programme.current_stage['HOLD']
@@ -45,12 +62,12 @@ class AppState:
                             holdTime += 0.5
                         await asleep(0.5)
     
+                    breakpoint()
                     try:
-                        breakpoint()
                         self.programme.next_stage()
                     except StopIteration:
                         self.run = self.data.copy()
-                        self.data = {'PID': np.array([0.]) ,'TEMP': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
+                        self.data = {'PID': np.array([0.]) ,'TEMPA': np.array([0.]), 'TEMPB': np.array([0.]), 'TEMPC': np.array([0.]), 'DTEMP': np.array([0.]), 'TIME': np.array([0.])}
                         self.programme = Programme()
                         self.config = {'RUN': False, 'MODE': False, 'LOG': False, 'TARGET': 25, 'KP': 35.0, 'KD': 2.0, 'KI': 3.5, 'INTERVAL': 0.25}
     
@@ -58,12 +75,14 @@ class AppState:
                     self.config['LOG'] = False
                     self.config['MODE'] = False
                     self.config['TARGET'] = self.programme.current_stage['TEMP']
-                    self.programme.startingTemp = self.data['TEMP'][-1]
-                    self.data['TEMP'][0] = self.programme.startingTemp
+                    self.programme.startingTemp = self.data['TEMPC'][-1]
+                    self.data['TEMPC'][0] = self.programme.startingTemp
                     if len(self.programme.stages) > 1:
                         self.programme.update_xy()
                     await asleep(0.5)
-            except:
+            except Exception as e:
+                print('Error in appState work loop:')
+                print(e)
                 await asleep(0.5)
             #await asyncio.sleep(0.5)
         
