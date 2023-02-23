@@ -1,5 +1,5 @@
-Build/Installation
-=====
+Building
+========
 
 .. _build:
 
@@ -26,21 +26,6 @@ The DTA utilises the following off-the-shelf parts:
 * An adjustable DC Power Supply, capable of providing up to 20V at 5A or greater
 
 As well as a number of custom PCBs, the files for which can be found on the project Github page.
-
-.. _installation:
-
-Installation
-------------
-
-To install the user interface software on the Raspberry Pi, you can use the following commands:
-
-.. code-block:: console
-
-   $ git clone https://github.com/TomFahey/DTA-MSC-Project.git
-   $ cd DTA-MSC-Project
-   $ sudo python setup.py install
-
-This will install the project, and all of its dependencies, after which the user interface service will start automatically.
 
 ..
     Creating recipes

@@ -4,52 +4,72 @@
    contain the root `toctree` directive.
 
 DIY Differential Thermal Analyser Project documentation
-===================================
+=======================================================
 
-Introduction
-------------
+-------
+Welcome
+-------
 
 This documentation covers the design and use of a low cost Differential Thermal Analyser (DTA) instrument, developed as a part of a MSc Project at the University of Birmingham.
 
-The aim of the project is to develop a DTA instrument that can be used in typical undegraduate labs, to analyse the properties and behaviour of a reasonable diverse range of 
-polymer materials, as a lower entry alternative to more expensive commercial instruments.
+The aim of the project is to develop a DTA instrument that can be used in typical undegraduate labs, enabling students to analyse the behaviour of a reasonably broad range of 
+polymers in response to heating. 
 
-The design therefore makes extensive use of off-the-shelf parts, integrated with free, open source software, to provide a low cost, easy to build and intuitive to use DTA instrument.
+As a lower cost alternative to existing commercial instruments, the design makes extensive use of off-the-shelf parts, as well as FOSS, making it easy to build and maintain.
+These are used in conjunction with the provided PCB and control software to produce an integrated DTA system that is intuitive to use, like commercial instruments.
 
-It also provides a platform for further development, having been designed with extensibility in mind, allowing for the easy integration of further features and capabilities.
+Unlike commercial instruments, the design is open source, allowing users to inspect, modify and extend parts as they see fit, whether it be to improve performance, add new 
+features and capabilities, or simply inspect/modify the code/recorded data to better suit their needs.
+.. It also provides a platform for further development, having been designed with extensibility in mind, allowing for the easy integration of further features and capabilities.
 
-Contents
---------
+How to use the documentation:
+-----------------------------
 
-The documentation covers three key topics:
+The documentation is structured as follows:
 
-* :doc:`build` - Instructions for building and setting up the instrument
-* :doc:`usage` - Instructions for basic use of the instrument
-* :doc:`api` - API documentation for the software
+* **Getting Started** - New users will want to start here, to get up to speed
+* **Users Guides** - Guides on how to use the system, including more advanced use and debugging
+* **Reference** - Reference documentation of hardware and software, useful for developers
 
-.. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+.. _getting-started:
 
-   build
-   usage
-   api
+Getting Started
+===============
 
 Check out the :doc:`usage` section for further information, including how to
 :ref:`install <installation>` the project.
 
+.. toctree::
+   :maxdepth: 2
+
+   start/introduction
+   start/components
+   start/building
+   start/setup
+
+
+.. _user-guides:
+
+User Guides
+===========
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
-Contents
---------
+   usage/basic
+   usage/advanced
+   usage/debugging
+
+.. _reference:
+
+Reference
+=========
 
 .. toctree::
+   :maxdepth: 2
 
-   usage
-   api
+   reference/hardware
+   reference/software
 
 
 Indices and tables
