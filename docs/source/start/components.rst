@@ -44,6 +44,8 @@ files of which are available in the `Github repository. <https://github.com/TomF
 
 These consist of the following:
 
+.. _microcontroller_interface_board:
+
 * Microcontroller and temperature sensor interface board
 
     .. image:: /images/MicrocontrollerTemperatureSensorBoard.png
@@ -54,6 +56,8 @@ These consist of the following:
     Interfaces with the Raspberry Pi Pico microcontroller and the temperature sensor
     breakout boards.
 
+.. _motor_controller_interface_board:
+
 * Motor controller interface board
 
     .. image:: /images/MotorControllerBoard.png
@@ -63,6 +67,8 @@ These consist of the following:
 
     Interfaces with the HAT-MDD10 motor controller board, via the 40-pin GPIO header, as
     well as the DC power supply.
+
+.. _tem_interface_board:
 
 * Thermoelectric module interface board
 

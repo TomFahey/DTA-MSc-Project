@@ -15,12 +15,6 @@ This documentation covers the design and use of a low cost Differential Thermal 
 The aim of the project is to develop a DTA instrument that can be used in typical undegraduate labs, enabling students to analyse the behaviour of a reasonably broad range of 
 polymers in response to heating. 
 
-As a lower cost alternative to existing commercial instruments, the design makes extensive use of off-the-shelf parts, as well as FOSS, making it easy to build and maintain.
-These are used in conjunction with the provided PCB and control software to produce an integrated DTA system that is intuitive to use, like commercial instruments.
-
-Unlike commercial instruments, the design is open source, allowing users to inspect, modify and extend parts as they see fit, whether it be to improve performance, add new 
-features and capabilities, or simply inspect/modify the code/recorded data to better suit their needs.
-.. It also provides a platform for further development, having been designed with extensibility in mind, allowing for the easy integration of further features and capabilities.
 
 How to use the documentation:
 -----------------------------
