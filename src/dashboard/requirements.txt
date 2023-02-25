@@ -1,4 +1,0 @@
-bqplot==0.12.33
-ipython==8.4.0
-ipywidgets==7.7.1
-numpy==1.16.2
