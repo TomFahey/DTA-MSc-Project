@@ -1,3 +1,6 @@
+""" Functional module: Defines the AppState class, which holds the state of the application, including its
+    current configuration, data and programme.
+"""
 import numpy as np
 from webapp.utils import Programme,ResponsiveList
 from asyncio import sleep as asleep
@@ -9,32 +12,39 @@ from asyncio import sleep as asleep
 #global appConnected
 class AppState:
     """
-    AppState is a class that holds the state of the application.
+    The AppState class is a container/struct for the state of the application, which is shared between the
+    various UI tab modules, after import. It contains the configuration of the application, data received
+    from the microcontroller during a heating run and the entered heating programme.
     """
     def __init__(self):
         self.config = {
-            'RUN': False, 
-            'MODE': False, 
-            'LOG': False, 
-            'TARGET': 25, 
-            'KP': 35.0, 
-            'KD': 2.0, 
-            'KI': 3.5, 
-            'INTERVAL': 0.25
+            'RUN': False,    # Controls start/stop of heating run (True/False)
+            'MODE': False,   # Controls heating behaviour, (Ramp/Hold) = (True/False)
+            'LOG': False,    # Controls logging of data from sensors (True/False)
+            'TARGET': 25,    # Target value for PID algorithm, (Ramp rate [K/min] or Hold temperature [degC])
+            'KP': 35.0,      # Proportional gain for PID algorithm
+            'KD': 2.0,       # Derivative gain for PID algorithm
+            'KI': 3.5,       # Integral gain for PID algorithm
+            'INTERVAL': 0.25 # 'Tick' interval for microcontroller routine, in seconds
             }
-        self.programme = Programme()
+        self.programme = Programme() # Heating programme - see utils.py
         self.data = {
-            'PID': np.array([0.]) ,
+            'PID': np.array([0.]) ,  # PID output - mainly used for debugging
             'TEMPA': np.array([0.]), # RTD 1 - reference temperature
             'TEMPB': np.array([0.]), # RTD 2 - sample temperature
             'TEMPC': np.array([0.]), # TC 1 - plate temperature
             'DTEMP': np.array([0.]), # TC 2 - sample-reference delta
-            'TIME': np.array([0.])
+            'TIME': np.array([0.])   # Time since start of heating run
             }
-        self.runs = []
-        self.connected = False
+        self.runs = []              # List of data dictionaries from previous heating runs
+        self.connected = False      # Flag to indicate connection to microcontroller
         
     async def work(self):
+        """ 
+        This function implements the logic controlling the heating run. 
+        
+        The behaviour of the microcontroller is determined by 
+        """
         while True:
             #breakpoint()
             try:

@@ -1,3 +1,6 @@
+"""  UI Tab module: Main tab for user interface. Features controls for starting a run, graph of specified
+     heating programme and temperature profile during run, as well as current temperature.
+"""
 from ipywidgets.widgets import Label, FloatProgress, Button
 from ipywidgets.widgets import Layout, HBox, VBox
 import numpy as np
@@ -6,6 +9,8 @@ from asyncio import sleep as asleep
 
 from webapp.shared import appState
 
+
+# Control buttons
 b_start = Button(
     description='Run',
     icon='play',
@@ -178,6 +183,11 @@ app = VBox(
 
 
 async def work():
+    """ Refresh loop for graph and temperature readouts
+
+        This function continously updates the graph and temperature readout for the tab, depending on
+        the current programme and data. 
+    """
     global appState
     while True:
         try:

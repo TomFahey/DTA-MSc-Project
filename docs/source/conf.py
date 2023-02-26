@@ -7,10 +7,10 @@
 # add these directories to sys.path here.
 import pathlib
 import sys
-sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
-sys.path.insert(0, "/home/Pi/Pi-Pico-Prototype")
-sys.path.insert(0, "/home/Pi/Pi-Pico-Prototype/microcontroller")
-sys.path.insert(0, "/home/Pi/Pi-Pico-Prototype/webapp")
+#sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
+#sys.path.insert(0, "/home/Pi/Pi-Pico-Prototype")
+#sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/microcontroller/")
+sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/dashboard/")
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
@@ -27,7 +27,7 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
+    'jupyter_sphinx',
 ]
 
 templates_path = ['_templates']
@@ -38,10 +38,13 @@ exclude_patterns = []
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
-html_theme = 'furo'
+html_theme = 'alabaster'
 html_static_path = ['_static']
 
 # -- Options for EPUB output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-epub-output
 
 epub_show_urls = 'footnote'
+
+# -- Options for Autosummary -------------------------------------------------
+#autosummary_generate = True

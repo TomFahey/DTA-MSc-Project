@@ -28,6 +28,9 @@ solder the middle pad to the 'TC' pad on the left. All four solder jumpers can b
 Connecting up the boards
 ------------------------
 
+Inter-board connections
+^^^^^^^^^^^^^^^^^^^^^^^
+
 The figure below shows the connections for the interface boards:
 
 .. figure:: /images/BoardConnectionDiagram.png
@@ -35,34 +38,26 @@ The figure below shows the connections for the interface boards:
     :align: center
     :alt: Connections for the interface boards
 
-After connecting the HAT-MDD10A to the :ref:`motor controller interface board <motor_controller_interface_board>`, the
-vertically stacked terminal blocks should be connected together like so:
+For the wires connecting the DC Power Supply, make sure to use an appropriate gauge, keeping in mind the current draw the
+thermoelectric module is likely to have (5A is a safe, if slightly overly overcautious, assumption).
+
+Motor controller interface board
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+After connecting the HAT-MDD10A to the :ref:`motor controller interface board <motor_controller_interface_board>`, via the
+the 40-pin header, the vertically stacked terminal blocks should be connected together like so (once again taking into
+consideration the current draw):
 
 .. figure:: /images/MotorHatWiring.png
     :width: 800px
     :align: center
     :alt: Stacked terminal blocks
 
-It is a good idea to use slightly longer wires for the connections between the terminals, so that the motor controller can
-be lifted off the interface board, without having to disconnect the wires.
+It's a good idea to use slightly longer wires for the connections between the terminals, so that the motor controller can
+be lifted off the interface board, without having to continuously disconnect and reconnect the wires.
+
+Temperature breakout boards
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 The temperature breakout boards connect to the microcontroller interface board via the female 8-pin headers. In the case of the MAX31856,
 which has a 9-pin male header, the 9th pin (DRDY) is not used, so can be left unconnected.
-..
-    Creating recipes
-    ----------------
-
-    To retrieve a list of random ingredients,
-    you can use the ``lumache.get_random_ingredients()`` function:
-
-    .. autofunction:: lumache.get_random_ingredients
-
-    The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-    or ``"veggies"``. Otherwise, :autofunction`lumache.get_random_ingredients`
-    will raise an exception.
-
-    .. autoexception:: lumache.InvalidKindError
-
-    >>> import lumache
-    >>> lumache.get_random_ingredients()
-    ['shells', 'gorgonzola', 'parsley']

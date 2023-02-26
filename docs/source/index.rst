@@ -30,7 +30,7 @@ The documentation is structured as follows:
 Getting Started
 ===============
 
-Check out the :doc:`usage` section for further information, including how to
+Check out the :doc:`start` section for further information, including how to
 :ref:`install <installation>` the project.
 
 .. toctree::
@@ -60,7 +60,7 @@ Reference
 =========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
 
    reference/hardware
    reference/software
