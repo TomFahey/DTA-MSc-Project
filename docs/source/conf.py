@@ -27,6 +27,7 @@ extensions = [
     'sphinx.ext.duration',
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
+    'sphinx.ext.githubpages',
     'jupyter_sphinx',
 ]
 
