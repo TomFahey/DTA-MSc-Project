@@ -5,3 +5,4 @@ webapp.utils
 
 .. automodule:: webapp.utils
    :members:
+   :private-members: __setitem__

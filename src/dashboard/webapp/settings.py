@@ -1,17 +1,33 @@
-
-from ipywidgets import widgets
-from ipywidgets.widgets import FloatSlider, Button, IntSlider, Tab, Accordion
-from ipywidgets.widgets import Layout, HBox
+""" 
+Widget definition module: Defines sliders for adjusting system settings,
+namely PID tuning parameters and the 'tick' interval.
+"""
+from ipywidgets.widgets import Accordion, FloatSlider, Layout
 from IPython.core.display import display, HTML # IPython Notebook functions
 from importlib import reload
 from webapp.shared import appState
 
 
-class ConfigTab(widgets.Accordion):
-    def __init__(self, config=
-        appState.config,
-        **kwargs
-    ):
+class ConfigTab(Accordion):
+    """
+    Simple customised extension of ``ipywidgets.widgets.Accordion`` class,
+    featuring a set of ``ControlSlider`` widgets as children.
+
+    :param config: A dictionary of configuration parameters, defaults to 
+        ``appState.config``
+    :type config: ``dict``, optional
+    :return: ``ConfigTab`` object
+    :rtype: ``webapp.settings.ConfigTab``
+    """
+    def __init__(self, config= appState.config, **kwargs):
+        """Initialse new ``ConfigTab`` object
+
+        :param config: A dictionary of configuration parameters, defaults to 
+            ``appState.config``
+        :type config: _type_, optional
+        :return: ``ConfigTab`` object
+        :rtype: ``webapp.settings.ConfigTab``
+        """
         self.config = config
         super().__init__(
             children= 
@@ -52,6 +68,19 @@ class ConfigTab(widgets.Accordion):
 
 
 class ControlSlider(FloatSlider):
+    """_summary_
+    Simple customised extension of ``ipywidgets.widgets.FloatSlider`` class, 
+    builds in the required callback function for ``FloatSlider.observe``, as
+    ``handle_slider_change(self, change)``.
+    
+    :param config: A dictionary of configuration parameters, defaults to 
+        ``appState.config``
+    :type config: ``dict``, optional
+    :param target: Dictionary key for the parameter in ``config`` that the
+        slider will control
+    :return: ``ConfigTab`` object
+    :rtype: ``webapp.settings.ConfigTab``
+    """
     def __init__(self, config, target, **kwargs):
         super().__init__(
             value=1,

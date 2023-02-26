@@ -1,6 +1,8 @@
-""" UI Tab module: Handles saving data to local or mounted storage, in CSV format.
+""" 
+Widget definition module: Handles saving data to local or mounted storage, in
+CSV format.
 """
-from ipywidgets.widgets import Image, VBox, Layout, Label, Select, Text, Button, HBox
+from ipywidgets.widgets import VBox, Layout, Label, Select, Text, Button, HBox
 from datetime import datetime
 import numpy as np
 import os
@@ -18,13 +20,16 @@ LOCALDIR = '/home/pi/data/'
 # Utility functions:
 
 def detect_mountpoints():
-    """Returns list of mounted storage devices as list of (name, path) tuples.
+    """
+    Returns list of mounted storage devices as list of (name, path) tuples.
     
-    Detects mounted block storage devices under /media/pi/ mountpoint, then returns them as a list of
-    tuples, in the format (name, path), where name is the mountpoint name.
+    Detects mounted block storage devices under ``/media/pi/`` directory, then
+    returns them as a list of tuples, in the format ``(name, path)``, where 
+    ``name`` is the mountpoint name and ``path`` is the absolute path to the
+    mountpoint.
 
-    :return: [(name, path), ...]
-    :rtype: list
+    :return: ``[(name, path), ...]``
+    :rtype: ``list(tuple(str, str)))``
 
     :Example:
 

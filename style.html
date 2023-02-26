@@ -1,0 +1,33 @@
+<style type="text/css">
+    body {
+      background-color: var(--jp-layout-color0);
+      overflow-y: scroll;
+    }
+    /* Overwrite default value, workaround for not breaking materialize */
+    .jp-Notebook {
+      padding: 0px;
+    }
+    .nav-wrapper {
+      background-color: {{ bar_color }};
+    }
+    .brand-logo {
+      height: 90%;
+      width: 100%;
+    }
+    .voila-spinner-color1 {
+      fill: {{ bar_color }};
+    }
+  </style>
+  
+  <style>
+  a.anchor-link {
+    display: none;
+  }
+  .highlight  {
+    margin: 0.4em;
+  }
+  /* we keep the DOM for nbconvert the same as for voila, but hide the status icon */
+  #kernel-status-icon {
+    display: none;
+  }
+  </style>

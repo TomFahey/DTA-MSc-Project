@@ -1,50 +1,101 @@
+
+""" 
+Functional module: Defines the ResponsiveDict and ResponsiveList classes,
+used to implement 'responsive' callbacks when config items are modified.
+Also defines the 'Programme' class, which encapsulates information 
+relating to a heating run, including number of stages, target temperatures,
+heating rate and hold times.
+"""
 import numpy as np
 #import shared.appState as appState
 from collections import UserDict, UserList
 
 class ResponsiveDict(UserDict):
     """
-    The ResponsiveDictionary is an extension of the Python
-    dictionary class, which allows for the assignment of
-    a user-speficied callable function for each key:value
-    pair stored in a given ResponsiveDict object.
-    
-    This callback function is then called whenever the __setitem__
-    operation is performed on the corresponding key:value pair, for
-    a ResponsiveDict object. E.g:
-    
-    myResponsiveDict['somekey'] = some_new_value
-    # Callback function associated with 'somekey' is called,
-    # during assignment
-    
-    When the callback function is called, it is automatically
-    provided with two parameters:
-    
-    (val, value) - A tuple of the old value and newly assigned value
-    self.__args[key] - An arbitrary value (default is None), that can
-                       be provided when the set_callback() function is
-                       used.
-                       
-    With this functionality, a user can define arbitrary dictionaries
-    of values, that will automatically carry out some desired behaviour
-    whenever their values are modified.
-    
-    This is especially beneficial for structures where modification of
-    a given attribute/parameter should automatically result in some
-    corresponding behaviour, without having to constantly check/poll
-    the parameter to explicitly see whether it has changed.
-    """
-    def __init__(self, initialdata):
-        super().__init__()
-        self.data = initialdata
-        self.callbacks = {key: None for key in self.data.keys()}
+    Extension of Python ``dict``, provides assignable callbacks that are called
+    when a ``dict`` item is modified.
 
-    def __setitem__(self, key, item) -> None:
-        super().__setitem__(key, item)
+    ``ResponsiveDict`` is an extension of the Python dictionary, which adds a
+    'responsive' callback behaviour for dictionary items, that is called
+    when the items are modified.
+
+    This is intended for scenarios where dictionary objects are used to 
+    encode a programme, or routine's 'state', and where modification of
+    this state should automatically result in some corresponding behaviour,
+    in response to the modification.
+    
+    This is achieved by overriding the ``__setitem__`` function of the Python
+    ``UserDict`` class, which this class inherits from.
+
+    :Example:
+    
+    >>> from webapp.utils import ResponsiveDict
+    >>> RGB_config = ResponsiveDict
+    ...     {
+    ...         'R' : 0,
+    ...         'G': 0,
+    ...         'B': 255
+    ...     }
+    ... )
+    >>> def announce_RGB_change(channel, value):
+    ...     print('RGB channel {} changed to {}'.format(channel, value))
+    ...
+    >>> RGB_config.set_callback(
+    ...     key='R',
+    ...     callback=announce_RGB_change
+    ... )
+    >>> RGB_config['R'] = 255
+    'RGB channel R changed to 255'
+
+    """
+    def __init__(self, dict_value={}):
+        """
+        Create an instance of ``ResponsiveDict``, containg the dictionary
+        ``dict_value``.
+        
+        :param dict_value: Dictionary of items to be contained in
+            ``ResponsiveDict`` object
+        :type dict_value: dict
+        :return: ResponsiveDict object containing dictionary dict_value
+        :rtype: ResponsiveDict
+        """
+        super().__init__()
+        self.data = dict_value 
+        """
+        Internal dictionary attribute
+        """
+        self.callbacks = {key: None for key in self.data.keys()}
+        """
+        Dictionary of callback functions, one for each item in ``self.data``.
+        Initially set to ``None`` for all items.
+        """
+
+    def __setitem__(self, key, value) -> None:
+        """
+        Same as Python ``dict.__setitem__()``, but also calls the associated
+        item's callback function, if it exists.
+
+        :param key: The item's key
+        :type key: _type_
+        :param value: The item's new value to be assigned
+        :type value: _type_
+        """
+        super().__setitem__(key, value)
         if self.callbacks[key] is not None:
-            self.callbacks[key](key, item)
+            self.callbacks[key](key, value)
 
     def set_callback(self, key, callback):
+        """
+        Assign a callback function to the item corresponding to ``key``
+
+        :param key: The dict item's key
+        :type key: _type_
+        :param callback: A function handle of the form 
+            ``callback(key, value)`` where ``key`` is the item's key,
+            and ``value`` is the item's new value.
+
+        :type callback: function
+        """
         try:
             self.callbacks[key] = callback
         except KeyError as error:
@@ -119,18 +170,6 @@ class Programme(object):
            (self.current_stage['HEAT'] > 0):
            self.update_sign()
            self.update_xy()
-
-
-    #def next_stage(self):
-    #    stage_next = next(self.iterator)
-    #    if stage_next['RUN']:
-    #        self.data.set_callback('TEMP', lambda valarray: self.check_condition(valarray[-1])) 
-    #        self.data.set_callback('TIME', lambda x: None)
-    #    elif not stage_next['RUN']:
-    #        self.data.set_callback('TEMP', lambda x: None)
-    #        self.data.set_callback('TIME', lambda valarray: self.check_condition(valarray[-1]))
-    #        stage_next['COND'] += self.data['TIME'][-1]
-    #    self.current_stage = stage_next
 
     def next_stage(self):
         self.__current_stage = next(self.__iterator)

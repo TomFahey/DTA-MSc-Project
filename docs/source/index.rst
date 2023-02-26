@@ -3,21 +3,22 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
+#######################################################
 DIY Differential Thermal Analyser Project documentation
-=======================================================
+#######################################################
 
--------
+"""""""
 Welcome
--------
+"""""""
 
 This documentation covers the design and use of a low cost Differential Thermal Analyser (DTA) instrument, developed as a part of a MSc Project at the University of Birmingham.
 
 The aim of the project is to develop a DTA instrument that can be used in typical undegraduate labs, enabling students to analyse the behaviour of a reasonably broad range of 
 polymers in response to heating. 
 
-
+"""""""""""""""""""""""""""""
 How to use the documentation:
------------------------------
+"""""""""""""""""""""""""""""
 
 The documentation is structured as follows:
 
@@ -27,8 +28,9 @@ The documentation is structured as follows:
 
 .. _getting-started:
 
+***************
 Getting Started
-===============
+***************
 
 Check out the :doc:`start` section for further information, including how to
 :ref:`install <installation>` the project.
@@ -44,8 +46,9 @@ Check out the :doc:`start` section for further information, including how to
 
 .. _user-guides:
 
+***********
 User Guides
-===========
+***********
 
 .. toctree::
    :maxdepth: 2
@@ -56,8 +59,9 @@ User Guides
 
 .. _reference:
 
+*********
 Reference
-=========
+*********
 
 .. toctree::
    :maxdepth: 3
@@ -65,9 +69,9 @@ Reference
    reference/hardware
    reference/software
 
-
+******************
 Indices and tables
-==================
+******************
 
 * :ref:`genindex`
 * :ref:`modindex`

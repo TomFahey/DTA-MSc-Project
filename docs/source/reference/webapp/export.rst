@@ -1,7 +1,7 @@
 .. _webapp_export:
 
 webapp.export
-^^^^^^^^^^^^^
+-------------
 
 .. jupyter-execute::
     :hide-code:
@@ -71,7 +71,8 @@ webapp.export
 
 .. automodule:: webapp.export
 
-   Module functions:
+   Helper Functions:
+   ^^^^^^^^^^^^^^^^^
 
    .. autofunction:: detect_mountpoints
 
@@ -79,18 +80,95 @@ webapp.export
 
    .. autofunction:: eject_click
 
-   Module widgets:
+   UI Widget declarations:
+   ^^^^^^^^^^^^^^^^^^^^^^^
 
    .. autodata:: drive_select
-      :annotation: = ipywidgets.widgets.Select
+      :annotation: <ipywidgets.widgets.Select>
+
+   .. jupyter-execute::                                                                             
+       :hide-code:
+ 
+       from IPython.core.display import display 
+       from ipywidgets.widgets import Image, VBox, Layout, Label, Select, Text, Button, HBox
+       from datetime import datetime
+       import numpy as np
+ 
+       MOUNTDIR = '/media/pi/'
+       LOCALDIR = '/home/pi/data/'
+ 
+       drive_select = Select(
+           options=[('Local storage', LOCALDIR)],
+           value=LOCALDIR,
+           disabled=False,
+           layout=Layout(width='87.5%', height='29.15%',margin='0 0 0 0')
+       )
+
+       display(drive_select)
 
    .. autodata:: filename_input
-      :annotation: = ipywidgets.widgets.Text
+      :annotation: <ipywidgets.widgets.Text>
+
+   .. jupyter-execute::                                                                             
+       :hide-code:
+ 
+       from IPython.core.display import display 
+       from ipywidgets.widgets import Image, VBox, Layout, Label, Select, Text, Button, HBox
+       from datetime import datetime
+       import numpy as np
+ 
+       MOUNTDIR = '/media/pi/'
+       LOCALDIR = '/home/pi/data/'
+ 
+       filename_input = Text(
+           value='DATA-{}.csv'.format(datetime.now().strftime('%Y-%m-%d-%H-%M-%S')),
+           disabled=False,
+           layout=Layout(width='87.5%')
+       ) 
+
+       display(filename_input)
 
    .. autodata:: save_button
-      :annotation: = ipywidgets.widgets.Button
+      :annotation: <ipywidgets.widgets.Button>
     
+   .. jupyter-execute::                                                                             
+       :hide-code:
+ 
+       from IPython.core.display import display 
+       from ipywidgets.widgets import Button
+       import numpy as np
+ 
+       save_button = Button(
+           description='Save data',
+           disabled=False,
+           button_style='success', 
+           tooltip='Save readings to mounted storage drive',
+           icon='download' 
+       ) #: Button widget, "Save data"
+
+       display(save_button)
+
    .. autodata:: eject_button
-      :annotation: = ipywidgets.widgets.Button
+      :annotation: <ipywidgets.widgets.Button>
+
+   .. jupyter-execute::                                                                             
+       :hide-code:
+ 
+       from IPython.core.display import display 
+       from ipywidgets.widgets import Button
+       import numpy as np
+ 
+       eject_button = Button( 
+           description='Eject disk',
+           disabled=False,
+           button_style='success',
+           tooltip='Eject mounted storage drive',
+           icon='eject'
+       ) #: Button widget, "Eject disk"
+
+       display(eject_button)
+
+Module code listing:
+^^^^^^^^^^^^^^^^^^^^
 
 .. jupyter-execute:: ./../../../../src/dashboard/webapp/export.py
