@@ -11,23 +11,13 @@ from webapp.shared import appState
 
 class ConfigTab(Accordion):
     """
-    Simple customised extension of ``ipywidgets.widgets.Accordion`` class,
-    featuring a set of ``ControlSlider`` widgets as children.
+    Customised subclass of :external:class:`ipywidgets.widgets.Accordion` 
+    class, styled to provide a drawer (or 'accordion')-like interface,
+    with multiple sliders for adjusting system parameters.
 
-    :param config: A dictionary of configuration parameters, defaults to 
-        ``appState.config``
-    :type config: ``dict``, optional
-    :return: ``ConfigTab`` object
-    :rtype: ``webapp.settings.ConfigTab``
-    :example:
-
-    >>> from webapp.settings import ConfigTab
-    >>> app = ConfigTab(
-    ...     layout=Layout(margin='3 3 3 3',maxwidth='81.25%',maxheight='83.33%',
-    ...                   padding='0 0 0 0')
-    ... )
-    ...
-    >>> display(app)
+    The :class:`ConfigTab` object contains a number of :class:`ControlSlider`
+    objects, which each control a system parameter that can be adjusted,
+    such as PID tuning parameters.
     """
     def __init__(self, config= appState.config, **kwargs):
         """Initialse new ``ConfigTab`` object
@@ -78,20 +68,28 @@ class ConfigTab(Accordion):
 
 
 class ControlSlider(FloatSlider):
-    """_summary_
-    Simple customised extension of ``ipywidgets.widgets.FloatSlider`` class, 
-    builds in the required callback function for ``FloatSlider.observe``, as
-    ``handle_slider_change(self, change)``.
+    """
+    Customised subclass of :external:class:`ipywidgets.widgets.FloatSlider`` 
+    widget, modified so that it automatically takes a dictionary containing
+    items it can modify (:param:`config`) and a target 'key' from the dictionary,
+    specifying the specific item it should modify (:param:`target`).
     
-    :param config: A dictionary of configuration parameters, defaults to 
-        ``appState.config``
-    :type config: ``dict``, optional
-    :param target: Dictionary key for the parameter in ``config`` that the
-        slider will control
-    :return: ``ConfigTab`` object
-    :rtype: ``webapp.settings.ConfigTab``
     """
     def __init__(self, config, target, **kwargs):
+        """
+        Initialise a new ``ControlSlider`` object, to control the value of
+        :param:`config`[:param:`target`].
+
+        :param config: A dictionary of configuration parameters, defaults to 
+            :attr:`webapp.shared.appState.config`
+        :type config: ``dict``
+        :param target: Dictionary key for the parameter in :param:`config` that
+        the slider will control
+        :type target: ``str``
+            
+        :return: :class:`ConfigTab` object
+        :rtype: :class:`webapp.settings.ConfigTab`
+        """
         super().__init__(
             value=1,
             min=0,
@@ -120,12 +118,12 @@ app = ConfigTab(
                   padding='0 0 0 0')
 )
 """
-Container widget, which holds all the widgets used for the 'Settings' tab.
-Allows tab to be added to the dashboard app using the example code below.
+Module top-level container widget - holds all the widgets defined in the
+:mod:`webapp.settings` module, which make up the Settings tab in the 
+dashboard app.
 
-:ivar app: ``ConfigTab`` object, containing ``ControlSlider`` widgets to
-    adjust system settings
-:vartype app: ``webapp.settings.ConfigTab``
+Allows the Settings tab to be imported into the dashboard app using the code
+below:
 
 :example:
 

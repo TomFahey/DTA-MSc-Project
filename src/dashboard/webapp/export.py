@@ -126,11 +126,11 @@ app = VBox(
     layout=Layout(width='94%', height='100%', margin='0 0 0 0')
 ) 
 """
-Container widget, which holds all the widgets used for the 'Export' tab.
-Allows tab to be added to the dashboard app using the example code below.
+Module top-level container widget - holds all the widgets defined in the
+:mod:`webapp.export` module, which make up the Export tab of the dashboard app.
 
-:ivar app: Container widget, which holds all the widgets used for the 'Export' tab.
-:ivar type: ``ipywidgets.widgets.VBox``
+Allows the Export tab to be imported into the dashboard app using the code
+below:
 
 :example:
 

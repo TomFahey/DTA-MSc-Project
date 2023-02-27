@@ -22,7 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="webapp.graph" href="webapp/graph.html" />
+    <link rel="next" title="app" href="app.html" />
     <link rel="prev" title="Hardware" href="hardware.html" />
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
@@ -44,15 +44,19 @@
 <h1>Dashboard (UI) software reference<a class="headerlink" href="#dashboard-ui-software-reference" title="Permalink to this heading">¶</a></h1>
 <section id="overview">
 <span id="ref-ui-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
-<p>As previously mentioned in the the <span class="xref std std-ref">&lt;basic&gt;</span> section, the dashboard-style user interface for the system
-is built using a <a class="reference external" href="https://ipywidgets.readthedocs.io/en/stable/">widget</a> based approach, that relies on the
-Jupyter interactive computing platform.</p>
+<p>As previously mentioned in the the <span class="xref std std-doc">basic</span> section, the dashboard-style
+user interface for the system is built using a <a class="reference external" href="https://ipywidgets.readthedocs.io/en/stable/">widget</a> based approach, that relies
+on the <a class="reference external" href="https://jupyter.org/">Jupyter</a> interactive computing platform.</p>
 <p>This approach was chosen for the following reasons:</p>
 <ul class="simple">
-<li><p>As a Python-based project, the Jupyter platform is a natural fit, providing a popular and well-documented
-Python environment that is capable of producing rich, interactive, web-based visualisations, using libraries
-and tools which many undergraduates that are familiar with Python, will already be familiar with.</p></li>
-<li><p>Modern web browsers provide</p></li>
+<li><p>As a Python-based project, the Jupyter platform is a natural fit, providing a
+popular, well-documented Python environment that is capable of producing rich
+interactive, web-based visualisations, using python libraries and code which
+should be familiar to undergraduates who have a grounding in Python
+programming.</p></li>
+<li><p>Modern web browsers provide an ideal deployment platform for graphical
+applications, offering compatibility across a wide range of devices,
+operating systems and user interfaces (mouse, or touchscreen).</p></li>
 </ul>
 </section>
 <section id="structure">
@@ -66,25 +70,24 @@ file.</p></li>
 imported in widget definition files and used by the widget objects in them, to effect <em>global behaviour</em> of the
 user interface, such as handling of shared data and progression of the application state.</p></li>
 </ul>
-<p>A ‘top-level’ script, <code class="file docutils literal notranslate"><span class="pre">app.py</span></code>, is then used to bring together the various UI elements defined in the
-widget definition files, in a nesting/container-like manner, producing the final dashboard interface.</p>
+<p>A ‘top-level’ widget definition file, <code class="file docutils literal notranslate"><span class="pre">app.py</span></code>, is then used to bring together the various UI elements defined in the
+other files, in a nesting/container-like manner, producing the final dashboard interface.</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/UIView.png"><img alt="Web app UI module structure" src="../_images/UIView.png" style="width: 530.5px; height: 652.0px;" /></a>
 </figure>
 <p>This approach introduces a great deal of flexibility, when it comes to implementing additional UI elements and
-behaviours, as it is only necessary to create a new widget definition file (and accompanying utility function file,
-if required), and then import that into the top-level script.</p>
+behaviours, as it is only necessary to create a new widget definition file and then import that into the
+top-level script.</p>
 <p>The present structure of the UI code includes the following files:</p>
 <section id="widget-definition-files">
 <h3>Widget definition files<a class="headerlink" href="#widget-definition-files" title="Permalink to this heading">¶</a></h3>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="app.html">app</a></li>
 <li class="toctree-l1"><a class="reference internal" href="webapp/graph.html">webapp.graph</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#webapp.graph.app"><code class="docutils literal notranslate"><span class="pre">app</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#webapp.graph.command_box"><code class="docutils literal notranslate"><span class="pre">command_box</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#webapp.graph.fig"><code class="docutils literal notranslate"><span class="pre">fig</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#webapp.graph.info_box"><code class="docutils literal notranslate"><span class="pre">info_box</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#webapp.graph.work"><code class="docutils literal notranslate"><span class="pre">work()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#helper-functions">Helper functions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#widget-definitions">Widget definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#code-listing">Code listing</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="webapp/programme.html">webapp.programme</a><ul>
@@ -94,9 +97,9 @@ if required), and then import that into the top-level script.</p>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="webapp/settings.html">webapp.settings</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="webapp/settings.html#widget-definitions">Widget definitions</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/settings.html#code-listing">Code listing</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="webapp/settings.html#code-listing">Code listing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="webapp/export.html">webapp.export</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="webapp/export.html#helper-functions">Helper functions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="webapp/export.html#widget-definitions">Widget definitions</a></li>
@@ -171,7 +174,7 @@ if required), and then import that into the top-level script.</p>
 <ul>
   <li><a href="../index.html">Documentation overview</a><ul>
       <li>Previous: <a href="hardware.html" title="previous chapter">Hardware</a></li>
-      <li>Next: <a href="webapp/graph.html" title="next chapter">webapp.graph</a></li>
+      <li>Next: <a href="app.html" title="next chapter">app</a></li>
   </ul></li>
 </ul>
 </div>

@@ -34,21 +34,44 @@ The user interface is presented as a series of navigable tabs:
 
 .. _web_interface_main:
 
-Main page
-^^^^^^^^^
+Main tab
+^^^^^^^^
 
 .. figure:: ../images/UserInterfaceMainHighlight.png
    :align: center
    :scale: 50%
    :alt: Web app interface
 
-The main page features the 
+The main tab features the 
 
 1. Nagivation bar, for switching between the user interface pages
 2. Control bar - 
 3. Activity graph
 4. Information bar
 
+Programme tab
+^^^^^^^^^^^^^
+
+.. figure:: ../images/UserInterfaceProgramme.png
+   :align: center
+   :scale: 50%
+   :alt: Web app interface
+
+Settings tab
+^^^^^^^^^^^^
+
+.. figure:: ../images/UserInterfaceSettings.png
+   :align: center
+   :scale: 50%
+   :alt: Web app interface
+
+Export tab
+^^^^^^^^^^
+
+.. figure:: ../images/UserInterfaceExport.png
+   :align: center
+   :scale: 50%
+   :alt: Web app interface
 
 
 

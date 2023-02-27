@@ -188,15 +188,25 @@ app = VBox(
     layout=Layout(width='100%', height='100%', margin='0 0 0 0')
 )
 """
+Module top-level container widget - holds all the widgets defined in the
+:mod:`webapp.graph` module, which make up the Main tab of the dashboard app.
 
+Allows the Main tab to be imported into the dashboard app using the code
+below:
+
+:example:
+
+>>> from webapp import graph
+>>> display(graph.app)
 """
 
 
 async def work():
-    """ Refresh loop for graph and temperature readouts
+    """ 
+    Refresh loop for graph and temperature readouts
 
-        This function continously updates the graph and temperature readout for the tab, depending on
-        the current programme and data. 
+    This function continously updates the graph and temperature readout for the tab, depending on
+    the current programme and data. 
     """
     global appState
     while True:

@@ -14,7 +14,7 @@ from webapp.utils import ResponsiveDict
 
 class ProgrammeTab(Tab):
     """
-    Customised extension of :external:class:`ipywidgets.widgets.Tab` widget, styled to
+    Customised subclass of :external:class:`ipywidgets.widgets.Tab` widget, styled to
     provide a tabbed interface, where each tab represents a sequential
     temperature stage in the heating programme.
 
@@ -120,7 +120,7 @@ class ProgrammeTab(Tab):
 
 class StageTab(Accordion):
     """
-    Customised extension of ``ipywidgets.widgets.Accordion`` widget, styled to 
+    Customised subclass of ``ipywidgets.widgets.Accordion`` widget, styled to 
     provide a group of sliders for setting the three parameters in a
     temperature stage.
 
@@ -224,8 +224,12 @@ app = ProgrammeTab(
                   padding='0 0 0 0')
 )
 """
-Container widget, which holds all the widgets used for the 'Programme' tab.
-Allows tab to be added to the dashboard app using the example code below.
+Module top-level container widget - holds all the widgets defined in the 
+:mod:`webapp.programme` module, which make up the Programme tab in the
+dashboard app.
+
+Allows the Programme tab to be imported into the dashboard app using the
+code below:
 
 :example:
 
