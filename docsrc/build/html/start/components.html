@@ -1,0 +1,199 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Components &#8212; DIY DTA 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Building" href="building.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="components">
+<h1>Components<a class="headerlink" href="#components" title="Permalink to this heading">¶</a></h1>
+<section id="off-the-shelf-parts">
+<span id="shelfparts"></span><h2>Off-the-Shelf Parts<a class="headerlink" href="#off-the-shelf-parts" title="Permalink to this heading">¶</a></h2>
+<p>The system utilises the following components:</p>
+<ul>
+<li><p>Raspberry Pi Model B (3+/4), running Raspbian Buster, or newer - <a class="reference external" href="https://www.raspberrypi.com/products/raspberry-pi-4-model-b/">Raspberry Pi 4 Model B</a>.</p></li>
+<li><p>Official Raspberry Pi 7” Touchscreen Display - <a class="reference external" href="https://www.raspberrypi.org/products/raspberry-pi-touch-display/">7” Touchscreen Display</a>.</p></li>
+<li><p>Raspberry Pi Pico microcontroller - <a class="reference external" href="https://www.raspberrypi.org/products/raspberry-pi-pico/">Raspberry Pi Pico</a>.</p></li>
+<li><p>Micro USB cable</p></li>
+<li><p>Breakout boards from Adafruit, including:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>2x Adafruit MAX31865 RTD Temperature Sensor boards - <a class="reference external" href="https://www.adafruit.com/product/3328">MAX31865 RTD Sensor</a></p></li>
+<li><p>2x Adafruit MAX31856 Thermocouple Amplifier boards - <a class="reference external" href="https://www.adafruit.com/product/3263">MAX31856 Thermocouple Amplifier</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Temperature sensors:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>2x 4-wire PT100 RTD sensors - <a class="reference external" href="https://uk.rs-online.com/web/p/rtd-sensors/8919141">PT100 RTD Sensor</a></p></li>
+<li><p>2x Type T thermocouples - <a class="reference external" href="https://uk.rs-online.com/web/p/thermocouples/0158907">Type T Thermocouple</a></p></li>
+<li><p>1x Type (K/T) thermocouple - <a class="reference external" href="https://uk.rs-online.com/web/p/thermocouples/0158907">Type (K/T) Thermocouple</a></p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>Motor Controller board by Cytron Technologies: HAT-MDD10 - <a class="reference external" href="https://www.cytron.io/p-hat-mdd10">HAT-MDD10</a></p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/HAT-MDD10A.jpg"><img alt="HAT-MDD10 Motor Controller board" class="align-center" src="../_images/HAT-MDD10A.jpg" style="width: 400px;" /></a>
+</div></blockquote>
+</li>
+<li><p>2x 12V DC motors - <a class="reference external" href="https://uk.rs-online.com/web/p/dc-motors/0908152">12V DC Motor</a></p></li>
+<li><p>An adjustable DC Power Supply, capable of providing up to 20V at 5A or greater</p></li>
+<li><p>A capable thermoelectric module (TEC) device, able to pump &gt;10W of heat</p></li>
+</ul>
+</section>
+<section id="interface-boards">
+<span id="customparts"></span><h2>Interface boards<a class="headerlink" href="#interface-boards" title="Permalink to this heading">¶</a></h2>
+<p>A set of PCB interface boards are used to connect the microcontroller, breakout boards and other components, the
+files of which are available in the <a class="reference external" href="https://github.com/TomFahey/DTA-MSc-Project/tree/master/pcb">Github repository.</a></p>
+<p>These consist of the following:</p>
+<ul id="microcontroller-interface-board">
+<li><p>Microcontroller and temperature sensor interface board</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/MicrocontrollerTemperatureSensorBoard.png"><img alt="Microcontroller and temperature sensor interface board" class="align-center" src="../_images/MicrocontrollerTemperatureSensorBoard.png" style="width: 400px;" /></a>
+<p>Interfaces with the Raspberry Pi Pico microcontroller and the temperature sensor
+breakout boards.</p>
+</div></blockquote>
+</li>
+</ul>
+<ul id="motor-controller-interface-board">
+<li><p>Motor controller interface board</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/MotorControllerBoard.png"><img alt="Motor controller interface board" class="align-center" src="../_images/MotorControllerBoard.png" style="width: 400px;" /></a>
+<p>Interfaces with the HAT-MDD10 motor controller board, via the 40-pin GPIO header, as
+well as the DC power supply.</p>
+</div></blockquote>
+</li>
+</ul>
+<ul id="tem-interface-board">
+<li><p>Thermoelectric module interface board</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="../_images/ThermoelectricModuleBoard.png"><img alt="Thermoelectric module interface board" class="align-center" src="../_images/ThermoelectricModuleBoard.png" style="width: 400px;" /></a>
+<p>Interfaces with the thermoelectric module(s)</p>
+</div></blockquote>
+</li>
+</ul>
+<p>The boards connected to each other via Molex 6-pin Micro-Fit cables, available <a class="reference external" href="https://uk.rs-online.com/web/p/wire-to-board-cables/2134263">here.</a></p>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">DIY DTA</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#off-the-shelf-parts">Off-the-Shelf Parts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#interface-boards">Interface boards</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="building.html">Building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="setup.html">Setup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">Debugging</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../reference/hardware.html">Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/software.html">Dashboard (UI) software reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="introduction.html" title="previous chapter">Introduction</a></li>
+      <li>Next: <a href="building.html" title="next chapter">Building</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tom Fahey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/start/components.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

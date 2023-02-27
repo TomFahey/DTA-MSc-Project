@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>webapp.shared &#8212; DIY DTA 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="webapp.utils" href="utils.html" />
+    <link rel="prev" title="webapp.export" href="export.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-webapp.shared">
+<span id="id1"></span><span id="webapp-shared"></span><h1>webapp.shared<a class="headerlink" href="#module-webapp.shared" title="Permalink to this heading">¶</a></h1>
+<p>Functional module: Defines the AppState class, which holds the state of the 
+application, including its current configuration, data and programme.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="webapp.shared.AppState">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.shared.</span></span><span class="sig-name descname"><span class="pre">AppState</span></span><a class="headerlink" href="#webapp.shared.AppState" title="Permalink to this definition">¶</a></dt>
+<dd><p>AppState is a container/struct-like class designed to store the application
+state.</p>
+<p>When the ‘top-level’ app.py script is first loaded, a single instance of 
+AppState is created by a module import. When the other widget definition
+modules are imported, they share this instance of AppState, allowing the
+application state to be synchronised across the different UI elements.</p>
+<p>When the dashboard application is connected to the microcontroller, via
+USB, a serial connection is established. This connection is then used to
+synchronise the AppState.config attribute with an equivalent data structure
+on the microcontroller side. Modifications to the AppState.config attribute
+thereby result in changes in the microcontroller’s behaviour, in real time.</p>
+<p>This principle is used to implement the ‘heating run’ functionnality of the
+system, which is defined in the AppState.work() function. This is called at
+runtime by app.py, and runs asynchronously in the background. When the user
+starts a heating run, via the ‘Start’ button, AppState.config[‘RUN’] is set
+true, which in turn causes AppState.work() to enter the first ‘if’
+statement, beginning the heating run logic. See AppState.work() for more
+information.</p>
+<p>An initalised AppState object has the following attributes:</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.shared.AppState.config">
+<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#webapp.shared.AppState.config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of values that are synchronised with microcontroller to control its behaviour.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RUN</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls start/stop of heating run (True/False)</p></li>
+<li><p><strong>MODE</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls heating behaviour, (Ramp/Hold) = (True/False)</p></li>
+<li><p><strong>LOG</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls logging of data from sensors (True/False)</p></li>
+<li><p><strong>TARGET</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Target value for PID algorithm, (Ramp rate [K/min] or 
+Hold temperature [degC])</p></li>
+<li><p><strong>KP</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Proportional gain for PID algorithm</p></li>
+<li><p><strong>KD</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Derivative gain for PID algorithm</p></li>
+<li><p><strong>KI</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Integral gain for PID algorithm</p></li>
+<li><p><strong>INTERVAL</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – ‘Tick’ interval for microcontroller routine, in seconds</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.shared.AppState.connected">
+<span class="sig-name descname"><span class="pre">connected</span></span><a class="headerlink" href="#webapp.shared.AppState.connected" title="Permalink to this definition">¶</a></dt>
+<dd><p>Flag indicating whether the microcontroller is connected to the 
+dashboard application. Toggled when a heating run is finished, 
+indicating to the microcontroller to reset to idle mode.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.shared.AppState.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#webapp.shared.AppState.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of numpy data arrays, containing data from microcontroller</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>PID</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – PID algorithm output values - mainly used for debugging 
+purposes</p></li>
+<li><p><strong>TEMPA</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 1 (SPI_CS0)</p></li>
+<li><p><strong>TEMPB</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 2 (SPI_CS1)</p></li>
+<li><p><strong>TEMPC</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 3 (SPI_CS2)</p></li>
+<li><p><strong>DTEMP</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 4 (SPI_CS3)</p></li>
+<li><p><strong>TIME</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Corresponding time stamp values for above data</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.shared.AppState.programme">
+<span class="sig-name descname"><span class="pre">programme</span></span><a class="headerlink" href="#webapp.shared.AppState.programme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object holding information about the assigned heating programme - see 
+<code class="docutils literal notranslate"><span class="pre">webapp.utils.Programme</span></code>.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.shared.AppState.runs">
+<span class="sig-name descname"><span class="pre">runs</span></span><a class="headerlink" href="#webapp.shared.AppState.runs" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of dictionaries containing data from previous heating runs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="webapp.shared.AppState.work">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">work</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#webapp.shared.AppState.work" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function implements the logic required for the heating run 
+behaviour.</p>
+<p>It is called by app.py at runtime and waits for the attribute
+<code class="docutils literal notranslate"><span class="pre">AppState.config['RUN']</span></code> to be set <code class="docutils literal notranslate"><span class="pre">True</span></code> (which occurs when the 
+‘Start’ button is pressed), before entering the main body of the 
+function.</p>
+<p>The function uses two sequential while loops to handle the ramp and
+subsequent hold parts of a heating run ‘stage’. When both loops are
+satisfied, the programme is advanced to the next stage, until no
+more stages remain, signifying the end of the heating run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Async<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+<dt class="field-even">Classmethod<span class="colon">:</span></dt>
+<dd class="field-even"><p></p></dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">DIY DTA</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../start/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/building.html">Building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/setup.html">Setup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/debugging.html">Debugging</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../software.html">Dashboard (UI) software reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../software.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../software.html#structure">Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../software.html#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../software.html#utility-function-files">Utility function files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../software.html">Dashboard (UI) software reference</a><ul>
+      <li>Previous: <a href="export.html" title="previous chapter">webapp.export</a></li>
+      <li>Next: <a href="utils.html" title="next chapter">webapp.utils</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tom Fahey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../_sources/reference/webapp/shared.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

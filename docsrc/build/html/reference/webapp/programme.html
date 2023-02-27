@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>webapp.programme &#8212; DIY DTA 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="webapp.settings" href="settings.html" />
+    <link rel="prev" title="webapp.graph" href="graph.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-webapp.programme">
+<span id="id1"></span><span id="webapp-programme"></span><h1>webapp.programme<a class="headerlink" href="#module-webapp.programme" title="Permalink to this heading">¶</a></h1>
+<p>Widget definition module: Defines UI elements used for entering heating
+run parameters, such as target temperature, heat rate and hold time.</p>
+<section id="widget-definitions">
+<h2>Widget definitions<a class="headerlink" href="#widget-definitions" title="Permalink to this heading">¶</a></h2>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="webapp.programme.ProgrammeTab">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.programme.</span></span><span class="sig-name descname"><span class="pre">ProgrammeTab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.programme.ProgrammeTab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Customised extension of <code class="xref py py-class docutils literal notranslate"><span class="pre">ipywidgets.widgets.Tab</span></code> widget, styled to
+provide a tabbed interface, where each tab represents a sequential
+temperature stage in the heating programme.</p>
+<p>A <a class="reference internal" href="#webapp.programme.ProgrammeTab" title="webapp.programme.ProgrammeTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProgrammeTab</span></code></a> object therefore contains a number of <a class="reference internal" href="#webapp.programme.StageTab" title="webapp.programme.StageTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">StageTab</span></code></a>
+objects, which themselves contain slider widgets for setting the target
+temperature, heat rate and hold time for each temperature stage.</p>
+<p>In order to facilitate arbitrary numbers of temperature stages, the
+<a class="reference internal" href="#webapp.programme.ProgrammeTab.new_tab_callback" title="webapp.programme.ProgrammeTab.new_tab_callback"><code class="xref py py-meth docutils literal notranslate"><span class="pre">new_tab_callback()</span></code></a> and <a class="reference internal" href="#webapp.programme.ProgrammeTab.add_tab" title="webapp.programme.ProgrammeTab.add_tab"><code class="xref py py-meth docutils literal notranslate"><span class="pre">add_tab()</span></code></a> methods provide a way of adding
+additional <a class="reference internal" href="#webapp.programme.StageTab" title="webapp.programme.StageTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">StageTab</span></code></a> instances to an instance of <a class="reference internal" href="#webapp.programme.ProgrammeTab" title="webapp.programme.ProgrammeTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProgrammeTab</span></code></a>, 
+as that functionality is not provided by the <code class="xref py py-class docutils literal notranslate"><span class="pre">ipywidgets.widgets.Tab</span></code>
+class at the time of writing.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="webapp.programme.ProgrammeTab.add_tab">
+<span class="sig-name descname"><span class="pre">add_tab</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#webapp.programme.ProgrammeTab.add_tab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new <a class="reference internal" href="#webapp.programme.StageTab" title="webapp.programme.StageTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">StageTab</span></code></a> to the 
+<a class="reference internal" href="#webapp.programme.ProgrammeTab" title="webapp.programme.ProgrammeTab"><code class="xref py py-class docutils literal notranslate"><span class="pre">ProgrammeTab</span></code></a> widget and, correspondingly, a new
+stage to <code class="xref py py-attr docutils literal notranslate"><span class="pre">webapp.shared.appState.programme</span></code></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="webapp.programme.ProgrammeTab.new_tab_callback">
+<span class="sig-name descname"><span class="pre">new_tab_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">change</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.programme.ProgrammeTab.new_tab_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback function used to check whether a new tab should be added.</p>
+<p>Works in conjunction with the <a class="reference external" href="https://ipywidgets.readthedocs.io/en/7.6.2/examples/Widget%20Events.html?highlight=observe#Traitlet-events">ipywidgets.widgets.Widget.observe()</a>
+method, (see <code class="xref py py-meth docutils literal notranslate"><span class="pre">ProgrammeTab.__init__()</span></code>), which will
+call this method whenever the widget’s selected tab changes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>change</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – Dictionary of the form <code class="docutils literal notranslate"><span class="pre">{'name':</span> <span class="pre">'selected_index',</span> 
+<span class="pre">'old':</span> <span class="pre">x,</span> <span class="pre">'new':</span> <span class="pre">y,</span> <span class="pre">'owner':</span> <span class="pre">ProgrammeTab}</span></code>, where <code class="docutils literal notranslate"><span class="pre">x</span></code> is
+the index of the previously selected tab, and <code class="docutils literal notranslate"><span class="pre">y</span></code> is the
+index of the newly selected tab.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="webapp.programme.ProgrammeTab.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#webapp.programme.ProgrammeTab.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset to idle settings. Called when the ‘Reset’ button is pressed, as well as
+after a heating programme has finished.</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="webapp.programme.StageTab">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.programme.</span></span><span class="sig-name descname"><span class="pre">StageTab</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.programme.StageTab" title="Permalink to this definition">¶</a></dt>
+<dd><p>Customised extension of <code class="docutils literal notranslate"><span class="pre">ipywidgets.widgets.Accordion</span></code> widget, styled to 
+provide a group of sliders for setting the three parameters in a
+temperature stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>stage</strong> (<code class="docutils literal notranslate"><span class="pre">ResponsiveDict{str:</span> <span class="pre">int,</span> <span class="pre">str:</span> <span class="pre">int,</span> <span class="pre">str:</span> <span class="pre">int}</span></code>) – <code class="docutils literal notranslate"><span class="pre">ResponsiveDict</span></code> of the form 
+<code class="docutils literal notranslate"><span class="pre">ResponsiveDict({'TEMP':</span> <span class="pre">X,</span> <span class="pre">'HEAT':</span> <span class="pre">Y,</span> <span class="pre">'HOLD':</span> <span class="pre">Z})</span></code>, where the 
+dictionary values specify the <em>target temperature</em>, <em>heating rate</em>
+and <em>hold time</em> for the stage, respectively.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "6c8789b4a4ed4e0a92397e992ad957c7"}
+</script></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="webapp.programme.ControlSlider">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.programme.</span></span><span class="sig-name descname"><span class="pre">ControlSlider</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.11)"><span class="pre">Any</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.programme.ControlSlider" title="Permalink to this definition">¶</a></dt>
+<dd><p>Customised extension of <code class="docutils literal notranslate"><span class="pre">ipywidgets.widgets.IntSlider</span></code> widget, styled to
+provide a slider that controls a single parameter in a temperature stage.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>stage</strong> (<code class="docutils literal notranslate"><span class="pre">dict{str:</span> <span class="pre">int,</span> <span class="pre">str:</span> <span class="pre">int,</span> <span class="pre">str:</span> <span class="pre">int}</span></code>) – A <code class="docutils literal notranslate"><span class="pre">dict</span></code>-type object, of the following form,
+<code class="docutils literal notranslate"><span class="pre">{'TEMP':</span> <span class="pre">X,</span> <span class="pre">'HEAT':</span> <span class="pre">Y,</span> <span class="pre">'HOLD':</span> <span class="pre">Z}</span></code>,</p></li>
+<li><p><strong>target</strong> (<code class="docutils literal notranslate"><span class="pre">str</span></code>) – The key for the item in <code class="docutils literal notranslate"><span class="pre">stage</span></code> that the slider will control.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "67aa0ec34531481aa47ad3340a198d13"}
+</script></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<dl class="py data">
+<dt class="sig sig-object py" id="webapp.programme.app">
+<span class="sig-prename descclassname"><span class="pre">webapp.programme.</span></span><span class="sig-name descname"><span class="pre">app</span></span><em class="property"><span class="w"> </span><span class="pre">&lt;webapp.programme.ProgrammeTab&gt;</span></em><a class="headerlink" href="#webapp.programme.app" title="Permalink to this definition">¶</a></dt>
+<dd><p>Container widget, which holds all the widgets used for the ‘Programme’ tab.
+Allows tab to be added to the dashboard app using the example code below.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">webapp</span> <span class="kn">import</span> <span class="n">programme</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">display</span><span class="p">(</span><span class="n">programme</span><span class="o">.</span><span class="n">app</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<div class="jupyter_cell docutils container">
+<div class="cell_output docutils container">
+<script type="application/vnd.jupyter.widget-view+json">
+{"version_major": 2, "version_minor": 0, "model_id": "6d53088eb5cd4559846f283152efff05"}
+</script></div>
+</div>
+</section>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<section id="code-listing">
+<h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Widget definition module: Defines UI elements used for entering heating</span>
+<span class="sd">run parameters, such as target temperature, heat rate and hold time.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># Import the widgets we need to use</span>
+<span class="kn">from</span> <span class="nn">ipywidgets.widgets</span> <span class="kn">import</span> <span class="n">IntSlider</span><span class="p">,</span> <span class="n">Tab</span><span class="p">,</span> <span class="n">Accordion</span>
+<span class="kn">from</span> <span class="nn">ipywidgets.widgets</span> <span class="kn">import</span> <span class="n">Layout</span>
+<span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">HTML</span> <span class="c1"># IPython Notebook functions</span>
+
+<span class="c1"># Import global settings, to be able to change the config</span>
+<span class="kn">from</span> <span class="nn">webapp.shared</span> <span class="kn">import</span> <span class="n">appState</span>
+<span class="kn">from</span> <span class="nn">webapp.utils</span> <span class="kn">import</span> <span class="n">ResponsiveDict</span>
+
+<span class="k">class</span> <span class="nc">ProgrammeTab</span><span class="p">(</span><span class="n">Tab</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Customised extension of :external:class:`ipywidgets.widgets.Tab` widget, styled to</span>
+<span class="sd">    provide a tabbed interface, where each tab represents a sequential</span>
+<span class="sd">    temperature stage in the heating programme.</span>
+
+<span class="sd">    A :class:`ProgrammeTab` object therefore contains a number of :class:`StageTab`</span>
+<span class="sd">    objects, which themselves contain slider widgets for setting the target</span>
+<span class="sd">    temperature, heat rate and hold time for each temperature stage.</span>
+
+<span class="sd">    In order to facilitate arbitrary numbers of temperature stages, the</span>
+<span class="sd">    :meth:`new_tab_callback` and :meth:`add_tab` methods provide a way of adding</span>
+<span class="sd">    additional :class:`StageTab` instances to an instance of :class:`ProgrammeTab`, </span>
+<span class="sd">    as that functionality is not provided by the :external:class:`ipywidgets.widgets.Tab`</span>
+<span class="sd">    class at the time of writing.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>  <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">global</span> <span class="n">appState</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">children</span> <span class="o">=</span>
+            <span class="p">[</span>
+                <span class="c1"># One stage tab for each stage in the programme, plus one</span>
+                <span class="c1"># more for the &#39;+&#39; tab</span>
+                <span class="o">*</span><span class="p">[</span><span class="n">StageTab</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span> <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">],</span>
+                <span class="n">StageTab</span><span class="p">()</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="c1"># Label the tabs with their stage numbers</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;Stage </span><span class="si">{}</span><span class="s1">:&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Last tab is the &#39;+&#39; tab</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">),</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span>
+
+        <span class="c1"># Default to the first tab (because defaulting to the &#39;+&#39; tab</span>
+        <span class="c1"># is a VERY bad idea)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_index</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Add an observer to the selected_index attribute, so that whenever</span>
+        <span class="c1"># the selected tab changes, the ``new_tab_callback`` method is called</span>
+        <span class="c1"># in response.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">new_tab_callback</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s1">&#39;selected_index&#39;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">new_tab_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Callback function used to check whether a new tab should be added.</span>
+
+<span class="sd">        Works in conjunction with the `ipywidgets.widgets.Widget.observe() &lt;https://ipywidgets.readthedocs.io/en/7.6.2/examples/Widget%20Events.html?highlight=observe#Traitlet-events&gt;`_</span>
+<span class="sd">        method, (see :meth:`ProgrammeTab.__init__`), which will</span>
+<span class="sd">        call this method whenever the widget&#39;s selected tab changes.</span>
+
+<span class="sd">        :param change: Dictionary of the form ``{&#39;name&#39;: &#39;selected_index&#39;, </span>
+<span class="sd">            &#39;old&#39;: x, &#39;new&#39;: y, &#39;owner&#39;: ProgrammeTab}``, where ``x`` is</span>
+<span class="sd">            the index of the previously selected tab, and ``y`` is the</span>
+<span class="sd">            index of the newly selected tab.</span>
+<span class="sd">        :type change: ``dict``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># What is the index of the newly selected tab?</span>
+        <span class="n">new_tab_index</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span>
+        <span class="c1"># Was the &#39;+&#39; tab selected? </span>
+        <span class="k">if</span> <span class="n">new_tab_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Yes, therefore we need to add a new tab</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_tab</span><span class="p">()</span>
+        
+
+    <span class="k">def</span> <span class="nf">add_tab</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a new :class:`StageTab` to the </span>
+<span class="sd">        :class:`ProgrammeTab` widget and, correspondingly, a new</span>
+<span class="sd">        stage to :attr:`webapp.shared.appState.programme`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">global</span> <span class="n">appState</span>
+
+        <span class="c1"># Are we adding the first stage?</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># No, therefore add a new stage to the end of the programme </span>
+            <span class="c1"># with initial values equal to the last stage</span>
+            <span class="n">new_stage</span> <span class="o">=</span> <span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">add_stage</span><span class="p">(</span><span class="n">new_stage</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Yes, therefore add a new stage with the idle settings of room</span>
+            <span class="c1"># temperature and no heating</span>
+            <span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">add_stage</span><span class="p">({</span><span class="s1">&#39;TEMP:&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="s1">&#39;HEAT&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;HOLD&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+
+        <span class="c1"># Define the new tab layout </span>
+        <span class="n">tabs</span> <span class="o">=</span> <span class="p">[</span><span class="n">StageTab</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span> <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">]</span>
+        <span class="c1"># Assign the new tab layout to the ``ProgrammeTab`` widget</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span> <span class="o">=</span> <span class="p">[</span><span class="o">*</span><span class="n">tabs</span><span class="p">,</span> <span class="n">StageTab</span><span class="p">()]</span>
+        <span class="c1"># Relabel the tabs with their stage numbers</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">stage</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;Stage </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">),</span> <span class="s1">&#39;+&#39;</span><span class="p">)</span>
+        <span class="c1"># Set the selected tab to the newest one</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">selected_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset to idle settings. Called when the &#39;Reset&#39; button is pressed, as well as</span>
+<span class="sd">        after a heating programme has finished.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1">#breakpoint()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="c1">#self.children = [StageTab(stage) for stage in appState.programme.stages]</span>
+
+
+<span class="k">class</span> <span class="nc">StageTab</span><span class="p">(</span><span class="n">Accordion</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Customised extension of ``ipywidgets.widgets.Accordion`` widget, styled to </span>
+<span class="sd">    provide a group of sliders for setting the three parameters in a</span>
+<span class="sd">    temperature stage.</span>
+
+<span class="sd">    :param stage: ``ResponsiveDict`` of the form </span>
+<span class="sd">        ``ResponsiveDict({&#39;TEMP&#39;: X, &#39;HEAT&#39;: Y, &#39;HOLD&#39;: Z})``, where the </span>
+<span class="sd">        dictionary values specify the *target temperature*, *heating rate*</span>
+<span class="sd">        and *hold time* for the stage, respectively.</span>
+<span class="sd">    :type stage: ``ResponsiveDict{str: int, str: int, str: int}``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="o">=</span>
+        <span class="n">ResponsiveDict</span><span class="p">(</span>
+            <span class="p">{</span>
+               <span class="s1">&#39;TEMP&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> 
+               <span class="s1">&#39;HEAT&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+               <span class="s1">&#39;HOLD&#39;</span><span class="p">:</span> <span class="mi">0</span>
+            <span class="p">}</span>
+        <span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage</span> <span class="o">=</span> <span class="n">stage</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">children</span><span class="o">=</span> 
+            <span class="p">[</span>
+                <span class="n">ControlSlider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="s1">&#39;TEMP&#39;</span><span class="p">),</span> 
+                <span class="n">ControlSlider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="s1">&#39;HEAT&#39;</span><span class="p">),</span>
+                <span class="n">ControlSlider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">,</span> <span class="s1">&#39;HOLD&#39;</span><span class="p">)</span>
+            <span class="p">],</span>
+            <span class="n">layout</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;Target Temperature&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="o">=</span><span class="mi">200</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;Heating rate&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">[</span><span class="s1">&#39;HEAT&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="o">=</span><span class="mf">0.001</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="o">=</span><span class="mi">30</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;Hold Time&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">[</span><span class="s1">&#39;HOLD&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="o">=</span><span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">children</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="o">=</span><span class="mi">180</span>
+
+<span class="k">class</span> <span class="nc">ControlSlider</span><span class="p">(</span><span class="n">IntSlider</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Customised extension of ``ipywidgets.widgets.IntSlider`` widget, styled to</span>
+<span class="sd">    provide a slider that controls a single parameter in a temperature stage.</span>
+
+<span class="sd">    :param stage: A ``dict``-type object, of the following form,</span>
+<span class="sd">        ``{&#39;TEMP&#39;: X, &#39;HEAT&#39;: Y, &#39;HOLD&#39;: Z}``,</span>
+<span class="sd">    :type stage: ``dict{str: int, str: int, str: int}``</span>
+<span class="sd">    :param target: The key for the item in ``stage`` that the slider will control.</span>
+<span class="sd">    :type target: ``str``</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
+            <span class="n">value</span><span class="o">=</span><span class="mi">22</span><span class="p">,</span>
+            <span class="nb">min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="nb">max</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+            <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">disabled</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">continuous_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="n">orientation</span><span class="o">=</span><span class="s1">&#39;horizontal&#39;</span><span class="p">,</span>
+            <span class="n">readout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">readout_format</span><span class="o">=</span><span class="s1">&#39;d&#39;</span><span class="p">,</span>
+            <span class="n">layout</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="s1">&#39;100%&#39;</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage</span> <span class="o">=</span> <span class="n">stage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="n">target</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observe</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_slider_change</span><span class="p">,</span> <span class="n">names</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">handle_slider_change</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">change</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stage</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">target</span><span class="p">]</span> <span class="o">=</span> <span class="n">change</span><span class="p">[</span><span class="s1">&#39;new&#39;</span><span class="p">]</span>
+
+<span class="c1"># Define a slider widget for the target temperature</span>
+<span class="c1"># Options are largely self-explanatory</span>
+
+<span class="c1"># Define a slider widget for the target heating rate</span>
+
+
+<span class="c1"># Define the callback function, which is called when the temperarture slider is changed</span>
+<span class="c1"># The new value is provided within the parameter `change`</span>
+<span class="c1"># This is then assigned to the global settings.config[&#39;TargetTemp&#39;] variable</span>
+
+<span class="c1"># Define the callback function, which is called when the heating rate slider is changed</span>
+<span class="c1"># The new value is provided within the parameter `change`</span>
+<span class="c1"># This is then assigned to the global settings.config[&#39;TargetHeat&#39;] variable</span>
+    
+
+<span class="c1"># The observe function is used to monitor the changes of the slider widgets</span>
+<span class="c1"># It takes as its parameters the callback function to call when a change is</span>
+<span class="c1"># detected, as well as the value passed to that callback function</span>
+
+<span class="c1"># Finally, define a horizontal box container for the slider widgets in the app</span>
+<span class="c1"># This just serves to place the two widgets next to each other, as well as allowing</span>
+<span class="c1"># us to wrap the page in a single container object, ready to pass to app.py</span>
+
+<span class="n">app</span> <span class="o">=</span> <span class="n">ProgrammeTab</span><span class="p">(</span>
+            <span class="n">layout</span><span class="o">=</span><span class="n">Layout</span><span class="p">(</span><span class="n">margin</span><span class="o">=</span><span class="s1">&#39;0 0 0 0&#39;</span><span class="p">,</span><span class="n">maxwidth</span><span class="o">=</span><span class="s1">&#39;81.25%&#39;</span><span class="p">,</span><span class="n">maxheight</span><span class="o">=</span><span class="s1">&#39;83.33%&#39;</span><span class="p">,</span>
+                  <span class="n">padding</span><span class="o">=</span><span class="s1">&#39;0 0 0 0&#39;</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Container widget, which holds all the widgets used for the &#39;Programme&#39; tab.</span>
+<span class="sd">Allows tab to be added to the dashboard app using the example code below.</span>
+
+<span class="sd">:example:</span>
+
+<span class="sd">&gt;&gt;&gt; from webapp import programme</span>
+<span class="sd">&gt;&gt;&gt; display(programme.app)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+<script type="application/vnd.jupyter.widget-state+json">
+{"state": {"8a918eb9c896460db63ac0993c2299bf": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": "0 0 0 0", "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": "0 0 0 0", "right": null, "top": null, "visibility": null, "width": null}}, "ecf84e434b734583a09e1aaa41df98f2": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "77f24970de4e4a6d8b30564f2df35a78": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "443ad91112a2435e836a540fbd6d1223": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_ecf84e434b734583a09e1aaa41df98f2", "max": 200, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_77f24970de4e4a6d8b30564f2df35a78", "tabbable": null, "tooltip": null, "value": 23}}, "4cb098c299ec45ef9533629dae680343": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "5f8ee16110c24b468b66ff338cd962f8": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "905cb66f258a4edc9f9ad58a6eac8be4": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_4cb098c299ec45ef9533629dae680343", "max": 30, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_5f8ee16110c24b468b66ff338cd962f8", "tabbable": null, "tooltip": null, "value": 0}}, "b3d5f26f88a342259fa10e91570d230a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "1abc6b794f5a47a48f0411a76992c76a": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "909a03e09d8b4d7bb72c23833140bfee": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_b3d5f26f88a342259fa10e91570d230a", "max": 180, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_1abc6b794f5a47a48f0411a76992c76a", "tabbable": null, "tooltip": null, "value": 0}}, "61efa31c07bb4b22ab68759bb5b275a1": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "c07ddbc717644e319f50725b42cff77e": {"model_name": "AccordionModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "AccordionModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "AccordionView", "box_style": "", "children": ["IPY_MODEL_443ad91112a2435e836a540fbd6d1223", "IPY_MODEL_905cb66f258a4edc9f9ad58a6eac8be4", "IPY_MODEL_909a03e09d8b4d7bb72c23833140bfee"], "layout": "IPY_MODEL_61efa31c07bb4b22ab68759bb5b275a1", "selected_index": null, "tabbable": null, "titles": ["Target Temperature", "Heating rate", "Hold Time"], "tooltip": null}}, "aee65176701e4e03bc297ffc98ea1403": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "52bf7cba7c6a4c208d15069db66ea7e7": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "137c7c6b331e47f8ba6a25256fc96a64": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_aee65176701e4e03bc297ffc98ea1403", "max": 200, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_52bf7cba7c6a4c208d15069db66ea7e7", "tabbable": null, "tooltip": null, "value": 23}}, "128aa52b7c0f4cf99a9650b0bcae7646": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "b4aaf93b97594311b1fdd7e30c4e0350": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "6647a17d87934dfaa92fe39d48ec717d": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_128aa52b7c0f4cf99a9650b0bcae7646", "max": 30, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_b4aaf93b97594311b1fdd7e30c4e0350", "tabbable": null, "tooltip": null, "value": 0}}, "2bdb94ba8d264bd1b9b9e229263fc6b3": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "8593617d4774477e9f9debde2ea0d215": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "371ce8bfc6c54aacabcef7ba6ded3bec": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_2bdb94ba8d264bd1b9b9e229263fc6b3", "max": 180, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_8593617d4774477e9f9debde2ea0d215", "tabbable": null, "tooltip": null, "value": 0}}, "149d801a16bb4eaba9c6d88e2062e74f": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "b3d968e81b5743cd923586016bc6c6cf": {"model_name": "AccordionModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "AccordionModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "AccordionView", "box_style": "", "children": ["IPY_MODEL_137c7c6b331e47f8ba6a25256fc96a64", "IPY_MODEL_6647a17d87934dfaa92fe39d48ec717d", "IPY_MODEL_371ce8bfc6c54aacabcef7ba6ded3bec"], "layout": "IPY_MODEL_149d801a16bb4eaba9c6d88e2062e74f", "selected_index": null, "tabbable": null, "titles": ["Target Temperature", "Heating rate", "Hold Time"], "tooltip": null}}, "fac1e47223c44e359c5fbdbcfe7eee92": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": null}}, "6d53088eb5cd4559846f283152efff05": {"model_name": "TabModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "TabModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "TabView", "box_style": "", "children": ["IPY_MODEL_c07ddbc717644e319f50725b42cff77e", "IPY_MODEL_b3d968e81b5743cd923586016bc6c6cf"], "layout": "IPY_MODEL_fac1e47223c44e359c5fbdbcfe7eee92", "selected_index": 0, "tabbable": null, "titles": ["Stage 1:", "+"], "tooltip": null}}, "5709e1b86d774b5aa94068dbdedb18ea": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "ef7c974007f24a38ab2a8299ca8959e5": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "dbb4419643824a43b9c06c0225ff5634": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_5709e1b86d774b5aa94068dbdedb18ea", "max": 200, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_ef7c974007f24a38ab2a8299ca8959e5", "tabbable": null, "tooltip": null, "value": 23}}, "9c08c292e57f49289b052f580e5d920d": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "18d54f27549e418890020f5a0a242d85": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "6ea3ebc99aaf48cdb348e1e92b0138f9": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_9c08c292e57f49289b052f580e5d920d", "max": 30, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_18d54f27549e418890020f5a0a242d85", "tabbable": null, "tooltip": null, "value": 0}}, "91194e7730eb4d9d9fd1a249d571e64a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "9e006a653aef4e96a37f476236cfc2cf": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "b09452e3707c451080c3813c68e05789": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_91194e7730eb4d9d9fd1a249d571e64a", "max": 180, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_9e006a653aef4e96a37f476236cfc2cf", "tabbable": null, "tooltip": null, "value": 0}}, "251bcda7fbca4206850619b66d0a080a": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "6c8789b4a4ed4e0a92397e992ad957c7": {"model_name": "AccordionModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "AccordionModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "AccordionView", "box_style": "", "children": ["IPY_MODEL_dbb4419643824a43b9c06c0225ff5634", "IPY_MODEL_6ea3ebc99aaf48cdb348e1e92b0138f9", "IPY_MODEL_b09452e3707c451080c3813c68e05789"], "layout": "IPY_MODEL_251bcda7fbca4206850619b66d0a080a", "selected_index": null, "tabbable": null, "titles": ["Target Temperature", "Heating rate", "Hold Time"], "tooltip": null}}, "3db2e1bbb587460cbb4ed57602693f91": {"model_name": "LayoutModel", "model_module": "@jupyter-widgets/base", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/base", "_model_module_version": "2.0.0", "_model_name": "LayoutModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "LayoutView", "align_content": null, "align_items": null, "align_self": null, "border_bottom": null, "border_left": null, "border_right": null, "border_top": null, "bottom": null, "display": null, "flex": null, "flex_flow": null, "grid_area": null, "grid_auto_columns": null, "grid_auto_flow": null, "grid_auto_rows": null, "grid_column": null, "grid_gap": null, "grid_row": null, "grid_template_areas": null, "grid_template_columns": null, "grid_template_rows": null, "height": null, "justify_content": null, "justify_items": null, "left": null, "margin": null, "max_height": null, "max_width": null, "min_height": null, "min_width": null, "object_fit": null, "object_position": null, "order": null, "overflow": null, "padding": null, "right": null, "top": null, "visibility": null, "width": "100%"}}, "530dfd046d4d4015afbe55c561f19188": {"model_name": "SliderStyleModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "SliderStyleModel", "_view_count": null, "_view_module": "@jupyter-widgets/base", "_view_module_version": "2.0.0", "_view_name": "StyleView", "description_width": "", "handle_color": null}}, "67aa0ec34531481aa47ad3340a198d13": {"model_name": "IntSliderModel", "model_module": "@jupyter-widgets/controls", "model_module_version": "2.0.0", "state": {"_dom_classes": [], "_model_module": "@jupyter-widgets/controls", "_model_module_version": "2.0.0", "_model_name": "IntSliderModel", "_view_count": null, "_view_module": "@jupyter-widgets/controls", "_view_module_version": "2.0.0", "_view_name": "IntSliderView", "behavior": "drag-tap", "continuous_update": false, "description": "", "description_allow_html": false, "disabled": false, "layout": "IPY_MODEL_3db2e1bbb587460cbb4ed57602693f91", "max": 200, "min": 0, "orientation": "horizontal", "readout": true, "readout_format": "d", "step": 1, "style": "IPY_MODEL_530dfd046d4d4015afbe55c561f19188", "tabbable": null, "tooltip": null, "value": 22}}}, "version_major": 2, "version_minor": 0}
+</script>
+
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">DIY DTA</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../start/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/building.html">Building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/setup.html">Setup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/debugging.html">Debugging</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../software.html">Dashboard (UI) software reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../software.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../software.html#structure">Structure</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../software.html#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../software.html#utility-function-files">Utility function files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../software.html">Dashboard (UI) software reference</a><ul>
+      <li>Previous: <a href="graph.html" title="previous chapter">webapp.graph</a></li>
+      <li>Next: <a href="settings.html" title="next chapter">webapp.settings</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tom Fahey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../_sources/reference/webapp/programme.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
