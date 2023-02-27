@@ -1,6 +1,7 @@
 """ 
-Widget definition module: Defines sliders for adjusting system settings,
-namely PID tuning parameters and the 'tick' interval.
+Widget definition module: Defines UI elements used for adjusting system 
+settings, namely PID tuning parameters and the 'tick' interval of the
+microcontroller.
 """
 from ipywidgets.widgets import Accordion, FloatSlider, Layout
 from IPython.core.display import display, HTML # IPython Notebook functions
@@ -18,6 +19,15 @@ class ConfigTab(Accordion):
     :type config: ``dict``, optional
     :return: ``ConfigTab`` object
     :rtype: ``webapp.settings.ConfigTab``
+    :example:
+
+    >>> from webapp.settings import ConfigTab
+    >>> app = ConfigTab(
+    ...     layout=Layout(margin='3 3 3 3',maxwidth='81.25%',maxheight='83.33%',
+    ...                   padding='0 0 0 0')
+    ... )
+    ...
+    >>> display(app)
     """
     def __init__(self, config= appState.config, **kwargs):
         """Initialse new ``ConfigTab`` object
@@ -109,3 +119,16 @@ app = ConfigTab(
     layout=Layout(margin='0 0 0 0',maxwidth='81.25%',maxheight='83.33%',
                   padding='0 0 0 0')
 )
+"""
+Container widget, which holds all the widgets used for the 'Settings' tab.
+Allows tab to be added to the dashboard app using the example code below.
+
+:ivar app: ``ConfigTab`` object, containing ``ControlSlider`` widgets to
+    adjust system settings
+:vartype app: ``webapp.settings.ConfigTab``
+
+:example:
+
+>>> from webapp import settings
+>>> display(settings.app)
+"""

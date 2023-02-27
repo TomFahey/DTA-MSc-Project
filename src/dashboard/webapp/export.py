@@ -1,6 +1,6 @@
 """ 
-Widget definition module: Handles saving data to local or mounted storage, in
-CSV format.
+Widget definition module: Defines UI elements used for exporting recorded data
+to local or mounted storage devices, including file names and save location.
 """
 from ipywidgets.widgets import VBox, Layout, Label, Select, Text, Button, HBox
 from datetime import datetime
@@ -121,10 +121,21 @@ command_buttons = HBox(
     layout=Layout(width='90.5%', height='21%', margin='0 0 0 0')
 )
 
-# Vertical box widget, containing all widgets
 app = VBox(
     children=(input_boxes, command_buttons),
     layout=Layout(width='94%', height='100%', margin='0 0 0 0')
-)
+) 
+"""
+Container widget, which holds all the widgets used for the 'Export' tab.
+Allows tab to be added to the dashboard app using the example code below.
+
+:ivar app: Container widget, which holds all the widgets used for the 'Export' tab.
+:ivar type: ``ipywidgets.widgets.VBox``
+
+:example:
+
+>>> from webapp import export
+>>> display(export.app)
+"""
    
 

@@ -1,5 +1,8 @@
-"""  UI Tab module: Main tab for user interface. Features controls for starting a run, graph of specified
-     heating programme and temperature profile during run, as well as current temperature.
+""" 
+Widget definition module: Defines UI elements used for main dashboard tab,
+including controls for initiating heating runs, a graph displaying the
+temperature profiles during runs, as well as real-time information such as
+current temperature and heating run progress.
 """
 from ipywidgets.widgets import Label, FloatProgress, Button
 from ipywidgets.widgets import Layout, HBox, VBox
@@ -52,7 +55,7 @@ b_reset.on_click(reset_click)
 command_box = HBox(
     children=(b_start, b_stop, b_reset),
     layout=Layout(width='87.5%', height='10%')
-)
+) #: Button widgets, for initiating heating runs
 
 w1 = FloatProgress(
     value=0,
@@ -76,7 +79,7 @@ w3 = Label(
 info_box = VBox(
     children=(w1,w2,w3),
     layout=Layout(width='75%', height='15%')
-)
+) #: Container widget, containing progress bar and temperature readout label widgets
 
 x_sc = bq.LinearScale(min=0)
 y_sc_l = bq.LinearScale()
@@ -175,11 +178,18 @@ fig = bq.Figure(
     fig_margin=dict(top=25, bottom=50, left=45, right=70),
     legend_location='top-right'
 )
+"""
+Graphing widget, displays temperature profiles of temperature sensors, as well as
+specified temperature programme, for heating runs.
+"""
 
 app = VBox(
     children=(command_box, fig, info_box),
     layout=Layout(width='100%', height='100%', margin='0 0 0 0')
 )
+"""
+
+"""
 
 
 async def work():

@@ -28,6 +28,7 @@ extensions = [
     'sphinx.ext.doctest',
     'sphinx.ext.autodoc',
     'sphinx.ext.githubpages',
+    'sphinx.ext.intersphinx',
     'jupyter_sphinx',
 ]
 
@@ -49,3 +50,9 @@ epub_show_urls = 'footnote'
 
 # -- Options for Autosummary -------------------------------------------------
 #autosummary_generate = True
+
+# -- Options for Intersphinx -------------------------------------------------
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'ipywidgets': ('https://ipywidgets.readthedocs.io/en/latest/', 'ipywidgets-inv.inv'),
+}
