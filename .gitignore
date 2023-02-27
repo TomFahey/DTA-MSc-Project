@@ -13,4 +13,3 @@ __pycache__
 *.code-workspace
 src/microcontroller/pyRTOS.mpy
 src/dashboard/data-13-10-11-49-Isomalt-Oil-5g-30-50-30
-/docs/build

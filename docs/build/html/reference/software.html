@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>Dashboard (UI) software reference &#8212; DIY DTA 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/thebelab.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="webapp.graph" href="webapp/graph.html" />
+    <link rel="prev" title="Hardware" href="hardware.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="dashboard-ui-software-reference">
+<h1>Dashboard (UI) software reference<a class="headerlink" href="#dashboard-ui-software-reference" title="Permalink to this heading">¶</a></h1>
+<section id="overview">
+<span id="ref-ui-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>As previously mentioned in the the <span class="xref std std-ref">&lt;basic&gt;</span> section, the dashboard-style user interface for the system
+is built using a <a class="reference external" href="https://ipywidgets.readthedocs.io/en/stable/">widget</a> based approach, that relies on the
+Jupyter interactive computing platform.</p>
+<p>This approach was chosen for the following reasons:</p>
+<ul class="simple">
+<li><p>As a Python-based project, the Jupyter platform is a natural fit, providing a popular and well-documented
+Python environment that is capable of producing rich, interactive, web-based visualisations, using libraries
+and tools which many undergraduates that are familiar with Python, will already be familiar with.</p></li>
+<li><p>Modern web browsers provide</p></li>
+</ul>
+</section>
+<section id="structure">
+<span id="ref-ui-structure"></span><h2>Structure<a class="headerlink" href="#structure" title="Permalink to this heading">¶</a></h2>
+<p>The underlying Python code for the dashboard application is composed of two main types of files:</p>
+<ul class="simple">
+<li><p><strong>Widget definition files</strong>, largely composed of ipywidget object declarations, which define the <em>appearance</em> of
+the user interface, in addition to some <em>local behaviour</em>, specific to the user elements defined within a given
+file.</p></li>
+<li><p><strong>Utility function files</strong>, containing regular python code that defines useful functions/classes that are then
+imported in widget definition files and used by the widget objects in them, to effect <em>global behaviour</em> of the
+user interface, such as handling of shared data and progression of the application state.</p></li>
+</ul>
+<p>A ‘top-level’ script, <code class="file docutils literal notranslate"><span class="pre">app.py</span></code>, is then used to bring together the various UI elements defined in the
+widget definition files, in a nesting/container-like manner, producing the final dashboard interface.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/UIView.png"><img alt="Web app UI module structure" src="../_images/UIView.png" style="width: 530.5px; height: 652.0px;" /></a>
+</figure>
+<p>This approach introduces a great deal of flexibility, when it comes to implementing additional UI elements and
+behaviours, as it is only necessary to create a new widget definition file (and accompanying utility function file,
+if required), and then import that into the top-level script.</p>
+<p>The present structure of the UI code includes the following files:</p>
+<section id="widget-definition-files">
+<h3>Widget definition files<a class="headerlink" href="#widget-definition-files" title="Permalink to this heading">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="webapp/graph.html">webapp.graph</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webapp/graph.html#webapp.graph.work"><code class="docutils literal notranslate"><span class="pre">work()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webapp/programme.html">webapp.programme</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webapp/programme.html#webapp.programme.ControlSlider"><code class="docutils literal notranslate"><span class="pre">ControlSlider</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/programme.html#webapp.programme.ProgrammeTab"><code class="docutils literal notranslate"><span class="pre">ProgrammeTab</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/programme.html#webapp.programme.StageTab"><code class="docutils literal notranslate"><span class="pre">StageTab</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webapp/settings.html">webapp.settings</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webapp/settings.html#webapp.settings.ConfigTab"><code class="docutils literal notranslate"><span class="pre">ConfigTab</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/settings.html#webapp.settings.ControlSlider"><code class="docutils literal notranslate"><span class="pre">ControlSlider</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webapp/export.html">webapp.export</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webapp/export.html#helper-functions">Helper Functions:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/export.html#ui-widget-declarations">UI Widget declarations:</a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/export.html#module-code-listing">Module code listing:</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="utility-function-files">
+<h3>Utility function files<a class="headerlink" href="#utility-function-files" title="Permalink to this heading">¶</a></h3>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="webapp/shared.html">webapp.shared</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webapp/shared.html#webapp.shared.AppState"><code class="docutils literal notranslate"><span class="pre">AppState</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="webapp/utils.html">webapp.utils</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="webapp/utils.html#webapp.utils.ResponsiveDict"><code class="docutils literal notranslate"><span class="pre">ResponsiveDict</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="webapp/utils.html#webapp.utils.ResponsiveList"><code class="docutils literal notranslate"><span class="pre">ResponsiveList</span></code></a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+</section>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../index.html">DIY DTA</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../start/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start/components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start/building.html">Building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../start/setup.html">Setup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../usage/basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">Debugging</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Dashboard (UI) software reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#utility-function-files">Utility function files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="hardware.html" title="previous chapter">Hardware</a></li>
+      <li>Next: <a href="webapp/graph.html" title="next chapter">webapp.graph</a></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tom Fahey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../_sources/reference/software.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

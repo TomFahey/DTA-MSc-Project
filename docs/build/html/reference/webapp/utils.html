@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>webapp.utils &#8212; DIY DTA 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="prev" title="webapp.shared" href="shared.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-webapp.utils">
+<span id="id1"></span><span id="webapp-utils"></span><h1>webapp.utils<a class="headerlink" href="#module-webapp.utils" title="Permalink to this heading">¶</a></h1>
+<p>Functional module: Defines the ResponsiveDict and ResponsiveList classes,
+used to implement ‘responsive’ callbacks when config items are modified.
+Also defines the ‘Programme’ class, which encapsulates information 
+relating to a heating run, including number of stages, target temperatures,
+heating rate and hold times.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveDict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extension of Python <code class="docutils literal notranslate"><span class="pre">dict</span></code>, provides assignable callbacks that are called
+when a <code class="docutils literal notranslate"><span class="pre">dict</span></code> item is modified.</p>
+<p><code class="docutils literal notranslate"><span class="pre">ResponsiveDict</span></code> is an extension of the Python dictionary, which adds a
+‘responsive’ callback behaviour for dictionary items, that is called
+when the items are modified.</p>
+<p>This is intended for scenarios where dictionary objects are used to 
+encode a programme, or routine’s ‘state’, and where modification of
+this state should automatically result in some corresponding behaviour,
+in response to the modification.</p>
+<p>This is achieved by overriding the <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> function of the Python
+<code class="docutils literal notranslate"><span class="pre">UserDict</span></code> class, which this class inherits from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">webapp.utils</span> <span class="kn">import</span> <span class="n">ResponsiveDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RGB_config</span> <span class="o">=</span> <span class="n">ResponsiveDict</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s1">&#39;R&#39;</span> <span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;G&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;B&#39;</span><span class="p">:</span> <span class="mi">255</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">announce_RGB_change</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;RGB channel </span><span class="si">{}</span><span class="s1"> changed to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RGB_config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key</span><span class="o">=</span><span class="s1">&#39;R&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">callback</span><span class="o">=</span><span class="n">announce_RGB_change</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">RGB_config</span><span class="p">[</span><span class="s1">&#39;R&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">255</span>
+<span class="go">&#39;RGB channel R changed to 255&#39;</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.callbacks">
+<span class="sig-name descname"><span class="pre">callbacks</span></span><a class="headerlink" href="#webapp.utils.ResponsiveDict.callbacks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dictionary of callback functions, one for each item in <code class="docutils literal notranslate"><span class="pre">self.data</span></code>.
+Initially set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for all items.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.data">
+<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#webapp.utils.ResponsiveDict.data" title="Permalink to this definition">¶</a></dt>
+<dd><p>Internal dictionary attribute</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.set_callback">
+<span class="sig-name descname"><span class="pre">set_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveDict.set_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a callback function to the item corresponding to <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<em>_type_</em>) – The dict item’s key</p></li>
+<li><p><strong>callback</strong> (<em>function</em>) – A function handle of the form 
+<code class="docutils literal notranslate"><span class="pre">callback(key,</span> <span class="pre">value)</span></code> where <code class="docutils literal notranslate"><span class="pre">key</span></code> is the item’s key,
+and <code class="docutils literal notranslate"><span class="pre">value</span></code> is the item’s new value.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="webapp.utils.ResponsiveList">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialdata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveList" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">DIY DTA</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../start/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/building.html">Building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/setup.html">Setup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/debugging.html">Debugging</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../software.html">Dashboard (UI) software reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../software.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../software.html#structure">Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../software.html#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../software.html#utility-function-files">Utility function files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../software.html">Dashboard (UI) software reference</a><ul>
+      <li>Previous: <a href="shared.html" title="previous chapter">webapp.shared</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tom Fahey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../_sources/reference/webapp/utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

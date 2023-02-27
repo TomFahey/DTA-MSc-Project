@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>webapp.graph &#8212; DIY DTA 0.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/alabaster.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/thebelab-helper.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="webapp.programme" href="programme.html" />
+    <link rel="prev" title="Dashboard (UI) software reference" href="../software.html" />
+   
+  <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-webapp.graph">
+<span id="id1"></span><span id="webapp-graph"></span><h1>webapp.graph<a class="headerlink" href="#module-webapp.graph" title="Permalink to this heading">¶</a></h1>
+<p>UI Tab module: Main tab for user interface. Features controls for starting a run, graph of specified
+heating programme and temperature profile during run, as well as current temperature.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="webapp.graph.work">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.graph.</span></span><span class="sig-name descname"><span class="pre">work</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#webapp.graph.work" title="Permalink to this definition">¶</a></dt>
+<dd><p>Refresh loop for graph and temperature readouts</p>
+<p>This function continously updates the graph and temperature readout for the tab, depending on
+the current programme and data.</p>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="../../index.html">DIY DTA</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../start/introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/building.html">Building</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../start/setup.html">Setup</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/basic.html">Basic Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/advanced.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../usage/debugging.html">Debugging</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../software.html">Dashboard (UI) software reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../software.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../software.html#structure">Structure</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../software.html#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../software.html#utility-function-files">Utility function files</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../index.html">Documentation overview</a><ul>
+  <li><a href="../software.html">Dashboard (UI) software reference</a><ul>
+      <li>Previous: <a href="../software.html" title="previous chapter">Dashboard (UI) software reference</a></li>
+      <li>Next: <a href="programme.html" title="next chapter">webapp.programme</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Tom Fahey.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
+      
+      |
+      <a href="../../_sources/reference/webapp/graph.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
