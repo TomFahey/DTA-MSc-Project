@@ -42,12 +42,48 @@
             
   <section id="advanced-usage">
 <h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading">¶</a></h1>
-<section id="web-interface">
-<span id="web"></span><h2>Web Interface<a class="headerlink" href="#web-interface" title="Permalink to this heading">¶</a></h2>
-<p>To use Lumache, first install it using pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>lumache
-</pre></div>
-</div>
+<section id="the-jupyter-environment">
+<span id="web"></span><h2>The Jupyter environment<a class="headerlink" href="#the-jupyter-environment" title="Permalink to this heading">¶</a></h2>
+<p>As mentioned in <span class="xref std std-ref">_web_app</span>, the python code used for the user interface
+runs inside a Jupyter environment.</p>
+<p>The way this works, is that a Jupyter server is started in the root directory
+of the project folder, which contains an IPython notebook called
+<code class="docutils literal notranslate"><span class="pre">webapp.ipynb</span></code>, under the directory <code class="docutils literal notranslate"><span class="pre">PROJECT_DIR/src/dashboard/</span></code>. This notebook
+features a single cell, which uses the magic command <code class="docutils literal notranslate"><span class="pre">%run</span></code> to execute the top-level
+python widget module, <code class="docutils literal notranslate"><span class="pre">app.py</span></code>, which then loads the rest of the user interface
+programme.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/UserInterfaceJupyter.png"><img alt="Jupyter notebook environment" src="../_images/UserInterfaceJupyter.png" style="width: 828.0px; height: 581.5px;" /></a>
+</figure>
+<p>The standalone browser application is then deployed using the voila Jupyter
+extension, which converts the notebook into html and javascript, allowing it
+to be viewed as a standalone web application.</p>
+</section>
+<section id="using-the-jupyter-environment">
+<h2>Using the Jupyter environment<a class="headerlink" href="#using-the-jupyter-environment" title="Permalink to this heading">¶</a></h2>
+<p>The dashboard-style web application is intended to provide a straightforward
+graphical user interface to control the system with, approximating those used
+by commercial systems.</p>
+<p>However, this comes with the limitations that the user is restricted to the
+controls and features included by the interface, preventing them from directly
+accessing the full details of the system.</p>
+<p>For users wishing to access the deeper details of the system, the notebook
+environment represents a potent tool, allowing users to interact directly
+with system components in a Python environnment, equipped with the full
+suite of graphical visualisation tools that Jupyter is known for.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/UserInterfaceJupyterUse.png"><img alt="Jupyter notebook environment" src="../_images/UserInterfaceJupyterUse.png" style="width: 828.0px; height: 824.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Inspecting system state and data with simple Python commands</span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-center" id="id2">
+<a class="reference internal image-reference" href="../_images/UserInterfaceJupyterExplore.png"><img alt="Jupyter notebook environment" src="../_images/UserInterfaceJupyterExplore.png" style="width: 828.0px; height: 741.0px;" /></a>
+<figcaption>
+<p><span class="caption-text">Calculating covariance matrix of temperature against time,
+using the Numpy library.</span><a class="headerlink" href="#id2" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
 </section>
 </section>
 
@@ -77,7 +113,8 @@
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Advanced Usage</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#web-interface">Web Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#the-jupyter-environment">The Jupyter environment</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#using-the-jupyter-environment">Using the Jupyter environment</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
