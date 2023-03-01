@@ -4,7 +4,11 @@ setup
 -----
 
 .. py:module:: setup
-    :synopsis: Module handles setup of SPI and PWM devices
+    :synopsis: Setup script for the microcontroller programme.
+
+    This module acts as a setup script for the microcontroller programme,
+    providing pin definitions and configuration values for bus devices,
+    then initialising them.
 
 Code listing
 ^^^^^^^^^^^^

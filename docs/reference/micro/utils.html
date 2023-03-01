@@ -41,129 +41,403 @@
             
   <section id="module-utils">
 <span id="utils"></span><span id="micro-utils"></span><h1>utils<a class="headerlink" href="#module-utils" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="utils.ResponsiveDict">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#utils.ResponsiveDict" title="Permalink to this definition">¶</a></dt>
+<dd><p><a class="reference internal" href="#utils.ResponsiveDict" title="utils.ResponsiveDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponsiveDict</span></code></a> is an extension of the Python dictionary, which
+adds a ‘responsive’ callback behaviour for dictionary items, that occurs
+when the items are modified.</p>
+<p>This is intended for scenarios where dictionary objects are used to
+encode a programme, or routine’s ‘state’, and where modification of
+this state should automatically result in some corresponding behaviour,
+in response to the modification.</p>
+<p>This is achieved by overriding the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code> function of the
+Python <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code> class, which this class inherits from.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">ResponsiveDict</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat_config</span> <span class="o">=</span> <span class="n">ResponsiveDict</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="p">{</span>
+<span class="gp">... </span>        <span class="s1">&#39;POWER&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;ENABLED&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;CONNECTED&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+<span class="gp">... </span>        <span class="s1">&#39;TEMPERATURE&#39;</span><span class="p">:</span> <span class="mi">27</span>
+<span class="gp">... </span>    <span class="p">}</span>
+<span class="gp">... </span><span class="p">)</span> <span class="c1"># Example of a possible thermostat object&#39;s configuration</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Assign callbacks for when &#39;POWER&#39; and &#39;TEMPERATURE&#39; values are modified:</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat_config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key</span><span class="o">=</span><span class="s1">&#39;POWER&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">callback</span><span class="o">=</span><span class="n">thermostat</span><span class="o">.</span><span class="n">power_sequence</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat_config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span>
+<span class="gp">... </span>    <span class="n">key</span><span class="o">=</span><span class="s1">&#39;TEMPERATURE&#39;</span><span class="p">,</span>
+<span class="gp">... </span>    <span class="n">callback</span><span class="o">=</span><span class="n">thermostat</span><span class="o">.</span><span class="n">update_temp</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Modify values in dictionary:</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat_config</span><span class="p">[</span><span class="s1">&#39;POWER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>     <span class="c1"># thermostat.power_sequence((True, False)) called automatically</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat_config</span><span class="p">[</span><span class="s1">&#39;TEMPERATURE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">28</span>  <span class="c1"># thermostat.update_temp((27, 28)) called automatically</span>
+</pre></div>
+</div>
+<p>Note that when the specified callback function is called, it is automatically provided with a
+tuple containing the previous value, followed by the new value, in its argument. Therefore,
+callback functions MUST have function signatures that will accept this tuple, even if it isn’t
+used in the function body:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Acceptable function signature</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_good_callback</span><span class="p">((</span><span class="n">old</span><span class="p">,</span> <span class="n">new</span><span class="p">)):</span>
+<span class="gp">... </span>    <span class="k">if</span> <span class="n">new</span><span class="o">==</span><span class="kc">True</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True&#39;</span><span class="p">)</span>
+<span class="gp">... </span>    <span class="k">else</span><span class="p">:</span>
+<span class="gp">... </span>        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not True&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="c1"># Incompatible function signature - will result in error, due to lack of function argument</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">my_bad_callback</span><span class="p">():</span>
+<span class="gp">... </span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;True&#39;</span><span class="p">)</span>
+<span class="gp">...</span>
+</pre></div>
+</div>
+<p>The set_callback function also allows optional parameters to be specified too, via the ‘args’
+keyword:</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">key</span>      <span class="o">=</span> <span class="s1">&#39;CONNECTED&#39;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">callback</span> <span class="o">=</span> <span class="n">thermostat</span><span class="o">.</span><span class="n">handle_connection</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">args</span>     <span class="o">=</span> <span class="s1">&#39;abc123&#39;</span> <span class="c1"># WiFi password</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;CONNECTED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># thermostat.handle_connection((False, True), &#39;abc123&#39;)</span>
+<span class="gp">... </span>                                      <span class="c1"># called with additional argument</span>
+</pre></div>
+</div>
+<p>Lambda functions can also be used as callbacks, so that a choice of several arbitrary functions
+can be called, depending on the contents of the tuple (old value, new value) matching the
+logic specified in the lambda function:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Call switch_on_heater() if new value is &#39;True&#39;, otherwise call switch_off_heater()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">key</span>      <span class="o">=</span> <span class="s1">&#39;ENABLE&#39;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">callback</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">,</span> <span class="n">args</span> <span class="p">:</span> <span class="n">thermostat</span><span class="o">.</span><span class="n">switch_on_heater</span> <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span>
+<span class="gp">... </span>                                   <span class="k">else</span> <span class="n">thermostat</span><span class="o">.</span><span class="n">switch_off_heater</span>
+<span class="gp">... </span>                                   <span class="c1"># Here, &#39;values&#39; is the tuple of (old value, new value)</span>
+<span class="gp">... </span>  <span class="n">args</span>     <span class="o">=</span> <span class="kc">None</span>
+<span class="gp">... </span><span class="p">)</span>
+<span class="gp">...</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;ENABLED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># thermostat.switch_on_heater() called</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;ENABLED&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span> <span class="c1"># thermostat.switch_off_heater() called</span>
+</pre></div>
+</div>
+<p>Notice how the switch_on/off function is <em>not</em> called with the (old, new) tuple in its argument
+here, as the tuple was passed to the lambda function, which then returns the switch_on/off
+function by itself.</p>
+<p>An inconvenient edgecase is when a certain change in value should not result in the callback
+function being called e.g:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">Config</span><span class="p">({</span><span class="s1">&#39;POWER&#39;</span> <span class="p">:</span> <span class="kc">True</span><span class="p">,</span><span class="s1">&#39;ENABLED&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;CONNECTED&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span><span class="s1">&#39;TEMPERATURE&#39;</span><span class="p">:</span> <span class="mi">27</span><span class="p">}</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;POWER&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span> <span class="c1"># Will call thermostat.power_sequence(), even though</span>
+<span class="gp">... </span>                                  <span class="c1"># new value is same as old</span>
+</pre></div>
+</div>
+<p>To get around this, one can use the following lambda function body:</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="c1"># Call power_sequence if &#39;POWER&#39; value changed, otherwise do nothing</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">thermostat</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span>
+<span class="gp">... </span>  <span class="n">key</span>      <span class="o">=</span> <span class="s1">&#39;POWER&#39;</span><span class="p">,</span>
+<span class="gp">... </span>  <span class="n">callback</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">values</span><span class="p">,</span> <span class="n">args</span> <span class="p">:</span>
+<span class="gp">... </span>                  <span class="n">thermostat</span><span class="o">.</span><span class="n">power_sequence</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="k">if</span> <span class="n">values</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">!=</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="gp">... </span>                  <span class="k">else</span> <span class="kc">None</span>
+<span class="gp">... </span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Methods</strong>:</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.ResponsiveDict.keys">
+<span class="sig-name descname"><span class="pre">keys</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.ResponsiveDict.keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of keys contained in <code class="xref py py-attr docutils literal notranslate"><span class="pre">ResponsiveDict.data</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Return value of <code class="xref py py-meth docutils literal notranslate"><span class="pre">ResponsiveDict.data.keys()</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="utils.ResponsiveDict.values">
+<span class="sig-name descname"><span class="pre">values</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#utils.ResponsiveDict.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns list of values contained in <code class="xref py py-attr docutils literal notranslate"><span class="pre">ResponsiveDict.data</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Return value of <code class="xref py py-meth docutils literal notranslate"><span class="pre">ResponsiveDict.data.values()</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.11)">list</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">items():</span></span></dt>
+<dd><p>Returns items contained in <code class="xref py py-attr docutils literal notranslate"><span class="pre">ResponsiveDict.data</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Return value of <code class="xref py py-meth docutils literal notranslate"><span class="pre">ResponsiveDict.data.items()</span></code></p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.11)">tuple</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py">
+<span class="sig-name descname"><span class="pre">set_callback(key,</span> <span class="pre">callback,</span> <span class="pre">args=None):</span></span></dt>
+<dd><p>Associates provided <code class="docutils literal notranslate"><span class="pre">callback</span></code> function and (optional) arguments,
+<code class="docutils literal notranslate"><span class="pre">args</span></code>, with dictionary item in <code class="xref py py-attr docutils literal notranslate"><span class="pre">ResponsiveDict.data</span></code>
+matching <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.11)"><em>str</em></a>) – Key to associate callback with</p></li>
+<li><p><strong>callback</strong> (<em>function</em>) – Function handle for callback function that will be called,
+when item identified with <code class="docutils literal notranslate"><span class="pre">key</span></code> is modified</p></li>
+<li><p><strong>args</strong> (<em>any</em>) – Optional arguments to be passed to callback function</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
 <section id="code-listing">
 <h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">import</span> <span class="nn">board</span>
-<span class="kn">import</span> <span class="nn">busio</span>
-<span class="kn">from</span> <span class="nn">adafruit_bus_device.spi_device</span> <span class="kn">import</span> <span class="n">SPIDevice</span>
-<span class="kn">import</span> <span class="nn">digitalio</span>
-<span class="c1">#import adafruit_max31865</span>
-<span class="kn">from</span> <span class="nn">adafruit_max31865</span> <span class="kn">import</span> <span class="n">MAX31865</span> <span class="c1"># lib/adafruit_max31865.py</span>
-<span class="kn">from</span> <span class="nn">adafruit_max31856</span> <span class="kn">import</span> <span class="n">ThermocoupleType</span><span class="p">,</span> <span class="n">MAX31856</span> <span class="c1"># lib/adafruit_max31856</span>
-<span class="kn">import</span> <span class="nn">pwmio</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">time</span>
 
-<span class="c1"># Define hardware connections</span>
+<span class="k">def</span> <span class="nf">timeit</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic_ns</span><span class="p">()</span>
+    <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic_ns</span><span class="p">()</span><span class="o">-</span><span class="n">startTime</span><span class="p">)</span><span class="o">/</span><span class="mf">1e9</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 
-<span class="c1">## SPI pin definitions and configuration</span>
-<span class="n">SPI_MISO_PIN</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP12</span>
-<span class="n">SPI_MOSI_PIN</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP11</span>
-<span class="n">SPI_SCLK_PIN</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP10</span>
-<span class="n">SPI_CS_PIN_0</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP14</span> <span class="c1"># MAX31865 #1</span>
-<span class="n">SPI_CS_PIN_1</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP13</span> <span class="c1"># MAX31865 #2</span>
-<span class="n">SPI_CS_PIN_2</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP9</span>  <span class="c1"># MAX31856 #1</span>
-<span class="n">SPI_CS_PIN_3</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP8</span>  <span class="c1"># MAX31856 #2</span>
+<span class="k">def</span> <span class="nf">timeit_ms</span><span class="p">(</span><span class="n">func</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+    <span class="n">startTime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic_ns</span><span class="p">()</span>
+    <span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">round</span><span class="p">((</span><span class="n">time</span><span class="o">.</span><span class="n">monotonic_ns</span><span class="p">()</span><span class="o">-</span><span class="n">startTime</span><span class="p">)</span><span class="o">/</span><span class="mf">1e6</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 
-<span class="n">SPI_BAUDRATE</span> <span class="o">=</span> <span class="mi">5_000_000</span> <span class="c1"># 5 MHz max clock for ICs</span>
+<span class="k">class</span> <span class="nc">ResponsiveDict</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extension of Python ``dict``, provides assignable callbacks that are </span>
+<span class="sd">    called when a ``dict`` item is modified.</span>
 
-<span class="c1">## PWM pin definitions and configuration</span>
-<span class="n">PWM_PIN1</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP16</span>
-<span class="n">PWM_PIN2</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP17</span>
-<span class="n">PWM_PIN3</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP18</span>
-<span class="n">PWM_PIN4</span> <span class="o">=</span> <span class="n">board</span><span class="o">.</span><span class="n">GP19</span>
-<span class="n">PWM_FREQ</span> <span class="o">=</span> <span class="mi">19_900</span> <span class="c1"># 20 kHz PWM frequency</span>
+<span class="sd">    :class:`ResponsiveDict` is an extension of the Python dictionary, which </span>
+<span class="sd">    adds a &#39;responsive&#39; callback behaviour for dictionary items, that occurs</span>
+<span class="sd">    when the items are modified.</span>
 
+<span class="sd">    This is intended for scenarios where dictionary objects are used to </span>
+<span class="sd">    encode a programme, or routine&#39;s &#39;state&#39;, and where modification of</span>
+<span class="sd">    this state should automatically result in some corresponding behaviour,</span>
+<span class="sd">    in response to the modification.</span>
+<span class="sd">    </span>
+<span class="sd">    This is achieved by overriding the :meth:`__setitem__` function of the </span>
+<span class="sd">    Python :external:class:`UserDict` class, which this class inherits from.</span>
 
-<span class="c1"># Setup SPI bus</span>
-<span class="n">SPI</span> <span class="o">=</span> <span class="n">busio</span><span class="o">.</span><span class="n">SPI</span><span class="p">(</span><span class="n">SPI_SCLK_PIN</span><span class="p">,</span> <span class="n">MISO</span><span class="o">=</span><span class="n">SPI_MISO_PIN</span><span class="p">,</span> <span class="n">MOSI</span><span class="o">=</span><span class="n">SPI_MOSI_PIN</span><span class="p">)</span>
-<span class="n">CS_1</span> <span class="o">=</span> <span class="n">digitalio</span><span class="o">.</span><span class="n">DigitalInOut</span><span class="p">(</span><span class="n">SPI_CS_PIN_0</span><span class="p">)</span>
-<span class="n">CS_2</span> <span class="o">=</span> <span class="n">digitalio</span><span class="o">.</span><span class="n">DigitalInOut</span><span class="p">(</span><span class="n">SPI_CS_PIN_1</span><span class="p">)</span>
-<span class="n">CS_3</span> <span class="o">=</span> <span class="n">digitalio</span><span class="o">.</span><span class="n">DigitalInOut</span><span class="p">(</span><span class="n">SPI_CS_PIN_2</span><span class="p">)</span>
-<span class="n">CS_4</span> <span class="o">=</span> <span class="n">digitalio</span><span class="o">.</span><span class="n">DigitalInOut</span><span class="p">(</span><span class="n">SPI_CS_PIN_3</span><span class="p">)</span>
+<span class="sd">    :Example:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; import ResponsiveDict</span>
+<span class="sd">    &gt;&gt;&gt; thermostat_config = ResponsiveDict(</span>
+<span class="sd">    ...     {</span>
+<span class="sd">    ...         &#39;POWER&#39; : True,</span>
+<span class="sd">    ...         &#39;ENABLED&#39;: False,</span>
+<span class="sd">    ...         &#39;CONNECTED&#39;: False,</span>
+<span class="sd">    ...         &#39;TEMPERATURE&#39;: 27</span>
+<span class="sd">    ...     }</span>
+<span class="sd">    ... ) # Example of a possible thermostat object&#39;s configuration</span>
+<span class="sd">    ...</span>
+<span class="sd">    &gt;&gt;&gt; # Assign callbacks for when &#39;POWER&#39; and &#39;TEMPERATURE&#39; values are modified:</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; thermostat_config.set_callback(</span>
+<span class="sd">    ...     key=&#39;POWER&#39;,</span>
+<span class="sd">    ...     callback=thermostat.power_sequence</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; thermostat_config.set_callback(</span>
+<span class="sd">    ...     key=&#39;TEMPERATURE&#39;,</span>
+<span class="sd">    ...     callback=thermostat.update_temp</span>
+<span class="sd">    ... )</span>
+<span class="sd">    ...</span>
+<span class="sd">    &gt;&gt;&gt; # Modify values in dictionary:</span>
+<span class="sd">    &gt;&gt;&gt; thermostat_config[&#39;POWER&#39;] = False     # thermostat.power_sequence((True, False)) called automatically</span>
+<span class="sd">    &gt;&gt;&gt; thermostat_config[&#39;TEMPERATURE&#39;] = 28  # thermostat.update_temp((27, 28)) called automatically</span>
+<span class="sd">        </span>
+<span class="sd">    Note that when the specified callback function is called, it is automatically provided with a</span>
+<span class="sd">    tuple containing the previous value, followed by the new value, in its argument. Therefore,</span>
+<span class="sd">    callback functions MUST have function signatures that will accept this tuple, even if it isn&#39;t</span>
+<span class="sd">    used in the function body:</span>
 
-<span class="c1">## Setup SPI devices</span>
+<span class="sd">    :Example:</span>
 
-<span class="c1">### Setup MAX31865 RTD temperature sensor breakout boards</span>
+<span class="sd">    &gt;&gt;&gt; # Acceptable function signature</span>
+<span class="sd">    &gt;&gt;&gt; def my_good_callback((old, new)):</span>
+<span class="sd">    ...     if new==True:</span>
+<span class="sd">    ...         print(&#39;True&#39;)</span>
+<span class="sd">    ...     else:</span>
+<span class="sd">    ...         print(&#39;Not True&#39;)</span>
+<span class="sd">    ...</span>
+<span class="sd">    &gt;&gt;&gt; # Incompatible function signature - will result in error, due to lack of function argument</span>
+<span class="sd">    &gt;&gt;&gt; def my_bad_callback():</span>
+<span class="sd">    ...     print(&#39;True&#39;)</span>
+<span class="sd">    ...</span>
 
-<span class="n">RTD_NOMINAL_RES_PT100</span> <span class="o">=</span> <span class="mf">100.0</span>
-<span class="n">RTD_NOMINAL_RES_PT1000</span> <span class="o">=</span> <span class="mf">1000.0</span>
-<span class="n">RTD_REF_RESISTOR_PT100</span> <span class="o">=</span> <span class="mf">430.0</span>
-<span class="n">RTD_REF_RESISTOR_PT1000</span> <span class="o">=</span> <span class="mf">4300.0</span>
+<span class="sd">    The set_callback function also allows optional parameters to be specified too, via the &#39;args&#39;</span>
+<span class="sd">    keyword:</span>
+<span class="sd">        </span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config.set_callback(</span>
+<span class="sd">    ...   key      = &#39;CONNECTED&#39;,</span>
+<span class="sd">    ...   callback = thermostat.handle_connection,</span>
+<span class="sd">    ...   args     = &#39;abc123&#39; # WiFi password</span>
+<span class="sd">    ... )</span>
+<span class="sd">    ...    </span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config[&#39;CONNECTED&#39;] = True # thermostat.handle_connection((False, True), &#39;abc123&#39;)</span>
+<span class="sd">    ...                                       # called with additional argument</span>
 
+<span class="sd">    Lambda functions can also be used as callbacks, so that a choice of several arbitrary functions</span>
+<span class="sd">    can be called, depending on the contents of the tuple (old value, new value) matching the</span>
+<span class="sd">    logic specified in the lambda function:</span>
 
+<span class="sd">    :Example:</span>
 
-<span class="n">max31865a</span> <span class="o">=</span> <span class="n">MAX31865</span><span class="p">(</span>
-        <span class="n">SPI</span><span class="p">,</span>
-        <span class="n">CS_1</span><span class="p">,</span>
-        <span class="n">rtd_nominal</span><span class="o">=</span><span class="n">RTD_NOMINAL_RES_PT100</span><span class="p">,</span> 
-        <span class="n">ref_resistor</span><span class="o">=</span><span class="n">RTD_REF_RESISTOR_PT100</span><span class="p">,</span>
-        <span class="n">wires</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-        <span class="n">baudrate</span><span class="o">=</span><span class="n">SPI_BAUDRATE</span>
-    <span class="p">)</span>
+<span class="sd">    &gt;&gt;&gt; # Call switch_on_heater() if new value is &#39;True&#39;, otherwise call switch_off_heater()  </span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config.set_callback(</span>
+<span class="sd">    ...   key      = &#39;ENABLE&#39;,</span>
+<span class="sd">    ...   callback = lambda values, args : thermostat.switch_on_heater if values[1] == &#39;True&#39;</span>
+<span class="sd">    ...                                    else thermostat.switch_off_heater</span>
+<span class="sd">    ...                                    # Here, &#39;values&#39; is the tuple of (old value, new value)</span>
+<span class="sd">    ...   args     = None</span>
+<span class="sd">    ... )</span>
+<span class="sd">    ...    </span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config[&#39;ENABLED&#39;] = True  # thermostat.switch_on_heater() called</span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config[&#39;ENABLED&#39;] = False # thermostat.switch_off_heater() called</span>
 
-<span class="n">max31865b</span> <span class="o">=</span> <span class="n">MAX31865</span><span class="p">(</span>
-        <span class="n">SPI</span><span class="p">,</span>
-        <span class="n">CS_2</span><span class="p">,</span>
-        <span class="n">rtd_nominal</span><span class="o">=</span><span class="n">RTD_NOMINAL_RES_PT100</span><span class="p">,</span> 
-        <span class="n">ref_resistor</span><span class="o">=</span><span class="n">RTD_REF_RESISTOR_PT100</span><span class="p">,</span>
-        <span class="n">wires</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-        <span class="n">baudrate</span><span class="o">=</span><span class="n">SPI_BAUDRATE</span>
-    <span class="p">)</span>
+<span class="sd">    Notice how the switch_on/off function is *not* called with the (old, new) tuple in its argument</span>
+<span class="sd">    here, as the tuple was passed to the lambda function, which then returns the switch_on/off</span>
+<span class="sd">    function by itself.</span>
 
-<span class="c1">## Configure MAX31865 to run with voltage bias always on and continuous conversion mode</span>
-<span class="n">max31865a</span><span class="o">.</span><span class="n">auto_convert</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">max31865a</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">max31865b</span><span class="o">.</span><span class="n">auto_convert</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="n">max31865b</span><span class="o">.</span><span class="n">bias</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="sd">    An inconvenient edgecase is when a certain change in value should not result in the callback</span>
+<span class="sd">    function being called e.g:</span>
 
-<span class="c1">## Double check configuration by inspecting configuration register and manually writing config value </span>
-<span class="c1">## (see datasheet): https://datasheets.maximintegrated.com/en/ds/MAX31865.pdf#page=13</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">max31865a</span><span class="o">.</span><span class="n">_read_u8</span><span class="p">(</span><span class="mh">0x00</span><span class="p">))</span>
-<span class="n">max31865a</span><span class="o">.</span><span class="n">_write_u8</span><span class="p">(</span><span class="mh">0x80</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">max31865a</span><span class="o">.</span><span class="n">_read_u8</span><span class="p">(</span><span class="mh">0x00</span><span class="p">))</span>
+<span class="sd">    :Example:</span>
 
-<span class="nb">print</span><span class="p">(</span><span class="n">max31865b</span><span class="o">.</span><span class="n">_read_u8</span><span class="p">(</span><span class="mh">0x00</span><span class="p">))</span>
-<span class="n">max31865b</span><span class="o">.</span><span class="n">_write_u8</span><span class="p">(</span><span class="mh">0x00</span><span class="p">,</span> <span class="mh">0xC1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">max31865b</span><span class="o">.</span><span class="n">_read_u8</span><span class="p">(</span><span class="mh">0x00</span><span class="p">))</span>
+<span class="sd">    &gt;&gt;&gt; print(thermostat.config)</span>
+<span class="sd">    &gt;&gt;&gt; Config({&#39;POWER&#39; : True,&#39;ENABLED&#39;: False, &#39;CONNECTED&#39;: False,&#39;TEMPERATURE&#39;: 27}</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config[&#39;POWER&#39;] = True # Will call thermostat.power_sequence(), even though</span>
+<span class="sd">    ...                                   # new value is same as old</span>
+<span class="sd">    </span>
+<span class="sd">    To get around this, one can use the following lambda function body:</span>
 
-<span class="c1">### Setup MAX31856 thermocouple temperature sensor breakout board:</span>
+<span class="sd">    :Example:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; # Call power_sequence if &#39;POWER&#39; value changed, otherwise do nothing  </span>
+<span class="sd">    &gt;&gt;&gt; thermostat.config.set_callback(</span>
+<span class="sd">    ...   key      = &#39;POWER&#39;,</span>
+<span class="sd">    ...   callback = lambda values, args :</span>
+<span class="sd">    ...                   thermostat.power_sequence(values) if values[1]!=values[0]</span>
+<span class="sd">    ...                   else None</span>
+<span class="sd">    ... )</span>
+<span class="sd">    </span>
+<span class="sd">    If the provided return value is &#39;None&#39; (instead of a callable function), then it</span>
+<span class="sd">    will be ignored (see line #150), reverting to the behaviour of a normal Python dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise ResponsiveDict object.</span>
 
-<span class="n">max31856a</span> <span class="o">=</span> <span class="n">MAX31856</span><span class="p">(</span>
-        <span class="n">SPI</span><span class="p">,</span>
-        <span class="n">CS_3</span><span class="p">,</span>                   <span class="c1"># Chip Select Pin number (lines 33-37)</span>
-        <span class="n">ThermocoupleType</span><span class="o">.</span><span class="n">T</span><span class="p">,</span>     <span class="c1"># Thermocouple Type (see lib/adafruit_max31856.py)</span>
-        <span class="n">filter_frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>    <span class="c1"># 50 Hz or 60 Hz</span>
-        <span class="n">auto_conversion</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>   <span class="c1"># Auto conversion for faster measurements</span>
-        <span class="n">cj_disable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>        <span class="c1"># Disable cold junction compensation to get deltaT</span>
-        <span class="n">baudrate</span><span class="o">=</span><span class="n">SPI_BAUDRATE</span>
-    <span class="p">)</span>
-<span class="n">max31856b</span> <span class="o">=</span> <span class="n">MAX31856</span><span class="p">(</span>
-        <span class="n">SPI</span><span class="p">,</span>
-        <span class="n">CS_4</span><span class="p">,</span>
-        <span class="n">ThermocoupleType</span><span class="o">.</span><span class="n">K</span><span class="p">,</span>
-        <span class="n">filter_frequency</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>
-        <span class="n">auto_conversion</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">cj_disable</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">baudrate</span><span class="o">=</span><span class="n">SPI_BAUDRATE</span>
-    <span class="p">)</span>
+<span class="sd">        :param data: Dictionary object to initialise ResponsiveDict with</span>
+<span class="sd">        :type data: dict</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__args</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span><span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+        
+    <span class="k">def</span> <span class="nf">keys</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns list of keys contained :attr:`ResponsiveDict.data`</span>
 
-<span class="n">max31856a_CR1</span> <span class="o">=</span> <span class="n">max31856a</span><span class="o">.</span><span class="n">_read_register</span><span class="p">(</span><span class="mh">0x01</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-<span class="n">max31856a</span><span class="o">.</span><span class="n">_write_u8</span><span class="p">(</span><span class="mh">0x81</span><span class="p">,</span> <span class="p">(</span><span class="n">max31856a_CR1</span> <span class="o">^</span> <span class="mh">0x20</span><span class="p">))</span> <span class="c1"># Enable averaging mode for MAX31856 (pg 20 in datasheet)</span>
+<span class="sd">        :return: Return value of :meth:`ResponsiveDict.data.keys()`</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns list of values contained in :attr:`ResponsiveDict.data`</span>
 
+<span class="sd">        :return: Return value of :meth:`ResponsiveDict.data.values()`</span>
+<span class="sd">        :rtype: list</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">values</span><span class="p">()</span>
+    
+    <span class="k">def</span> <span class="nf">items</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Returns items contained in :attr:`ResponsiveDict.data`</span>
 
+<span class="sd">        :return: Return value of :meth:`ResponsiveDict.data.items()`</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+    
 
-<span class="c1"># Setup PWM output for controlling TEC modules</span>
-
-<span class="n">enPin1</span> <span class="o">=</span> <span class="n">pwmio</span><span class="o">.</span><span class="n">PWMOut</span><span class="p">(</span><span class="n">PWM_PIN1</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">PWM_FREQ</span><span class="p">,</span> <span class="n">duty_cycle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">enPin2</span> <span class="o">=</span> <span class="n">digitalio</span><span class="o">.</span><span class="n">DigitalInOut</span><span class="p">(</span><span class="n">PWM_PIN2</span><span class="p">)</span>
-<span class="n">enPin2</span><span class="o">.</span><span class="n">direction</span><span class="o">=</span><span class="n">digitalio</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">OUTPUT</span>
-<span class="n">enPin2</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="kc">True</span>
-
-<span class="n">enPin3</span> <span class="o">=</span> <span class="n">pwmio</span><span class="o">.</span><span class="n">PWMOut</span><span class="p">(</span><span class="n">PWM_PIN3</span><span class="p">,</span> <span class="n">frequency</span><span class="o">=</span><span class="n">PWM_FREQ</span><span class="p">,</span> <span class="n">duty_cycle</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">enPin4</span> <span class="o">=</span> <span class="n">digitalio</span><span class="o">.</span><span class="n">DigitalInOut</span><span class="p">(</span><span class="n">PWM_PIN4</span><span class="p">)</span>
-<span class="n">enPin4</span><span class="o">.</span><span class="n">direction</span><span class="o">=</span><span class="n">digitalio</span><span class="o">.</span><span class="n">Direction</span><span class="o">.</span><span class="n">OUTPUT</span>
-<span class="n">enPin4</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="kc">True</span>
-
+    <span class="k">def</span> <span class="nf">set_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">callback</span><span class="p">,</span> <span class="n">args</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Associates provided &#39;callback&#39; function and (optional) arguments, &#39;args&#39;, with &#39;key&#39;</span>
+<span class="sd">        </span>
+<span class="sd">        :param key: Key to associate callback with</span>
+<span class="sd">        :type key: str</span>
+<span class="sd">        :param callback: Function handle for callback function that will be called,</span>
+<span class="sd">            when item identified with ``key`` is modified</span>
+<span class="sd">        :type callback: function</span>
+<span class="sd">        :param args: Optional arguments to be passed to callback function</span>
+<span class="sd">        :type args: any</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">callback</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">args</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">pass</span>
+        
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="fm">__getitem__</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]((</span><span class="n">val</span><span class="p">,</span> <span class="n">value</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">__args</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        
+    <span class="k">def</span> <span class="fm">__contains__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span>
+        
+    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> (</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="vm">__name__</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">__name__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">&#39;Config&#39;</span>
+    
+    <span class="k">def</span> <span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>

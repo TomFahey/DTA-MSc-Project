@@ -42,9 +42,15 @@
             
   <section id="module-setup">
 <span id="setup"></span><span id="micro-setup"></span><h1>setup<a class="headerlink" href="#module-setup" title="Permalink to this heading">¶</a></h1>
+<p>This module acts as a setup script for the microcontroller programme,
+providing pin definitions and configuration values for bus devices,
+then initialising them.</p>
 <section id="code-listing">
 <h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;Setup script for the microcontroller programme.</span>
+
+<span class="sd">Provides pin definitions, configuration and initialisation of bus devices</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">board</span>
 <span class="kn">import</span> <span class="nn">busio</span>
 <span class="kn">from</span> <span class="nn">adafruit_bus_device.spi_device</span> <span class="kn">import</span> <span class="n">SPIDevice</span>
@@ -101,6 +107,8 @@
         <span class="n">wires</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
         <span class="n">baudrate</span><span class="o">=</span><span class="n">SPI_BAUDRATE</span>
     <span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="n">max31865b</span> <span class="o">=</span> <span class="n">MAX31865</span><span class="p">(</span>
         <span class="n">SPI</span><span class="p">,</span>

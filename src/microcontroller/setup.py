@@ -1,4 +1,7 @@
+"""Setup script for the microcontroller programme.
 
+Provides pin definitions, configuration and initialisation of bus devices
+"""
 import board
 import busio
 from adafruit_bus_device.spi_device import SPIDevice
@@ -55,6 +58,8 @@ max31865a = MAX31865(
         wires=4,
         baudrate=SPI_BAUDRATE
     )
+"""
+"""
 
 max31865b = MAX31865(
         SPI,

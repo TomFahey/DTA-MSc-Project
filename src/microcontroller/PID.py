@@ -1,13 +1,66 @@
+"""Defines the :class:`PIDState` class, which is responsible for controlling
+and regulating the PWM output to the H-bridge, based on the system mode, target
+temperature and heat rate.
+"""
 import setup
 import time
 #import asyncio
 from utils import ResponsiveDict
 
 class PIDState:
+    """The :class:`PIDState` class is responsible for controlling and 
+    regulating the PWM output from the microcontroller. used to control
+    the power delivery to the heating element of the system.
+
+    This is determined by the system mode, target temperature and heat rate,
+    during a heating run, with a PID control loop used to calculate the
+    appropriate PWM output.
+
+    Parameters
+    ----------
+    
+    :param sensor: The temperature sensor used for the PID control loop
+    :type sensor: :class:`TempSensor`
+    :param kp: The proportional gain of the PID control loop
+    :type kp: float
+    :param ki: The integral gain of the PID control loop
+    :type ki: float
+    :param kd: The derivative gain of the PID control loop
+    :type kd: float
+    :param Ts: The sampling period of the PID control loop
+    :type Ts: float
+    """
+
+    # Attributes
+
+    config = ResponsiveDict(
+        {
+            'RUN': False,       # PWM output enable
+            'MODE': False,      # Ramp/Hold mode
+            'TARGET': 23,       # Target heat rate / temperature
+            'KP': 35.0,         # Proportional gain
+            'KI':3.5,           # Integral gain
+            'KD':2.0            # Derivative gain
+        }
+    )
+    """ Configuration dictionary for the PID controller.
+    """
+
+    #: Error
+    e = 0.
+
+    #: Output value
+    u = 0.
+
+    #: Change in output value
+    delta_u = 0.
+
     
     def __init__(self, sensor, kp=1.0, ki=0., kd=0., Ts=0.25):
         self._sensor = sensor
         self.config = ResponsiveDict({'RUN': False,'MODE': False, 'TARGET': self.temp, 'KP': kp, 'KI':ki, 'KD':kd})
+
+        # Debugging
         self.config.set_callback('MODE', lambda vals, args :
                                  self.reset('MODE') if vals[0]!=vals[1] else None)
         self.config.set_callback('KP', lambda vals, args :
@@ -16,6 +69,7 @@ class PIDState:
                                  self.reset('KD') if vals[0]!=vals[1] else None)
         self.config.set_callback('KI', lambda vals, args :
                                  self.reset('KI') if vals[0]!=vals[1] else None)
+
         self.e = 0.
         self.e1 = 0.
         self.e2 = 0.
@@ -35,6 +89,8 @@ class PIDState:
         return self._sensor.temperature
     
     def reset(self, callback=None):
+        """Reset PID controller values to defaults
+        """
         msg = 'Reset!'
         if callback:
             msg += ' Due to {}'.format(callback)
@@ -54,6 +110,8 @@ class PIDState:
         self.Temp1 = self.temp
 
     def update(self):
+        """Calculate updated values for PWM output
+        """
         self.Temp1 = self.temp
         self.time1 = time.monotonic()
         self.e2 = self.e1
@@ -71,33 +129,20 @@ class PIDState:
         else:
             self.u = 0
         print('Error: {}'.format(self.e))
-        #print('U: {}'.format(self.u))
-        #print('Dt: {}'.format(self.time1 - self.time0))
         if (self.u > 100):
             self.u = 100.
         elif (self.u < -100):
             self.u = -100.
         if (self.u>0):
-            #setup.enPin1.duty_cycle = 0
-            #setup.enPin2.duty_cycle = int((self.u/100.0) * 65535)
-            #setup.enPin3.duty_cycle = int((self.u/100.0) * 65535)
-            #setup.enPin4.duty_cycle = 0
             setup.enPin1.duty_cycle = int((self.u/100.0) * 65535)
             setup.enPin2.value = 1
             setup.enPin3.duty_cycle = int((self.u/100.0) * 65535)
             setup.enPin4.value = 1
         elif (self.u<0):
-            #setup.enPin1.duty_cycle = int((abs(self.u)/100.0) * 65535)
-            #setup.enPin2.duty_cycle = 0
-            #setup.enPin3.duty_cycle = 0
-            #setup.enPin4.duty_cycle = int((abs(self.u)/100.0) * 65535)
             setup.enPin1.duty_cycle = int((-self.u/100.0) * 65535)
             setup.enPin2.value = 0
             setup.enPin3.duty_cycle = int((-self.u/100.0) * 65535)
             setup.enPin4.value = 0
         else:
             setup.enPin1.duty_cycle = 0
-            #setup.enPin2.duty_cycle = 0
             setup.enPin3.duty_cycle = 0
-            #setup.enPin4.duty_cycle = 0
-        #await asyncio.sleep(0.25)
