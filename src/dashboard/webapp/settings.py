@@ -2,7 +2,15 @@
 Widget definition module: Defines UI elements used for adjusting system 
 settings, namely PID tuning parameters and the 'tick' interval of the
 microcontroller.
+
+Use the following code to import and display the widgets defined in this module:
+
+:example:
+
+>>> from webapp import settings
+>>> display(settings.app)
 """
+
 from ipywidgets.widgets import Accordion, FloatSlider, Layout
 from IPython.core.display import display, HTML # IPython Notebook functions
 from importlib import reload
@@ -128,5 +136,5 @@ below:
 :example:
 
 >>> from webapp import settings
->>> display(settings.app)
+>>> settings.app
 """

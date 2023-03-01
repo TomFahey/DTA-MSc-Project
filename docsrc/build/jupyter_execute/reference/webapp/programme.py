@@ -11,8 +11,8 @@ ROOT_DIR = os.path.abspath('../')
 WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
-from webapp.programme import StageTab
-display(StageTab())
+from webapp.programme import *
+display(app)
 
 
 # In[2]:
@@ -25,8 +25,8 @@ ROOT_DIR = os.path.abspath('../')
 WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
-from webapp.programme import ControlSlider
-display(ControlSlider(stage={'R': 100}, target='R'))
+from webapp.programme import StageTab
+display(StageTab())
 
 
 # In[3]:
@@ -39,6 +39,6 @@ ROOT_DIR = os.path.abspath('../')
 WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
-from webapp.programme import *
-display(app)
+from webapp.programme import ControlSlider
+display(ControlSlider(stage={'R': 100}, target='R'))
 

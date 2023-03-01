@@ -6,6 +6,21 @@ webapp.export
 
 .. automodule:: webapp.export
 
+   .. jupyter-execute::
+        :hide-code:
+   
+        import os
+        import sys
+   
+        ROOT_DIR = os.path.abspath('../')
+        WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
+        sys.path.insert(0, WEBAPP_PATH)
+   
+        from webapp.export import *
+        display(app)
+
+   |
+
    Helper functions
    ^^^^^^^^^^^^^^^^
 
@@ -103,18 +118,6 @@ webapp.export
    .. autodata:: app
       :annotation: <ipywidgets.widgets.VBox>
 
-   .. jupyter-execute::
-        :hide-code:
-   
-        import os
-        import sys
-   
-        ROOT_DIR = os.path.abspath('../')
-        WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
-        sys.path.insert(0, WEBAPP_PATH)
-   
-        from webapp.export import *
-        display(app)
 
 |
 

@@ -6,6 +6,21 @@ webapp.programme
 
 .. automodule:: webapp.programme
 
+   .. jupyter-execute::
+       :hide-code:
+
+       import os
+       import sys
+
+       ROOT_DIR = os.path.abspath('../')
+       WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
+       sys.path.insert(0, WEBAPP_PATH)
+
+       from webapp.programme import *
+       display(app)
+
+   |
+
    Widget definitions
    ^^^^^^^^^^^^^^^^^^
 
@@ -52,19 +67,6 @@ webapp.programme
 
    .. autodata:: app
       :annotation: <webapp.programme.ProgrammeTab>
-
-   .. jupyter-execute::
-       :hide-code:
-
-       import os
-       import sys
-
-       ROOT_DIR = os.path.abspath('../')
-       WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
-       sys.path.insert(0, WEBAPP_PATH)
-
-       from webapp.programme import *
-       display(app)
 
 |
 

@@ -42,46 +42,51 @@
             
   <section id="module-webapp.shared">
 <span id="id1"></span><span id="webapp-shared"></span><h1>webapp.shared<a class="headerlink" href="#module-webapp.shared" title="Permalink to this heading">¶</a></h1>
-<p>Functional module: Defines the AppState class, which holds the state of the 
-application, including its current configuration, data and programme.</p>
+<p>Functional module: Defines the <a class="reference internal" href="#webapp.shared.AppState" title="webapp.shared.AppState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppState</span></code></a> class, which holds the state 
+of the application, including its current configuration, data and programme.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="webapp.shared.AppState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.shared.</span></span><span class="sig-name descname"><span class="pre">AppState</span></span><a class="headerlink" href="#webapp.shared.AppState" title="Permalink to this definition">¶</a></dt>
-<dd><p>AppState is a container/struct-like class designed to store the application
-state.</p>
-<p>When the ‘top-level’ app.py script is first loaded, a single instance of 
-AppState is created by a module import. When the other widget definition
-modules are imported, they share this instance of AppState, allowing the
-application state to be synchronised across the different UI elements.</p>
+<dd><p><a class="reference internal" href="#webapp.shared.AppState" title="webapp.shared.AppState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppState</span></code></a> is a container/struct-like class designed to store the 
+application state.</p>
+<p>When the ‘top-level’ <code class="docutils literal notranslate"><span class="pre">app.py</span></code> script is first loaded, a single instance 
+of <a class="reference internal" href="#webapp.shared.AppState" title="webapp.shared.AppState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppState</span></code></a> is created by a module import. When the other widget
+definition modules are imported, they share this instance of 
+<a class="reference internal" href="#webapp.shared.AppState" title="webapp.shared.AppState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppState</span></code></a>, allowing the application state to be synchronised across
+the different UI elements.</p>
 <p>When the dashboard application is connected to the microcontroller, via
 USB, a serial connection is established. This connection is then used to
-synchronise the AppState.config attribute with an equivalent data structure
-on the microcontroller side. Modifications to the AppState.config attribute
-thereby result in changes in the microcontroller’s behaviour, in real time.</p>
+synchronise the <a class="reference internal" href="#webapp.shared.AppState.config" title="webapp.shared.AppState.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config</span></code></a> attribute with an equivalent data 
+structure on the microcontroller side. Modifications to the 
+<a class="reference internal" href="#webapp.shared.AppState.config" title="webapp.shared.AppState.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config</span></code></a> attribute thereby result in changes in the 
+microcontroller’s behaviour, in real time.</p>
 <p>This principle is used to implement the ‘heating run’ functionnality of the
-system, which is defined in the AppState.work() function. This is called at
-runtime by app.py, and runs asynchronously in the background. When the user
-starts a heating run, via the ‘Start’ button, AppState.config[‘RUN’] is set
-true, which in turn causes AppState.work() to enter the first ‘if’
-statement, beginning the heating run logic. See AppState.work() for more
+system, which is defined in the <a class="reference internal" href="#webapp.shared.AppState.work" title="webapp.shared.AppState.work"><code class="xref py py-func docutils literal notranslate"><span class="pre">AppState.work()</span></code></a> function. This is 
+called at runtime by <code class="docutils literal notranslate"><span class="pre">app.py</span></code>, and runs asynchronously in the background.
+When the user starts a heating run, via the ‘Start’ button,
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config['RUN']</span></code> is set <code class="docutils literal notranslate"><span class="pre">True</span></code>, which in turn causes 
+<a class="reference internal" href="#webapp.shared.AppState.work" title="webapp.shared.AppState.work"><code class="xref py py-func docutils literal notranslate"><span class="pre">AppState.work()</span></code></a> to enter its first ‘if’ statement (line 139),
+beginning the heating run logic. See <a class="reference internal" href="#webapp.shared.AppState.work" title="webapp.shared.AppState.work"><code class="xref py py-func docutils literal notranslate"><span class="pre">AppState.work()</span></code></a> for more
 information.</p>
 <p>An initalised AppState object has the following attributes:</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="webapp.shared.AppState.config">
 <span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#webapp.shared.AppState.config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary of values that are synchronised with microcontroller to control its behaviour.</p>
+<dd><p>Dictionary of values that are synchronised with microcontroller to 
+control its behaviour.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>RUN</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls start/stop of heating run (True/False)</p></li>
-<li><p><strong>MODE</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls heating behaviour, (Ramp/Hold) = (True/False)</p></li>
-<li><p><strong>LOG</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls logging of data from sensors (True/False)</p></li>
+<li><p><strong>RUN</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls start/stop of heating run (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
+<li><p><strong>MODE</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls heating behaviour, (Ramp/Hold) = (<code class="docutils literal notranslate"><span class="pre">True/False</span></code>)</p></li>
+<li><p><strong>LOG</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls logging of data from sensors (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
 <li><p><strong>TARGET</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Target value for PID algorithm, (Ramp rate [K/min] or 
 Hold temperature [degC])</p></li>
 <li><p><strong>KP</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Proportional gain for PID algorithm</p></li>
 <li><p><strong>KD</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Derivative gain for PID algorithm</p></li>
 <li><p><strong>KI</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Integral gain for PID algorithm</p></li>
-<li><p><strong>INTERVAL</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – ‘Tick’ interval for microcontroller routine, in seconds</p></li>
+<li><p><strong>INTERVAL</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – ‘Tick’ interval for microcontroller routine, 
+in seconds</p></li>
 </ul>
 </dd>
 </dl>
@@ -102,13 +107,13 @@ indicating to the microcontroller to reset to idle mode.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>PID</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – PID algorithm output values - mainly used for debugging 
+<li><p><strong>PID</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – PID algorithm output values - mainly used for debugging 
 purposes</p></li>
-<li><p><strong>TEMPA</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 1 (SPI_CS0)</p></li>
-<li><p><strong>TEMPB</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 2 (SPI_CS1)</p></li>
-<li><p><strong>TEMPC</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 3 (SPI_CS2)</p></li>
-<li><p><strong>DTEMP</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 4 (SPI_CS3)</p></li>
-<li><p><strong>TIME</strong> (<code class="docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Corresponding time stamp values for above data</p></li>
+<li><p><strong>TEMPA</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 1 (SPI_CS0)</p></li>
+<li><p><strong>TEMPB</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 2 (SPI_CS1)</p></li>
+<li><p><strong>TEMPC</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 3 (SPI_CS2)</p></li>
+<li><p><strong>DTEMP</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 4 (SPI_CS3)</p></li>
+<li><p><strong>TIME</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Corresponding time stamp values for above data</p></li>
 </ul>
 </dd>
 </dl>
@@ -132,9 +137,9 @@ purposes</p></li>
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">work</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#webapp.shared.AppState.work" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function implements the logic required for the heating run 
 behaviour.</p>
-<p>It is called by app.py at runtime and waits for the attribute
-<code class="docutils literal notranslate"><span class="pre">AppState.config['RUN']</span></code> to be set <code class="docutils literal notranslate"><span class="pre">True</span></code> (which occurs when the 
-‘Start’ button is pressed), before entering the main body of the 
+<p>It is called by <code class="docutils literal notranslate"><span class="pre">app.py</span></code> at runtime and waits for the attribute
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config['RUN']</span></code> to be set <code class="docutils literal notranslate"><span class="pre">True</span></code> (which occurs when 
+the ‘Start’ button is pressed), before entering the main body of the
 function.</p>
 <p>The function uses two sequential while loops to handle the ramp and
 subsequent hold parts of a heating run ‘stage’. When both loops are
@@ -150,6 +155,259 @@ more stages remain, signifying the end of the heating run.</p>
 
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="webapp.shared.appState">
+<span class="sig-prename descclassname"><span class="pre">webapp.shared.</span></span><span class="sig-name descname"><span class="pre">appState</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;webapp.shared.AppState</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#webapp.shared.appState" title="Permalink to this definition">¶</a></dt>
+<dd><p>Global instance of <a class="reference internal" href="#webapp.shared.AppState" title="webapp.shared.AppState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppState</span></code></a> that stores state information across 
+the application, which is shared by the other application modules</p>
+<dl class="field-list simple">
+<dt class="field-odd">Example<span class="colon">:</span></dt>
+<dd class="field-odd"><p></p></dd>
+</dl>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">webapp.shared</span> <span class="kn">import</span> <span class="n">appState</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">])</span>
+<span class="go">False</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">appState</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">appState</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">])</span>
+<span class="go">True</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<section id="code-listing">
+<h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Functional module: Defines the :class:`AppState` class, which holds the state </span>
+<span class="sd">of the application, including its current configuration, data and programme.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">webapp.utils</span> <span class="kn">import</span> <span class="n">Programme</span><span class="p">,</span><span class="n">ResponsiveList</span>
+<span class="kn">from</span> <span class="nn">asyncio</span> <span class="kn">import</span> <span class="n">sleep</span> <span class="k">as</span> <span class="n">asleep</span>
+
+<span class="c1">#global appConfig</span>
+<span class="c1">#global appData</span>
+<span class="c1">#global appProgramme</span>
+<span class="c1">#global appReading</span>
+<span class="c1">#global appConnected</span>
+<span class="k">class</span> <span class="nc">AppState</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    :class:`AppState` is a container/struct-like class designed to store the </span>
+<span class="sd">    application state.</span>
+<span class="sd">    </span>
+<span class="sd">    When the &#39;top-level&#39; ``app.py`` script is first loaded, a single instance </span>
+<span class="sd">    of :class:`AppState` is created by a module import. When the other widget</span>
+<span class="sd">    definition modules are imported, they share this instance of </span>
+<span class="sd">    :class:`AppState`, allowing the application state to be synchronised across</span>
+<span class="sd">    the different UI elements.</span>
+<span class="sd">    </span>
+<span class="sd">    When the dashboard application is connected to the microcontroller, via</span>
+<span class="sd">    USB, a serial connection is established. This connection is then used to</span>
+<span class="sd">    synchronise the :attr:`AppState.config` attribute with an equivalent data </span>
+<span class="sd">    structure on the microcontroller side. Modifications to the </span>
+<span class="sd">    :attr:`AppState.config` attribute thereby result in changes in the </span>
+<span class="sd">    microcontroller&#39;s behaviour, in real time.</span>
+
+<span class="sd">    This principle is used to implement the &#39;heating run&#39; functionnality of the</span>
+<span class="sd">    system, which is defined in the :func:`AppState.work` function. This is </span>
+<span class="sd">    called at runtime by ``app.py``, and runs asynchronously in the background.</span>
+<span class="sd">    When the user starts a heating run, via the &#39;Start&#39; button,</span>
+<span class="sd">    :attr:`AppState.config[&#39;RUN&#39;]` is set ``True``, which in turn causes </span>
+<span class="sd">    :func:`AppState.work` to enter its first &#39;if&#39; statement (line 139),</span>
+<span class="sd">    beginning the heating run logic. See :func:`AppState.work` for more</span>
+<span class="sd">    information.</span>
+
+<span class="sd">    An initalised AppState object has the following attributes:</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialisation function for AppState class. </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;RUN&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>    <span class="c1"># Controls start/stop of heating run </span>
+                                <span class="c1"># (``True``/``False``)</span>
+            <span class="s1">&#39;MODE&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>   <span class="c1"># Controls heating behaviour, </span>
+                                <span class="c1"># (Ramp/Hold) = (``True``/``False``)</span>
+            <span class="s1">&#39;LOG&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>    <span class="c1"># Controls logging of data from sensors </span>
+                                <span class="c1"># (``True``/``False``)</span>
+            <span class="s1">&#39;TARGET&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span>    <span class="c1"># Target value for PID algorithm, </span>
+                                <span class="c1"># (Ramp rate [K/min] or </span>
+                                <span class="c1"># Hold temperature [degC])</span>
+            <span class="s1">&#39;KP&#39;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span>      <span class="c1"># Proportional gain for PID algorithm</span>
+            <span class="s1">&#39;KD&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>       <span class="c1"># Derivative gain for PID algorithm</span>
+            <span class="s1">&#39;KI&#39;</span><span class="p">:</span> <span class="mf">3.5</span><span class="p">,</span>       <span class="c1"># Integral gain for PID algorithm</span>
+            <span class="s1">&#39;INTERVAL&#39;</span><span class="p">:</span> <span class="mf">0.25</span> <span class="c1"># &#39;Tick&#39; interval for microcontroller routine, </span>
+                                <span class="c1"># in seconds</span>
+            <span class="p">}</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dictionary of values that are synchronised with microcontroller to </span>
+<span class="sd">        control its behaviour.</span>
+
+<span class="sd">        :ivar RUN: Controls start/stop of heating run (``True``/``False``)</span>
+<span class="sd">        :vartype RUN: ``bool``</span>
+<span class="sd">        :ivar MODE: Controls heating behaviour, (Ramp/Hold) = (``True/False``)</span>
+<span class="sd">        :vartype MODE: ``bool``</span>
+<span class="sd">        :ivar LOG: Controls logging of data from sensors (``True``/``False``)</span>
+<span class="sd">        :vartype LOG: ``bool``</span>
+<span class="sd">        :ivar TARGET: Target value for PID algorithm, (Ramp rate [K/min] or </span>
+<span class="sd">            Hold temperature [degC])</span>
+<span class="sd">        :vartype TARGET: ``int``/``float``</span>
+<span class="sd">        :ivar KP: Proportional gain for PID algorithm</span>
+<span class="sd">        :vartype KP: ``int``/``float``</span>
+<span class="sd">        :ivar KD: Derivative gain for PID algorithm</span>
+<span class="sd">        :vartype KD: ``int``/``float``</span>
+<span class="sd">        :ivar KI: Integral gain for PID algorithm</span>
+<span class="sd">        :vartype KI: ``int``/``float``</span>
+<span class="sd">        :ivar INTERVAL: &#39;Tick&#39; interval for microcontroller routine, </span>
+<span class="sd">            in seconds</span>
+<span class="sd">        :vartype INTERVAL: ``float``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">programme</span> <span class="o">=</span> <span class="n">Programme</span><span class="p">()</span> <span class="c1"># Heating programme - see utils.py</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Object holding information about the assigned heating programme - see </span>
+<span class="sd">        ``webapp.utils.Programme``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s1">&#39;PID&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span> <span class="p">,</span>
+            <span class="s1">&#39;TEMPA&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+            <span class="s1">&#39;TEMPB&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+            <span class="s1">&#39;TEMPC&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+            <span class="s1">&#39;DTEMP&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span>
+            <span class="s1">&#39;TIME&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+            <span class="p">}</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dictionary of numpy data arrays, containing data from microcontroller</span>
+
+<span class="sd">        :ivar PID: PID algorithm output values - mainly used for debugging </span>
+<span class="sd">            purposes</span>
+<span class="sd">        :vartype PID: :class:`numpy.ndarray`</span>
+<span class="sd">        :ivar TEMPA: Temperature values from temperature sensor 1 (SPI_CS0)</span>
+<span class="sd">        :vartype TEMPA: :class:`numpy.ndarray`</span>
+<span class="sd">        :ivar TEMPB: Temperature values from temperature sensor 2 (SPI_CS1)</span>
+<span class="sd">        :vartype TEMPB: :class:`numpy.ndarray`</span>
+<span class="sd">        :ivar TEMPC: Temperature values from temperature sensor 3 (SPI_CS2)</span>
+<span class="sd">        :vartype TEMPC: :class:`numpy.ndarray`</span>
+<span class="sd">        :ivar DTEMP: Temperature values from temperature sensor 4 (SPI_CS3)</span>
+<span class="sd">        :vartype DTEMP: :class:`numpy.ndarray`</span>
+<span class="sd">        :ivar TIME: Corresponding time stamp values for above data</span>
+<span class="sd">        :vartype TIME: :class:`numpy.ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">runs</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        List of dictionaries containing data from previous heating runs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connected</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Flag indicating whether the microcontroller is connected to the </span>
+<span class="sd">        dashboard application. Toggled when a heating run is finished, </span>
+<span class="sd">        indicating to the microcontroller to reset to idle mode.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">work</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">        This function implements the logic required for the heating run </span>
+<span class="sd">        behaviour.</span>
+<span class="sd">        </span>
+<span class="sd">        It is called by ``app.py`` at runtime and waits for the attribute</span>
+<span class="sd">        :attr:`AppState.config[&#39;RUN&#39;]` to be set ``True`` (which occurs when </span>
+<span class="sd">        the &#39;Start&#39; button is pressed), before entering the main body of the</span>
+<span class="sd">        function.</span>
+<span class="sd">        </span>
+<span class="sd">        The function uses two sequential while loops to handle the ramp and</span>
+<span class="sd">        subsequent hold parts of a heating run &#39;stage&#39;. When both loops are</span>
+<span class="sd">        satisfied, the programme is advanced to the next stage, until no</span>
+<span class="sd">        more stages remain, signifying the end of the heating run.</span>
+
+<span class="sd">        :async:</span>
+<span class="sd">        :classmethod:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1">#breakpoint()</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    
+                    <span class="k">while</span> <span class="nb">abs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TEMPC&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+                        <span class="c1">#breakpoint()</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                            <span class="k">break</span>
+                        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">]):</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;MODE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;HEAT&#39;</span><span class="p">]</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;MODE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TEMPC&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                        <span class="k">await</span> <span class="n">asleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    
+                    <span class="n">holdTime</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TIME&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;HOLD&#39;</span><span class="p">]</span>
+                    <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TIME&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">holdTime</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;MODE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">:</span>
+                            <span class="k">break</span>
+                        <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">]):</span>
+                            <span class="k">pass</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">holdTime</span> <span class="o">+=</span> <span class="mf">0.5</span>
+                        <span class="k">await</span> <span class="n">asleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+    
+                    <span class="c1">#breakpoint()</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">next_stage</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+                        <span class="nb">breakpoint</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">runs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;PID&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span> <span class="p">,</span>
+                            <span class="s1">&#39;TEMPA&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> 
+                            <span class="s1">&#39;TEMPB&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> 
+                            <span class="s1">&#39;TEMPC&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> 
+                            <span class="s1">&#39;DTEMP&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> 
+                            <span class="s1">&#39;TIME&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+                            <span class="p">}</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">programme</span> <span class="o">=</span> <span class="n">Programme</span><span class="p">()</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
+                            <span class="s1">&#39;RUN&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
+                            <span class="s1">&#39;MODE&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
+                            <span class="s1">&#39;LOG&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
+                            <span class="s1">&#39;TARGET&#39;</span><span class="p">:</span> <span class="mi">25</span><span class="p">,</span> 
+                            <span class="s1">&#39;KP&#39;</span><span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span> 
+                            <span class="s1">&#39;KD&#39;</span><span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span> 
+                            <span class="s1">&#39;KI&#39;</span><span class="p">:</span> <span class="mf">3.5</span><span class="p">,</span> 
+                            <span class="s1">&#39;INTERVAL&#39;</span><span class="p">:</span> <span class="mf">0.25</span>
+                            <span class="p">}</span>
+    
+                <span class="k">elif</span> <span class="p">(</span><span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;LOG&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;MODE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">startingTemp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TEMPC&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;TEMPC&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">startingTemp</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">stages</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">programme</span><span class="o">.</span><span class="n">update_xy</span><span class="p">()</span>
+                    <span class="k">await</span> <span class="n">asleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error in appState work loop:&#39;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+                <span class="k">await</span> <span class="n">asleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+            <span class="c1">#await asyncio.sleep(0.5)</span>
+        
+<span class="n">appState</span> <span class="o">=</span> <span class="n">AppState</span><span class="p">()</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Global instance of :class:`AppState` that stores state information across </span>
+<span class="sd">the application, which is shared by the other application modules</span>
+
+<span class="sd">:example:</span>
+
+<span class="sd">&gt;&gt;&gt; from webapp.shared import appState</span>
+<span class="sd">&gt;&gt;&gt; print(appState.config[&#39;RUN&#39;])</span>
+<span class="sd">False</span>
+<span class="sd">&gt;&gt;&gt; appState.config[&#39;RUN&#39;] = True</span>
+<span class="sd">&gt;&gt;&gt; print(appState.config[&#39;RUN&#39;])</span>
+<span class="sd">True</span>
+<span class="sd">&quot;&quot;&quot;</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -182,22 +440,23 @@ more stages remain, signifying the end of the heating run.</p>
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../software.html">Dashboard (UI) software reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../software.html#overview">Overview</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../software.html#structure">Structure</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../software.html#widget-definition-files">Widget definition files</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../software.html#utility-function-files">Utility function files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ui-software.html">Dashboard (UI) software reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ui-software.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ui-software.html#structure">Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ui-software.html#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../ui-software.html#utility-function-files">Utility function files</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../micro-software.html">Microcontroller software reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../software.html">Dashboard (UI) software reference</a><ul>
+  <li><a href="../ui-software.html">Dashboard (UI) software reference</a><ul>
       <li>Previous: <a href="export.html" title="previous chapter">webapp.export</a></li>
       <li>Next: <a href="utils.html" title="next chapter">webapp.utils</a></li>
   </ul></li>

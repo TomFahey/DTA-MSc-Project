@@ -1,3 +1,19 @@
+"""
+Main programme that is run when the microcontroller powers on.
+
+Defines the :class:`Supervisor` class, which is responsible for:
+
+* Collecting together the various component modules that make up the system,
+  which are specified in the :attr:`components` attribute.
+* Holding the system state, specified in the :attr:`config` attribute.
+* Synchronising the system state with the python code running on the connected
+  computer, using the :meth:`pull_config` method.
+* Sending recorded sensors data to the computer, using the :meth:`push_data`
+  method.
+* Executing the main control loop, implemented by the :meth:`Supervisor.run` 
+  method.
+
+"""
 import asyncio
 import time
 
@@ -10,7 +26,10 @@ from utils import ResponsiveDict
 
 
 class Supervisor:
+    """
+    The Supervisor 
     
+    """
     def __init__(self, serial_client, PID, log):
         
         self.components = [serial_client, PID, log]
@@ -30,6 +49,9 @@ class Supervisor:
             }
         
     def pull_config(self):
+        """
+        
+        """
         for msg in self.client.buf_in.copy():
             try:
                 config = eval(msg.decode('utf-8'))
@@ -63,13 +85,6 @@ class Supervisor:
         self.pull_config()
         self.push_data()
         
-        #coros = [
-        #    asyncio.create_task(component.update()) for component in self.components
-        #]
-        #coros.append(asyncio.create_task(self.pull_config()))
-        #coros.append(asyncio.create_task(self.push_data()))
-        #await asyncio.gather(*coros)
-        
     def wait(self, lastTimeStamp):
         while(time.monotonic_ns()-lastTimeStamp<self.config['INTERVAL']*1E9):
             time.sleep(0.001)
@@ -89,41 +104,10 @@ thisClient = SerialClient()
 
 thisSupervisor = Supervisor(thisClient, thisPID, thisLog)
         
-
-
-#async def main():
-#    while True:
-#        await thisSupervisor.run()
 def main():
     lastTimeStamp = time.monotonic_ns()
     while True:
         thisSupervisor.run()
         lastTimeStamp = thisSupervisor.wait(lastTimeStamp)
 
-    
-    #while True:
-    #    lastTimeStamp = time.monotonic_ns()
-    #    thisSupervisor.run()
-    #    thisSupervisor.wait(lastTimeStamp)
-
-    #PID_task = asyncio.create_task(PIDControl(thisPID, 0.5, thisEvent_a))
-    #logread_task = asyncio.create_task(logread(thisPID, thisLogger, thisEvent_b, thisEvent_a))
-    #logwrite_task = asyncio.create_task(logwrite(thisLogger,thisCoordinator, 0.25, thisLock, serial=True, flash=False))
-    #serial_read_task = asyncio.create_task(readSerial(thisCoordinator, 1.0, thisLock))
-    #serial_write_task = asyncio.create_task(writeSerial(thisCoordinator, 0.25, thisLock))
-    #msg_read_task = asyncio.create_task(readMessages(thisCoordinator, thisPID, 1.5, thisLock))
-    #lock_task = asyncio.create_task(mytimer(thisLock, thisLogger, thisEvent))
-    
-    #await asyncio.gather(PID_task, logread_task, logwrite_task, serial_read_task, serial_write_task, msg_read_task)
-    #await asyncio.gather(PID_task, logread_task, logwrite_task, lock_task, serial_read_task, serial_write_task, msg_read_task)
-    #await logread_task
-    #await lock_task
-    #await logwrite_task
-    #await serial_read_task
-    #await serial_write_task
-    #await msg_read_task
-
-#timer = Timer(period=1000, mode=Timer.PERIODIC, callback=lambda x: x)
-#asyncio.run(main())
-#main()
-
+main()

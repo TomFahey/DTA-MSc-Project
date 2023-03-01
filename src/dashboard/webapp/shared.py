@@ -1,5 +1,6 @@
-""" Functional module: Defines the AppState class, which holds the state of the 
-    application, including its current configuration, data and programme.
+""" 
+Functional module: Defines the :class:`AppState` class, which holds the state 
+of the application, including its current configuration, data and programme.
 """
 import numpy as np
 from webapp.utils import Programme,ResponsiveList
@@ -12,26 +13,29 @@ from asyncio import sleep as asleep
 #global appConnected
 class AppState:
     """
-    AppState is a container/struct-like class designed to store the application
-    state.
+    :class:`AppState` is a container/struct-like class designed to store the 
+    application state.
     
-    When the 'top-level' app.py script is first loaded, a single instance of 
-    AppState is created by a module import. When the other widget definition
-    modules are imported, they share this instance of AppState, allowing the
-    application state to be synchronised across the different UI elements.
+    When the 'top-level' ``app.py`` script is first loaded, a single instance 
+    of :class:`AppState` is created by a module import. When the other widget
+    definition modules are imported, they share this instance of 
+    :class:`AppState`, allowing the application state to be synchronised across
+    the different UI elements.
     
     When the dashboard application is connected to the microcontroller, via
     USB, a serial connection is established. This connection is then used to
-    synchronise the AppState.config attribute with an equivalent data structure
-    on the microcontroller side. Modifications to the AppState.config attribute
-    thereby result in changes in the microcontroller's behaviour, in real time.
+    synchronise the :attr:`AppState.config` attribute with an equivalent data 
+    structure on the microcontroller side. Modifications to the 
+    :attr:`AppState.config` attribute thereby result in changes in the 
+    microcontroller's behaviour, in real time.
 
     This principle is used to implement the 'heating run' functionnality of the
-    system, which is defined in the AppState.work() function. This is called at
-    runtime by app.py, and runs asynchronously in the background. When the user
-    starts a heating run, via the 'Start' button, AppState.config['RUN'] is set
-    true, which in turn causes AppState.work() to enter the first 'if'
-    statement, beginning the heating run logic. See AppState.work() for more
+    system, which is defined in the :func:`AppState.work` function. This is 
+    called at runtime by ``app.py``, and runs asynchronously in the background.
+    When the user starts a heating run, via the 'Start' button,
+    :attr:`AppState.config['RUN']` is set ``True``, which in turn causes 
+    :func:`AppState.work` to enter its first 'if' statement (line 139),
+    beginning the heating run logic. See :func:`AppState.work` for more
     information.
 
     An initalised AppState object has the following attributes:
@@ -41,23 +45,30 @@ class AppState:
         Initialisation function for AppState class. 
         """
         self.config = {
-            'RUN': False,    # Controls start/stop of heating run (True/False)
-            'MODE': False,   # Controls heating behaviour, (Ramp/Hold) = (True/False)
-            'LOG': False,    # Controls logging of data from sensors (True/False)
-            'TARGET': 25,    # Target value for PID algorithm, (Ramp rate [K/min] or Hold temperature [degC])
+            'RUN': False,    # Controls start/stop of heating run 
+                                # (``True``/``False``)
+            'MODE': False,   # Controls heating behaviour, 
+                                # (Ramp/Hold) = (``True``/``False``)
+            'LOG': False,    # Controls logging of data from sensors 
+                                # (``True``/``False``)
+            'TARGET': 25,    # Target value for PID algorithm, 
+                                # (Ramp rate [K/min] or 
+                                # Hold temperature [degC])
             'KP': 35.0,      # Proportional gain for PID algorithm
             'KD': 2.0,       # Derivative gain for PID algorithm
             'KI': 3.5,       # Integral gain for PID algorithm
-            'INTERVAL': 0.25 # 'Tick' interval for microcontroller routine, in seconds
+            'INTERVAL': 0.25 # 'Tick' interval for microcontroller routine, 
+                                # in seconds
             }
         """
-        Dictionary of values that are synchronised with microcontroller to control its behaviour.
+        Dictionary of values that are synchronised with microcontroller to 
+        control its behaviour.
 
-        :ivar RUN: Controls start/stop of heating run (True/False)
+        :ivar RUN: Controls start/stop of heating run (``True``/``False``)
         :vartype RUN: ``bool``
-        :ivar MODE: Controls heating behaviour, (Ramp/Hold) = (True/False)
+        :ivar MODE: Controls heating behaviour, (Ramp/Hold) = (``True/False``)
         :vartype MODE: ``bool``
-        :ivar LOG: Controls logging of data from sensors (True/False)
+        :ivar LOG: Controls logging of data from sensors (``True``/``False``)
         :vartype LOG: ``bool``
         :ivar TARGET: Target value for PID algorithm, (Ramp rate [K/min] or 
             Hold temperature [degC])
@@ -68,7 +79,8 @@ class AppState:
         :vartype KD: ``int``/``float``
         :ivar KI: Integral gain for PID algorithm
         :vartype KI: ``int``/``float``
-        :ivar INTERVAL: 'Tick' interval for microcontroller routine, in seconds
+        :ivar INTERVAL: 'Tick' interval for microcontroller routine, 
+            in seconds
         :vartype INTERVAL: ``float``
         """
         self.programme = Programme() # Heating programme - see utils.py
@@ -89,17 +101,17 @@ class AppState:
 
         :ivar PID: PID algorithm output values - mainly used for debugging 
             purposes
-        :vartype PID: ``numpy.ndarray``
+        :vartype PID: :class:`numpy.ndarray`
         :ivar TEMPA: Temperature values from temperature sensor 1 (SPI_CS0)
-        :vartype TEMPA: ``numpy.ndarray``
+        :vartype TEMPA: :class:`numpy.ndarray`
         :ivar TEMPB: Temperature values from temperature sensor 2 (SPI_CS1)
-        :vartype TEMPB: ``numpy.ndarray``
+        :vartype TEMPB: :class:`numpy.ndarray`
         :ivar TEMPC: Temperature values from temperature sensor 3 (SPI_CS2)
-        :vartype TEMPC: ``numpy.ndarray``
+        :vartype TEMPC: :class:`numpy.ndarray`
         :ivar DTEMP: Temperature values from temperature sensor 4 (SPI_CS3)
-        :vartype DTEMP: ``numpy.ndarray``
+        :vartype DTEMP: :class:`numpy.ndarray`
         :ivar TIME: Corresponding time stamp values for above data
-        :vartype TIME: ``numpy.ndarray``
+        :vartype TIME: :class:`numpy.ndarray`
         """
         self.runs = []
         """
@@ -117,9 +129,9 @@ class AppState:
         This function implements the logic required for the heating run 
         behaviour.
         
-        It is called by app.py at runtime and waits for the attribute
-        ``AppState.config['RUN']`` to be set ``True`` (which occurs when the 
-        'Start' button is pressed), before entering the main body of the 
+        It is called by ``app.py`` at runtime and waits for the attribute
+        :attr:`AppState.config['RUN']` to be set ``True`` (which occurs when 
+        the 'Start' button is pressed), before entering the main body of the
         function.
         
         The function uses two sequential while loops to handle the ramp and
@@ -202,3 +214,16 @@ class AppState:
             #await asyncio.sleep(0.5)
         
 appState = AppState()
+"""
+Global instance of :class:`AppState` that stores state information across 
+the application, which is shared by the other application modules
+
+:example:
+
+>>> from webapp.shared import appState
+>>> print(appState.config['RUN'])
+False
+>>> appState.config['RUN'] = True
+>>> print(appState.config['RUN'])
+True
+"""

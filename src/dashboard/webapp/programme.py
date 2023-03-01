@@ -1,6 +1,13 @@
 """ 
 Widget definition module: Defines UI elements used for entering heating
 run parameters, such as target temperature, heat rate and hold time.
+
+Use the following code to import and display the widgets defined in this module:
+
+:example:
+
+>>> from webapp import programme
+>>> display(programme.app)
 """
 
 # Import the widgets we need to use
@@ -196,29 +203,6 @@ class ControlSlider(IntSlider):
     def handle_slider_change(self, change):
         self.stage[self.target] = change['new']
 
-# Define a slider widget for the target temperature
-# Options are largely self-explanatory
-
-# Define a slider widget for the target heating rate
-
-
-# Define the callback function, which is called when the temperarture slider is changed
-# The new value is provided within the parameter `change`
-# This is then assigned to the global settings.config['TargetTemp'] variable
-
-# Define the callback function, which is called when the heating rate slider is changed
-# The new value is provided within the parameter `change`
-# This is then assigned to the global settings.config['TargetHeat'] variable
-    
-
-# The observe function is used to monitor the changes of the slider widgets
-# It takes as its parameters the callback function to call when a change is
-# detected, as well as the value passed to that callback function
-
-# Finally, define a horizontal box container for the slider widgets in the app
-# This just serves to place the two widgets next to each other, as well as allowing
-# us to wrap the page in a single container object, ready to pass to app.py
-
 app = ProgrammeTab(
             layout=Layout(margin='0 0 0 0',maxwidth='81.25%',maxheight='83.33%',
                   padding='0 0 0 0')
@@ -234,5 +218,5 @@ code below:
 :example:
 
 >>> from webapp import programme
->>> display(programme.app)
+>>> programme.app
 """

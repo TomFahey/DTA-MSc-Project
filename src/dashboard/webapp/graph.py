@@ -3,6 +3,13 @@ Widget definition module: Defines UI elements used for main dashboard tab,
 including controls for initiating heating runs, a graph displaying the
 temperature profiles during runs, as well as real-time information such as
 current temperature and heating run progress.
+
+Use the following code to import and display the widgets defined in this module:
+
+:example:
+
+>>> from webapp import graph
+>>> display(graph.app)
 """
 from ipywidgets.widgets import Label, FloatProgress, Button
 from ipywidgets.widgets import Layout, HBox, VBox
@@ -197,7 +204,7 @@ below:
 :example:
 
 >>> from webapp import graph
->>> display(graph.app)
+>>> graph.app
 """
 
 

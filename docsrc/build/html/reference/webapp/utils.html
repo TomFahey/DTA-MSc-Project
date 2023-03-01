@@ -22,6 +22,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@jupyter-widgets/html-manager@^1.0.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Microcontroller software reference" href="../micro-software.html" />
     <link rel="prev" title="webapp.shared" href="shared.html" />
    
   <link rel="stylesheet" href="../../_static/custom.css" type="text/css" />
@@ -41,9 +42,10 @@
             
   <section id="module-webapp.utils">
 <span id="id1"></span><span id="webapp-utils"></span><h1>webapp.utils<a class="headerlink" href="#module-webapp.utils" title="Permalink to this heading">¶</a></h1>
-<p>Functional module: Defines the ResponsiveDict and ResponsiveList classes,
-used to implement ‘responsive’ callbacks when config items are modified.
-Also defines the ‘Programme’ class, which encapsulates information 
+<p>Functional module: Defines the <a class="reference internal" href="#webapp.utils.ResponsiveDict" title="webapp.utils.ResponsiveDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponsiveDict</span></code></a> and 
+class:<cite>ResponsiveList</cite> classes, used to implement ‘responsive’ callbacks
+when configuration values are modified.</p>
+<p>Also defines the <code class="xref py py-class docutils literal notranslate"><span class="pre">Programme</span></code> class, which encapsulates information 
 relating to a heating run, including number of stages, target temperatures,
 heating rate and hold times.</p>
 <dl class="py class">
@@ -51,15 +53,15 @@ heating rate and hold times.</p>
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveDict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extension of Python <code class="docutils literal notranslate"><span class="pre">dict</span></code>, provides assignable callbacks that are called
 when a <code class="docutils literal notranslate"><span class="pre">dict</span></code> item is modified.</p>
-<p><code class="docutils literal notranslate"><span class="pre">ResponsiveDict</span></code> is an extension of the Python dictionary, which adds a
-‘responsive’ callback behaviour for dictionary items, that is called
+<p><a class="reference internal" href="#webapp.utils.ResponsiveDict" title="webapp.utils.ResponsiveDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponsiveDict</span></code></a> is an extension of the Python dictionary, which 
+adds a ‘responsive’ callback behaviour for dictionary items, that occurs
 when the items are modified.</p>
 <p>This is intended for scenarios where dictionary objects are used to 
 encode a programme, or routine’s ‘state’, and where modification of
 this state should automatically result in some corresponding behaviour,
 in response to the modification.</p>
-<p>This is achieved by overriding the <code class="docutils literal notranslate"><span class="pre">__setitem__</span></code> function of the Python
-<code class="docutils literal notranslate"><span class="pre">UserDict</span></code> class, which this class inherits from.</p>
+<p>This is achieved by overriding the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code> function of the 
+Python <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code> class, which this class inherits from.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
 <dd class="field-odd"><p></p></dd>
@@ -86,8 +88,8 @@ in response to the modification.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.callbacks">
 <span class="sig-name descname"><span class="pre">callbacks</span></span><a class="headerlink" href="#webapp.utils.ResponsiveDict.callbacks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary of callback functions, one for each item in <code class="docutils literal notranslate"><span class="pre">self.data</span></code>.
-Initially set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for all items.</p>
+<dd><p>Dictionary of callback functions, one for each item in 
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">self.data</span></code>. Initially set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for all items.</p>
 </dd></dl>
 
 <dl class="py attribute">
@@ -99,7 +101,7 @@ Initially set to <code class="docutils literal notranslate"><span class="pre">No
 <dl class="py method">
 <dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.set_callback">
 <span class="sig-name descname"><span class="pre">set_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveDict.set_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign a callback function to the item corresponding to <code class="docutils literal notranslate"><span class="pre">key</span></code></p>
+<dd><p>Assign a callback function to the item corresponding to <a href="#id2"><span class="problematic" id="id3">:arg:`key`</span></a></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -119,6 +121,225 @@ and <code class="docutils literal notranslate"><span class="pre">value</span></c
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialdata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveList" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<section id="code-listing">
+<h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
+<span class="sd">Functional module: Defines the :class:`ResponsiveDict` and </span>
+<span class="sd">class:`ResponsiveList` classes, used to implement &#39;responsive&#39; callbacks</span>
+<span class="sd">when configuration values are modified.</span>
+
+<span class="sd">Also defines the :class:`Programme` class, which encapsulates information </span>
+<span class="sd">relating to a heating run, including number of stages, target temperatures,</span>
+<span class="sd">heating rate and hold times.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="c1">#import shared.appState as appState</span>
+<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span><span class="p">,</span> <span class="n">UserList</span>
+
+<span class="k">class</span> <span class="nc">ResponsiveDict</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Extension of Python ``dict``, provides assignable callbacks that are called</span>
+<span class="sd">    when a ``dict`` item is modified.</span>
+
+<span class="sd">    :class:`ResponsiveDict` is an extension of the Python dictionary, which </span>
+<span class="sd">    adds a &#39;responsive&#39; callback behaviour for dictionary items, that occurs</span>
+<span class="sd">    when the items are modified.</span>
+
+<span class="sd">    This is intended for scenarios where dictionary objects are used to </span>
+<span class="sd">    encode a programme, or routine&#39;s &#39;state&#39;, and where modification of</span>
+<span class="sd">    this state should automatically result in some corresponding behaviour,</span>
+<span class="sd">    in response to the modification.</span>
+<span class="sd">    </span>
+<span class="sd">    This is achieved by overriding the :meth:`__setitem__` function of the </span>
+<span class="sd">    Python :external:class:`UserDict` class, which this class inherits from.</span>
+
+<span class="sd">    :Example:</span>
+<span class="sd">    </span>
+<span class="sd">    &gt;&gt;&gt; from webapp.utils import ResponsiveDict</span>
+<span class="sd">    &gt;&gt;&gt; RGB_config = ResponsiveDict</span>
+<span class="sd">    ...     {</span>
+<span class="sd">    ...         &#39;R&#39; : 0,</span>
+<span class="sd">    ...         &#39;G&#39;: 0,</span>
+<span class="sd">    ...         &#39;B&#39;: 255</span>
+<span class="sd">    ...     }</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; def announce_RGB_change(channel, value):</span>
+<span class="sd">    ...     print(&#39;RGB channel {} changed to {}&#39;.format(channel, value))</span>
+<span class="sd">    ...</span>
+<span class="sd">    &gt;&gt;&gt; RGB_config.set_callback(</span>
+<span class="sd">    ...     key=&#39;R&#39;,</span>
+<span class="sd">    ...     callback=announce_RGB_change</span>
+<span class="sd">    ... )</span>
+<span class="sd">    &gt;&gt;&gt; RGB_config[&#39;R&#39;] = 255</span>
+<span class="sd">    &#39;RGB channel R changed to 255&#39;</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dict_value</span><span class="o">=</span><span class="p">{}):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an instance of :class:`ResponsiveDict`, containg the dictionary</span>
+<span class="sd">        :arg:`dict_value`.</span>
+<span class="sd">        </span>
+<span class="sd">        :param dict_value: Dictionary of items to be contained in</span>
+<span class="sd">            :class:`ResponsiveDict` object</span>
+<span class="sd">        :type dict_value: dict</span>
+<span class="sd">        :return: :class:`ResponsiveDict` object containing dictionary </span>
+<span class="sd">            ``dict_value``</span>
+<span class="sd">        :rtype: :class:`ResponsiveDict`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">dict_value</span> 
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Internal dictionary attribute</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Dictionary of callback functions, one for each item in </span>
+<span class="sd">        :attr:`self.data`. Initially set to ``None`` for all items.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Same as Python :meth:`dict.__setitem__``, but also calls the associated</span>
+<span class="sd">        item&#39;s callback function, if it exists.</span>
+
+<span class="sd">        :param key: The item&#39;s key</span>
+<span class="sd">        :type key: _type_</span>
+<span class="sd">        :param value: The item&#39;s new value to be assigned</span>
+<span class="sd">        :type value: _type_</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">](</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">set_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Assign a callback function to the item corresponding to :arg:`key`</span>
+
+<span class="sd">        :param key: The dict item&#39;s key</span>
+<span class="sd">        :type key: _type_</span>
+<span class="sd">        :param callback: A function handle of the form </span>
+<span class="sd">            ``callback(key, value)`` where ``key`` is the item&#39;s key,</span>
+<span class="sd">            and ``value`` is the item&#39;s new value.</span>
+<span class="sd">        :type callback: function</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">ResponsiveList</span><span class="p">(</span><span class="n">UserList</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">initialdata</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">initialdata</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__setitem__</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">index</span><span class="p">]((</span><span class="n">index</span><span class="p">,</span> <span class="n">item</span><span class="p">))</span>
+
+    <span class="k">def</span> <span class="nf">set_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">callback</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">callback</span>
+        <span class="k">except</span> <span class="ne">KeyError</span> <span class="k">as</span> <span class="n">error</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+<span class="k">class</span> <span class="nc">Programme</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stages</span> <span class="o">=</span> <span class="n">ResponsiveList</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="n">ResponsiveDict</span><span class="p">(</span>
+                    <span class="p">{</span>
+                        <span class="s1">&#39;TEMP&#39;</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> 
+                        <span class="s1">&#39;HEAT&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> 
+                        <span class="s1">&#39;HOLD&#39;</span><span class="p">:</span> <span class="mi">0</span>
+                    <span class="p">}</span>
+                <span class="p">)</span>
+            <span class="p">]</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__iterator</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__current_stage</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__iterator</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_stage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ResponsiveDict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;PID&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> 
+                <span class="s1">&#39;TEMP&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">]),</span> 
+                <span class="s1">&#39;TIME&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+            <span class="p">}</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startingTemp</span> <span class="o">=</span> <span class="mf">23.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_temp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_heat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.</span><span class="p">])</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">current_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__current_stage</span>
+
+    <span class="k">def</span> <span class="nf">add_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arg</span><span class="p">):</span>
+        <span class="n">stage</span> <span class="o">=</span> <span class="n">arg</span>
+        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">dict</span><span class="p">:</span>
+            <span class="n">stage</span> <span class="o">=</span> <span class="n">ResponsiveDict</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">stage</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">stage</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_stage</span><span class="p">)</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_xy</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">remove_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stage</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">stage</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_xy</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">update_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">startingTemp</span><span class="p">)</span> <span class="ow">and</span> \
+           <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">current_stage</span><span class="p">[</span><span class="s1">&#39;HEAT&#39;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">update_sign</span><span class="p">()</span>
+           <span class="bp">self</span><span class="o">.</span><span class="n">update_xy</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">next_stage</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__current_stage</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">__iterator</span><span class="p">)</span>
+    
+    <span class="k">def</span> <span class="nf">update_sign</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">stage_n</span><span class="p">,</span> <span class="n">stage_n_1</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">stage_n</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">stage_n_1</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]:</span>
+                <span class="n">stage_n</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;HEAT&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="o">*</span><span class="nb">abs</span><span class="p">(</span><span class="n">stage_n</span><span class="p">[</span><span class="s1">&#39;HEAT&#39;</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="nf">update_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Generates a plot of the temperature over time for the current programme</span>
+<span class="sd">        Called each time a stage is added, removed, or has its paramaters updated</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stage_temps</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">startingTemp</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">stage</span><span class="p">[</span><span class="s1">&#39;TEMP&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">]]</span>
+        <span class="n">stage_heats</span> <span class="o">=</span> <span class="p">[</span><span class="n">stage</span><span class="p">[</span><span class="s1">&#39;HEAT&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">]</span>
+        <span class="n">hold_times</span> <span class="o">=</span> <span class="p">[</span><span class="n">stage</span><span class="p">[</span><span class="s1">&#39;HOLD&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">stage</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">stages</span><span class="p">]</span>
+        <span class="n">temp_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ediff1d</span><span class="p">(</span><span class="n">stage_temps</span><span class="p">)</span>
+        <span class="n">stage_times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">((</span><span class="mi">60</span><span class="o">*</span><span class="p">(</span><span class="n">temp_diffs</span><span class="o">/</span><span class="n">stage_heats</span><span class="p">)</span> <span class="o">+</span> <span class="n">hold_times</span><span class="p">))</span>
+        <span class="n">time_marks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span>
+                <span class="p">[</span><span class="n">time_mark</span> <span class="o">-</span> <span class="n">hold_time</span><span class="p">,</span> <span class="n">time_mark</span><span class="p">]</span> <span class="k">for</span> <span class="n">time_mark</span><span class="p">,</span> <span class="n">hold_time</span> 
+                    <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">stage_times</span><span class="p">,</span> <span class="n">hold_times</span><span class="p">)</span>
+            <span class="p">]</span>
+            <span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
+        <span class="n">time_marks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">time_marks</span><span class="p">])</span>
+        <span class="n">heat_times</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">time_marks</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">time_marks</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">time_marks</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">])]</span>
+        <span class="n">total_time</span> <span class="o">=</span> <span class="n">time_marks</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">total_time</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">time_slice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">heat_times</span><span class="p">[::</span><span class="mi">2</span><span class="p">]):</span>
+                <span class="n">time_steps</span><span class="p">[</span><span class="n">time_slice</span><span class="p">]</span> <span class="o">=</span> <span class="n">stage_heats</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">/</span><span class="mi">60</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_heat</span> <span class="o">=</span> <span class="n">time_steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y_temp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startingTemp</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">time_steps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">total_time</span><span class="p">)</span>
+
+
+    <span class="c1">#def check_condition(self, value):</span>
+    <span class="c1">#    if value &gt;= self.current_stage[&#39;COND&#39;]:</span>
+    <span class="c1">#        self.update_stage()</span>
+</pre></div>
+</div>
+</section>
 </section>
 
 
@@ -151,23 +372,25 @@ and <code class="docutils literal notranslate"><span class="pre">value</span></c
 </ul>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware</a></li>
-<li class="toctree-l1 current"><a class="reference internal" href="../software.html">Dashboard (UI) software reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../software.html#overview">Overview</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../software.html#structure">Structure</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../software.html#widget-definition-files">Widget definition files</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../software.html#utility-function-files">Utility function files</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../ui-software.html">Dashboard (UI) software reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../ui-software.html#overview">Overview</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../ui-software.html#structure">Structure</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../ui-software.html#widget-definition-files">Widget definition files</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../ui-software.html#utility-function-files">Utility function files</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../micro-software.html">Microcontroller software reference</a></li>
 </ul>
 
 <div class="relations">
 <h3>Related Topics</h3>
 <ul>
   <li><a href="../../index.html">Documentation overview</a><ul>
-  <li><a href="../software.html">Dashboard (UI) software reference</a><ul>
+  <li><a href="../ui-software.html">Dashboard (UI) software reference</a><ul>
       <li>Previous: <a href="shared.html" title="previous chapter">webapp.shared</a></li>
+      <li>Next: <a href="../micro-software.html" title="next chapter">Microcontroller software reference</a></li>
   </ul></li>
   </ul></li>
 </ul>

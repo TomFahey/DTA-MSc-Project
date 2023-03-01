@@ -5,6 +5,19 @@ webapp.graph
 
 .. automodule:: webapp.graph
 
+    .. jupyter-execute::
+        :hide-code:
+
+        import os
+        import sys
+    
+        ROOT_DIR = os.path.abspath('../')
+        WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
+        sys.path.insert(0, WEBAPP_PATH)
+    
+        from webapp.graph import app
+        display(app)
+
     Helper functions
     ^^^^^^^^^^^^^^^^
 
@@ -69,21 +82,6 @@ webapp.graph
 
     .. autodata:: app
         :annotation: = ipywidgets.widgets.VBox(children=(command_box, fig, info_box))
-
-    .. jupyter-execute::
-        :hide-code:
-
-        import os
-        import sys
-    
-        ROOT_DIR = os.path.abspath('../')
-        WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
-        sys.path.insert(0, WEBAPP_PATH)
-    
-        from webapp.graph import app
-        display(app)
-
-    |
 
 |
 

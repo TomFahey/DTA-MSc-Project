@@ -1,6 +1,13 @@
 """ 
 Widget definition module: Defines UI elements used for exporting recorded data
 to local or mounted storage devices, including file names and save location.
+
+Use the following code to import and display the widgets defined in this module:
+
+:example:
+
+>>> from webapp import export
+>>> display(export.app)
 """
 from ipywidgets.widgets import VBox, Layout, Label, Select, Text, Button, HBox
 from datetime import datetime
@@ -135,7 +142,7 @@ below:
 :example:
 
 >>> from webapp import export
->>> display(export.app)
+>>> export.app
 """
    
 

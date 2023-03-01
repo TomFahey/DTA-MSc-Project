@@ -1,8 +1,9 @@
-
 """ 
-Functional module: Defines the ResponsiveDict and ResponsiveList classes,
-used to implement 'responsive' callbacks when config items are modified.
-Also defines the 'Programme' class, which encapsulates information 
+Functional module: Defines the :class:`ResponsiveDict` and 
+class:`ResponsiveList` classes, used to implement 'responsive' callbacks
+when configuration values are modified.
+
+Also defines the :class:`Programme` class, which encapsulates information 
 relating to a heating run, including number of stages, target temperatures,
 heating rate and hold times.
 """
@@ -15,8 +16,8 @@ class ResponsiveDict(UserDict):
     Extension of Python ``dict``, provides assignable callbacks that are called
     when a ``dict`` item is modified.
 
-    ``ResponsiveDict`` is an extension of the Python dictionary, which adds a
-    'responsive' callback behaviour for dictionary items, that is called
+    :class:`ResponsiveDict` is an extension of the Python dictionary, which 
+    adds a 'responsive' callback behaviour for dictionary items, that occurs
     when the items are modified.
 
     This is intended for scenarios where dictionary objects are used to 
@@ -24,8 +25,8 @@ class ResponsiveDict(UserDict):
     this state should automatically result in some corresponding behaviour,
     in response to the modification.
     
-    This is achieved by overriding the ``__setitem__`` function of the Python
-    ``UserDict`` class, which this class inherits from.
+    This is achieved by overriding the :meth:`__setitem__` function of the 
+    Python :external:class:`UserDict` class, which this class inherits from.
 
     :Example:
     
@@ -50,14 +51,15 @@ class ResponsiveDict(UserDict):
     """
     def __init__(self, dict_value={}):
         """
-        Create an instance of ``ResponsiveDict``, containg the dictionary
-        ``dict_value``.
+        Create an instance of :class:`ResponsiveDict`, containg the dictionary
+        :arg:`dict_value`.
         
         :param dict_value: Dictionary of items to be contained in
-            ``ResponsiveDict`` object
+            :class:`ResponsiveDict` object
         :type dict_value: dict
-        :return: ResponsiveDict object containing dictionary dict_value
-        :rtype: ResponsiveDict
+        :return: :class:`ResponsiveDict` object containing dictionary 
+            ``dict_value``
+        :rtype: :class:`ResponsiveDict`
         """
         super().__init__()
         self.data = dict_value 
@@ -66,13 +68,13 @@ class ResponsiveDict(UserDict):
         """
         self.callbacks = {key: None for key in self.data.keys()}
         """
-        Dictionary of callback functions, one for each item in ``self.data``.
-        Initially set to ``None`` for all items.
+        Dictionary of callback functions, one for each item in 
+        :attr:`self.data`. Initially set to ``None`` for all items.
         """
 
     def __setitem__(self, key, value) -> None:
         """
-        Same as Python ``dict.__setitem__()``, but also calls the associated
+        Same as Python :meth:`dict.__setitem__``, but also calls the associated
         item's callback function, if it exists.
 
         :param key: The item's key
@@ -86,14 +88,13 @@ class ResponsiveDict(UserDict):
 
     def set_callback(self, key, callback):
         """
-        Assign a callback function to the item corresponding to ``key``
+        Assign a callback function to the item corresponding to :arg:`key`
 
         :param key: The dict item's key
         :type key: _type_
         :param callback: A function handle of the form 
             ``callback(key, value)`` where ``key`` is the item's key,
             and ``value`` is the item's new value.
-
         :type callback: function
         """
         try:

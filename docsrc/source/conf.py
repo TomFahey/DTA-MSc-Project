@@ -11,6 +11,7 @@ import sys
 #sys.path.insert(0, "/home/Pi/Pi-Pico-Prototype")
 #sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/microcontroller/")
 sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/dashboard/")
+sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/microcontroller/")
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

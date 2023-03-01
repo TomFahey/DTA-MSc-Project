@@ -12,7 +12,7 @@ WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
 from webapp.export import *
-display(drive_select)
+display(app)
 
 
 # In[2]:
@@ -26,7 +26,7 @@ WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
 from webapp.export import *
-display(filename_input)
+display(drive_select)
 
 
 # In[3]:
@@ -40,7 +40,7 @@ WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
 from webapp.export import *
-display(save_button)
+display(filename_input)
 
 
 # In[4]:
@@ -54,7 +54,7 @@ WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
 from webapp.export import *
-display(eject_button)
+display(save_button)
 
 
 # In[5]:
@@ -68,5 +68,5 @@ WEBAPP_PATH = ROOT_DIR + '/src/dashboard/'
 sys.path.insert(0, WEBAPP_PATH)
 
 from webapp.export import *
-display(app)
+display(eject_button)
 

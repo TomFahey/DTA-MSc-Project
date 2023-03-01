@@ -1,12 +1,27 @@
+"""
+A wrapper class, used to provide a common interface to the various sensors and
+values to log.
+"""
 import time
 import PID
 
 class Sensor:
-    
+    """ 
+    An abstract wrapper class for objects with data that can be read from
+
+    Can be subclassed to provide a common interface for different types of
+    devices. The :meth:`read` method must therefore be overridden to provide
+    a meaningful return value.
+    """
     def __init__(self, name):
         self.name = name
         
     def read(self):
+        """ Read current data value from :class:`Sensor` object
+
+        :return: The current value measured by the sensor
+        :rtype: None
+        """
         return None
     
     def reset(self):
@@ -21,8 +36,6 @@ class TempSensor(Sensor):
         
     def read(self):
         return round(self.device.temperature, self.precision)
-    
-    #(struct.unpack(">i", max31856a._read_register(0x0C, 3) + bytes(1))[0] >> 13) / (32*1.6*2**17)) * 1000
     
 class TimeSensor(Sensor):
     
@@ -44,19 +57,6 @@ class TimeSensor(Sensor):
         else:
             return 0.
     
-    #@property
-    #def nextTimeStamp_ns(self):
-    #    return self.__nextTimeStamp
-    #@property
-    #def nextTimeStamp(self):
-    #    return round(self.__nextTimeStamp/1e9, 1)   
-    #@nextTimeStamp.setter
-    #def nextTimeStamp(self, val):
-    #    self.__nextTimeStamp = val
-    #@nextTimeStamp_ns.setter
-    #def nextTimeStamp_ns(self, val):
-    #    self.__nextTimeStamp = val
-        
     def start(self):
         self.__startTime = time.monotonic_ns()
         return True

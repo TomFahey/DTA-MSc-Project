@@ -67,7 +67,8 @@ Reference
    :maxdepth: 3
 
    reference/hardware
-   reference/software
+   reference/ui-software
+   reference/micro-software
 
 ******************
 Indices and tables
