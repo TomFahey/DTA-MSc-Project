@@ -44,13 +44,30 @@
 <h1>Setup<a class="headerlink" href="#setup" title="Permalink to this heading">¶</a></h1>
 <section id="installation">
 <span id="id1"></span><h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
-<p>To install the user interface software on the Raspberry Pi, you can use the following commands:</p>
+<p>To install the user interface software on the Raspberry Pi, you can use the
+following commands:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/TomFahey/DTA-MSC-Project.git
 <span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>DTA-MSC-Project
-<span class="gp">$ </span>sudo<span class="w"> </span>python<span class="w"> </span>setup.py<span class="w"> </span>install
+<span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
+<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>etc/*<span class="w"> </span>/etc/systemd/system/
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
 </pre></div>
 </div>
-<p>This will install the project, and all of its dependencies, after which the user interface service will start automatically.</p>
+<p>This will install the project, and all of its dependencies, after which the
+user interface service will start automatically.</p>
+<p>Before installing the microcontroller code to the Raspberry Pi Pico, you will need to
+install the CircuitPython UF2 bootloader. To do this, you can follow the instructions
+provided on the <a class="reference external" href="https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython">Adafruit</a>
+website.</p>
+<p>Once CircuitPython is installed, to install the microcontroller code, simply mount the Pico’s filesystem
+and copy the contents of the <code class="docutils literal notranslate"><span class="pre">src/microcontroller/</span></code> directory to the root of the filesystem.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>src/microcontroller/*<span class="w"> </span>/media/pi/RPI-RP2/
+</pre></div>
+</div>
+<p>The microcontroller code will then be automatically compiled and flashed to the Pico. Once the
+command completes, the Pico will automatically reboot.</p>
 </section>
 </section>
 
