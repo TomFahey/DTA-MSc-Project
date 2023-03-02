@@ -49,9 +49,9 @@ following commands:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/TomFahey/DTA-MSC-Project.git
 <span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>DTA-MSC-Project
 <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<span class="gp">$ </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/usr/local/DTA
-<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>src/dashboard<span class="w"> </span>/usr/local/DTA/
-<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>src/receive.py<span class="w"> </span>/usr/local/DTA/
+<span class="gp">$ </span>sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/usr/local/bin/DTA/dashboard
+<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>src/dashboard<span class="w"> </span>/usr/local/bin/DTA/dashboard
+<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>src/receive.py<span class="w"> </span>/usr/local/bin/DTA/
 <span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>etc/systemd/*<span class="w"> </span>/etc/systemd/system/
 <span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
 <span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
@@ -60,6 +60,11 @@ following commands:</p>
 </div>
 <p>This will install the project, and all of its dependencies, after which the
 user interface service will start automatically.</p>
+<p>To disable the user interface service, you can use the following command:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>disable<span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
+<span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>stop<span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
+</pre></div>
+</div>
 <p>Before installing the microcontroller code to the Raspberry Pi Pico, you will need to
 install the CircuitPython UF2 bootloader. To do this, you can follow the instructions
 provided on the <a class="reference external" href="https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython">Adafruit</a>

@@ -42,10 +42,53 @@
             
   <section id="debugging">
 <h1>Debugging<a class="headerlink" href="#debugging" title="Permalink to this heading">¶</a></h1>
-<section id="web-interface">
-<span id="web"></span><h2>Web Interface<a class="headerlink" href="#web-interface" title="Permalink to this heading">¶</a></h2>
-<p>To use Lumache, first install it using pip:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp gp-VirtualEnv">(.venv)</span> <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>lumache
+<section id="checking-systemd-service-units">
+<span id="web"></span><h2>Checking systemd service units<a class="headerlink" href="#checking-systemd-service-units" title="Permalink to this heading">¶</a></h2>
+<p>If you are having problems with loading the user interface, the easiest thing to
+check is whether the service units are running. You can check this by running</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>DTA-jupyter.service
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>DTA-interface.service
+$<span class="w"> </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>status<span class="w"> </span>DTA-chrome.service
+</pre></div>
+</div>
+<p>These should return messages that look like the following:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>●<span class="w"> </span>DTA-jupyter.service<span class="w"> </span>-<span class="w"> </span>Jupyter<span class="w"> </span>server<span class="w"> </span>instance<span class="w"> </span>serving<span class="w"> </span>web<span class="w"> </span>accessible<span class="w"> </span>GUI<span class="w"> </span><span class="k">for</span><span class="w"> </span>connected<span class="w"> </span>DTA<span class="w"> </span>instrument
+<span class="w">   </span>Loaded:<span class="w"> </span>loaded<span class="w"> </span><span class="o">(</span>/etc/systemd/system/DTA-jupyter.service<span class="p">;</span><span class="w"> </span>enabled<span class="p">;</span><span class="w"> </span>vendor<span class="w"> </span>preset:<span class="w"> </span>enabled<span class="o">)</span>
+<span class="w">   </span>Active:<span class="w"> </span>active<span class="w"> </span><span class="o">(</span>running<span class="o">)</span><span class="w"> </span>since<span class="w"> </span>Wed<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:22<span class="w"> </span>GMT<span class="p">;</span><span class="w"> </span>24h<span class="w"> </span>ago
+<span class="w"> </span>Main<span class="w"> </span>PID:<span class="w"> </span><span class="m">19453</span><span class="w"> </span><span class="o">(</span>jupyter-server<span class="o">)</span>
+<span class="w">    </span>Tasks:<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="o">(</span>limit:<span class="w"> </span><span class="m">4915</span><span class="o">)</span>
+<span class="w">   </span>CGroup:<span class="w"> </span>/system.slice/DTA-jupyter.service
+<span class="w">           </span>└─19453<span class="w"> </span>/usr/bin/python3<span class="w"> </span>/home/pi/.local/bin/jupyter-server<span class="w"> </span>/home/pi/Pi-Pico-Prototype
+
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:39<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:39.918<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>notebook_shim<span class="w"> </span><span class="p">|</span><span class="w"> </span>extension<span class="w"> </span>was<span class="w"> </span>successfully<span class="w"> </span>loaded.
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:39<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:39.928<span class="w"> </span>LabApp<span class="o">]</span><span class="w"> </span>JupyterLab<span class="w"> </span>extension<span class="w"> </span>loaded<span class="w"> </span>from<span class="w"> </span>/home/pi/.local/lib/pytho
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:39<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:39.929<span class="w"> </span>LabApp<span class="o">]</span><span class="w"> </span>JupyterLab<span class="w"> </span>application<span class="w"> </span>directory<span class="w"> </span>is<span class="w"> </span>/home/pi/.local/share/
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:39<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:39.967<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>jupyterlab<span class="w"> </span><span class="p">|</span><span class="w"> </span>extension<span class="w"> </span>was<span class="w"> </span>successfully<span class="w"> </span>loaded.
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:40<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:40.005<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>voila.server_extension<span class="w"> </span><span class="p">|</span><span class="w"> </span>extension<span class="w"> </span>was<span class="w"> </span>successfully<span class="w"> </span>loa
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:40<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:40.009<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>Serving<span class="w"> </span>notebooks<span class="w"> </span>from<span class="w"> </span><span class="nb">local</span><span class="w"> </span>directory:<span class="w"> </span>/home/pi/Pi-Pic
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:40<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:40.009<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>Jupyter<span class="w"> </span>Server<span class="w"> </span><span class="m">1</span>.18.1<span class="w"> </span>is<span class="w"> </span>running<span class="w"> </span>at:
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:40<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:40.009<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>http://localhost:8888/
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:40<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:40.010<span class="w"> </span>ServerApp<span class="o">]</span><span class="w">  </span>or<span class="w"> </span>http://127.0.0.1:8888/
+Mar<span class="w"> </span><span class="m">01</span><span class="w"> </span><span class="m">10</span>:43:40<span class="w"> </span>raspberrypi<span class="w"> </span>jupyter-server<span class="o">[</span><span class="m">19453</span><span class="o">]</span>:<span class="w"> </span><span class="o">[</span>I<span class="w"> </span><span class="m">2023</span>-03-01<span class="w"> </span><span class="m">10</span>:43:40.010<span class="w"> </span>ServerApp<span class="o">]</span><span class="w"> </span>Use<span class="w"> </span>Control-C<span class="w"> </span>to<span class="w"> </span>stop<span class="w"> </span>this<span class="w"> </span>server<span class="w"> </span>and<span class="w"> </span>shut<span class="w"> </span>down<span class="w"> </span>all<span class="w"> </span>ke
+</pre></div>
+</div>
+<p>The above output shows that the service is running (<code class="docutils literal notranslate"><span class="pre">Active:</span> <span class="pre">active</span> <span class="pre">(running)</span></code>) and provides the
+<code class="docutils literal notranslate"><span class="pre">STDOUT</span></code> and <code class="docutils literal notranslate"><span class="pre">STDERR</span></code> streams from the service. If the service is not running, the <code class="docutils literal notranslate"><span class="pre">STDOUT</span></code>
+messages should provide a clue to what the problem might be.</p>
+</section>
+<section id="jupyter-lab-debugging">
+<h2>Jupyter Lab Debugging<a class="headerlink" href="#jupyter-lab-debugging" title="Permalink to this heading">¶</a></h2>
+<p>For debugging when developing your own extensions for the project, the Jupyter environment provides a
+useful debugging tool, shown next to the Kernel selection button in the top right of the Jupyter Lab
+interface:</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/UserInterfaceJupyterDebugHighlight.png"><img alt="Web app UI module structure" src="../_images/UserInterfaceJupyterDebugHighlight.png" style="width: 891.5px; height: 670.0px;" /></a>
+</figure>
+<p>Clicking this button will enable the debugging tool, allowing you to set breakpoints in your code,
+that will pause the execution of your code when the breakpoint is reached. This can be useful for
+checking the values of variables, as your code is running, to make sure that they are what you
+expect them to be. To include a breakpoint in your code, simply add the following line:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">breakpoint</span><span class="p">()</span>
 </pre></div>
 </div>
 </section>
@@ -78,7 +121,8 @@
 <li class="toctree-l1"><a class="reference internal" href="basic.html">Basic Usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="advanced.html">Advanced Usage</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Debugging</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#web-interface">Web Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#checking-systemd-service-units">Checking systemd service units</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#jupyter-lab-debugging">Jupyter Lab Debugging</a></li>
 </ul>
 </li>
 </ul>
