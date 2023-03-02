@@ -14,7 +14,7 @@ following commands:
    $ git clone https://github.com/TomFahey/DTA-MSC-Project.git
    $ cd DTA-MSC-Project
    $ pip install -r requirements.txt
-   $ sudo cp etc/* /etc/systemd/system/
+   $ sudo cp etc/systemd/* /etc/systemd/system/
    $ sudo systemctl daemon-reload
    $ sudo systemctl enable DTA-jupyter.service DTA-chrome.service DTA-interface.service
    $ sudo systemctl start DTA-jupyter.service DTA-chrome.service DTA-interface.service
@@ -32,7 +32,7 @@ and copy the contents of the ``src/microcontroller/`` directory to the root of t
 
 .. code-block:: console
 
-   $ sudo cp -r src/microcontroller/* /media/pi/RPI-RP2/
+   $ sudo cp -r src/microcontroller/* <PICO_MOUNTPOINT>
 
 The microcontroller code will then be automatically compiled and flashed to the Pico. Once the
 command completes, the Pico will automatically reboot.

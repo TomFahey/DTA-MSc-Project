@@ -49,7 +49,7 @@ following commands:</p>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/TomFahey/DTA-MSC-Project.git
 <span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>DTA-MSC-Project
 <span class="gp">$ </span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements.txt
-<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>etc/*<span class="w"> </span>/etc/systemd/system/
+<span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>etc/systemd/*<span class="w"> </span>/etc/systemd/system/
 <span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>daemon-reload
 <span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
 <span class="gp">$ </span>sudo<span class="w"> </span>systemctl<span class="w"> </span>start<span class="w"> </span>DTA-jupyter.service<span class="w"> </span>DTA-chrome.service<span class="w"> </span>DTA-interface.service
@@ -63,7 +63,7 @@ provided on the <a class="reference external" href="https://learn.adafruit.com/g
 website.</p>
 <p>Once CircuitPython is installed, to install the microcontroller code, simply mount the Pico’s filesystem
 and copy the contents of the <code class="docutils literal notranslate"><span class="pre">src/microcontroller/</span></code> directory to the root of the filesystem.</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>src/microcontroller/*<span class="w"> </span>/media/pi/RPI-RP2/
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>cp<span class="w"> </span>-r<span class="w"> </span>src/microcontroller/*<span class="w"> </span>&lt;PICO_MOUNTPOINT&gt;
 </pre></div>
 </div>
 <p>The microcontroller code will then be automatically compiled and flashed to the Pico. Once the
