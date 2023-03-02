@@ -14,6 +14,9 @@ following commands:
    $ git clone https://github.com/TomFahey/DTA-MSC-Project.git
    $ cd DTA-MSC-Project
    $ pip install -r requirements.txt
+   $ sudo mkdir -p /usr/local/DTA
+   $ sudo cp -r src/dashboard /usr/local/DTA/
+   $ sudo cp src/receive.py /usr/local/DTA/
    $ sudo cp etc/systemd/* /etc/systemd/system/
    $ sudo systemctl daemon-reload
    $ sudo systemctl enable DTA-jupyter.service DTA-chrome.service DTA-interface.service
