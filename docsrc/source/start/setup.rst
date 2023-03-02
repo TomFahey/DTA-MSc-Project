@@ -6,31 +6,33 @@ Setup
 Installation
 ------------
 
-To install the user interface software on the Raspberry Pi, you can use the following commands:
+To install the user interface software on the Raspberry Pi, you can use the 
+following commands:
 
 .. code-block:: console
 
    $ git clone https://github.com/TomFahey/DTA-MSC-Project.git
    $ cd DTA-MSC-Project
-   $ sudo python setup.py install
+   $ pip install -r requirements.txt
+   $ sudo cp etc/* /etc/systemd/system/
+   $ sudo systemctl daemon-reload
+   $ sudo systemctl enable DTA-jupyter.service DTA-chrome.service DTA-interface.service
+   $ sudo systemctl start DTA-jupyter.service DTA-chrome.service DTA-interface.service
 
-This will install the project, and all of its dependencies, after which the user interface service will start automatically.
+This will install the project, and all of its dependencies, after which the 
+user interface service will start automatically.
 
-..
-    Creating recipes
-    ----------------
+Before installing the microcontroller code to the Raspberry Pi Pico, you will need to
+install the CircuitPython UF2 bootloader. To do this, you can follow the instructions
+provided on the `Adafruit <https://learn.adafruit.com/getting-started-with-raspberry-pi-pico-circuitpython/circuitpython>`_
+website.
 
-    To retrieve a list of random ingredients,
-    you can use the ``lumache.get_random_ingredients()`` function:
+Once CircuitPython is installed, to install the microcontroller code, simply mount the Pico's filesystem
+and copy the contents of the ``src/microcontroller/`` directory to the root of the filesystem.
 
-    .. autofunction:: lumache.get_random_ingredients
+.. code-block:: console
 
-    The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-    or ``"veggies"``. Otherwise, :autofunction`lumache.get_random_ingredients`
-    will raise an exception.
+   $ sudo cp -r src/microcontroller/* /media/pi/RPI-RP2/
 
-    .. autoexception:: lumache.InvalidKindError
-
-    >>> import lumache
-    >>> lumache.get_random_ingredients()
-    ['shells', 'gorgonzola', 'parsley']
+The microcontroller code will then be automatically compiled and flashed to the Pico. Once the
+command completes, the Pico will automatically reboot.
