@@ -12,9 +12,8 @@ import numpy as np
 from collections import UserDict, UserList
 
 class ResponsiveDict(UserDict):
-    """
-    Extension of Python ``dict``, provides assignable callbacks that are called
-    when a ``dict`` item is modified.
+    """Extension of Python ``dict``, provides assignable callbacks that are 
+    called when a ``dict`` item is modified.
 
     :class:`ResponsiveDict` is an extension of the Python dictionary, which 
     adds a 'responsive' callback behaviour for dictionary items, that occurs
@@ -120,6 +119,23 @@ class ResponsiveList(UserList):
             pass
 
 class Programme(object):
+    """Python object representation of a heating programme.
+
+    :class:`Programme` is a Python object representation of a heating
+    programme for a DTA run. The programme is specified as a sequence
+    of heating 'stages', with variable target temperature, heating rate
+    and hold times, which collectively define the heating programme.
+
+    These 'stages' are represented by a :class:`Programme` object's
+    attribute :attr:`Programme:stages`, which is just a dictionary containing
+    the variable parameters mentioned above, for each stage.
+
+    An important function performed by the :class:`Programme` class is to
+    convert the specified heating programme into a graph of temperature
+    against time, which can be displayed for the user. This is performed
+    by the :meth:`Programme:update_xy` method, which is called whenever
+    the parameters for a stage are changed.
+    """
 
     def __init__(self):
         self.stages = ResponsiveList(

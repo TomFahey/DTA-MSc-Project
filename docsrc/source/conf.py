@@ -10,8 +10,9 @@ import sys
 #sys.path.insert(0, pathlib.Path(__file__).parents[2].resolve().as_posix())
 #sys.path.insert(0, "/home/Pi/Pi-Pico-Prototype")
 #sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/microcontroller/")
-sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/dashboard/")
-sys.path.insert(0, "/home/pi/Pi-Pico-Prototype/src/microcontroller/")
+PROJECT_ROOT_DIR = pathlib.Path(__file__).parents[2].resolve().as_posix()
+sys.path.insert(0, PROJECT_ROOT_DIR + "/src/dashboard/")
+sys.path.insert(0, PROJECT_ROOT_DIR + "/src/microcontroller/")
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

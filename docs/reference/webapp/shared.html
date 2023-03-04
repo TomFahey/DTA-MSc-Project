@@ -12,9 +12,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
@@ -44,6 +41,8 @@
 <span id="id1"></span><span id="webapp-shared"></span><h1>webapp.shared<a class="headerlink" href="#module-webapp.shared" title="Permalink to this heading">¶</a></h1>
 <p>Functional module: Defines the <a class="reference internal" href="#webapp.shared.AppState" title="webapp.shared.AppState"><code class="xref py py-class docutils literal notranslate"><span class="pre">AppState</span></code></a> class, which holds the state 
 of the application, including its current configuration, data and programme.</p>
+<section id="helper-classes">
+<h2>Helper classes<a class="headerlink" href="#helper-classes" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="webapp.shared.AppState">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.shared.</span></span><span class="sig-name descname"><span class="pre">AppState</span></span><a class="headerlink" href="#webapp.shared.AppState" title="Permalink to this definition">¶</a></dt>
@@ -56,9 +55,9 @@ definition modules are imported, they share this instance of
 the different UI elements.</p>
 <p>When the dashboard application is connected to the microcontroller, via
 USB, a serial connection is established. This connection is then used to
-synchronise the <a class="reference internal" href="#webapp.shared.AppState.config" title="webapp.shared.AppState.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config</span></code></a> attribute with an equivalent data 
+synchronise the <code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config</span></code> attribute with an equivalent data 
 structure on the microcontroller side. Modifications to the 
-<a class="reference internal" href="#webapp.shared.AppState.config" title="webapp.shared.AppState.config"><code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config</span></code></a> attribute thereby result in changes in the 
+<code class="xref py py-attr docutils literal notranslate"><span class="pre">AppState.config</span></code> attribute thereby result in changes in the 
 microcontroller’s behaviour, in real time.</p>
 <p>This principle is used to implement the ‘heating run’ functionnality of the
 system, which is defined in the <a class="reference internal" href="#webapp.shared.AppState.work" title="webapp.shared.AppState.work"><code class="xref py py-func docutils literal notranslate"><span class="pre">AppState.work()</span></code></a> function. This is 
@@ -69,69 +68,6 @@ When the user starts a heating run, via the ‘Start’ button,
 beginning the heating run logic. See <a class="reference internal" href="#webapp.shared.AppState.work" title="webapp.shared.AppState.work"><code class="xref py py-func docutils literal notranslate"><span class="pre">AppState.work()</span></code></a> for more
 information.</p>
 <p>An initalised AppState object has the following attributes:</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.shared.AppState.config">
-<span class="sig-name descname"><span class="pre">config</span></span><a class="headerlink" href="#webapp.shared.AppState.config" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary of values that are synchronised with microcontroller to 
-control its behaviour.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>RUN</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls start/stop of heating run (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
-<li><p><strong>MODE</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls heating behaviour, (Ramp/Hold) = (<code class="docutils literal notranslate"><span class="pre">True/False</span></code>)</p></li>
-<li><p><strong>LOG</strong> (<code class="docutils literal notranslate"><span class="pre">bool</span></code>) – Controls logging of data from sensors (<code class="docutils literal notranslate"><span class="pre">True</span></code>/<code class="docutils literal notranslate"><span class="pre">False</span></code>)</p></li>
-<li><p><strong>TARGET</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Target value for PID algorithm, (Ramp rate [K/min] or 
-Hold temperature [degC])</p></li>
-<li><p><strong>KP</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Proportional gain for PID algorithm</p></li>
-<li><p><strong>KD</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Derivative gain for PID algorithm</p></li>
-<li><p><strong>KI</strong> (<code class="docutils literal notranslate"><span class="pre">int</span></code>/<code class="docutils literal notranslate"><span class="pre">float</span></code>) – Integral gain for PID algorithm</p></li>
-<li><p><strong>INTERVAL</strong> (<code class="docutils literal notranslate"><span class="pre">float</span></code>) – ‘Tick’ interval for microcontroller routine, 
-in seconds</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.shared.AppState.connected">
-<span class="sig-name descname"><span class="pre">connected</span></span><a class="headerlink" href="#webapp.shared.AppState.connected" title="Permalink to this definition">¶</a></dt>
-<dd><p>Flag indicating whether the microcontroller is connected to the 
-dashboard application. Toggled when a heating run is finished, 
-indicating to the microcontroller to reset to idle mode.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.shared.AppState.data">
-<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#webapp.shared.AppState.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary of numpy data arrays, containing data from microcontroller</p>
-<dl class="field-list simple">
-<dt class="field-odd">Variables<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>PID</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – PID algorithm output values - mainly used for debugging 
-purposes</p></li>
-<li><p><strong>TEMPA</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 1 (SPI_CS0)</p></li>
-<li><p><strong>TEMPB</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 2 (SPI_CS1)</p></li>
-<li><p><strong>TEMPC</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 3 (SPI_CS2)</p></li>
-<li><p><strong>DTEMP</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Temperature values from temperature sensor 4 (SPI_CS3)</p></li>
-<li><p><strong>TIME</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">numpy.ndarray</span></code>) – Corresponding time stamp values for above data</p></li>
-</ul>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.shared.AppState.programme">
-<span class="sig-name descname"><span class="pre">programme</span></span><a class="headerlink" href="#webapp.shared.AppState.programme" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object holding information about the assigned heating programme - see 
-<code class="docutils literal notranslate"><span class="pre">webapp.utils.Programme</span></code>.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.shared.AppState.runs">
-<span class="sig-name descname"><span class="pre">runs</span></span><a class="headerlink" href="#webapp.shared.AppState.runs" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of dictionaries containing data from previous heating runs.</p>
-</dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="webapp.shared.AppState.work">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">work</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#webapp.shared.AppState.work" title="Permalink to this definition">¶</a></dt>
@@ -155,6 +91,9 @@ more stages remain, signifying the end of the heating run.</p>
 
 </dd></dl>
 
+</section>
+<section id="helper-objects">
+<h2>Helper objects<a class="headerlink" href="#helper-objects" title="Permalink to this heading">¶</a></h2>
 <dl class="py data">
 <dt class="sig sig-object py" id="webapp.shared.appState">
 <span class="sig-prename descclassname"><span class="pre">webapp.shared.</span></span><span class="sig-name descname"><span class="pre">appState</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">&lt;webapp.shared.AppState</span> <span class="pre">object&gt;</span></em><a class="headerlink" href="#webapp.shared.appState" title="Permalink to this definition">¶</a></dt>
@@ -174,6 +113,7 @@ the application, which is shared by the other application modules</p>
 </div>
 </dd></dl>
 
+</section>
 <section id="code-listing">
 <h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
@@ -489,7 +429,7 @@ the application, which is shared by the other application modules</p>
       &copy;2023, Tom Fahey.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

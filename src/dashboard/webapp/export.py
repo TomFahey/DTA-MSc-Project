@@ -44,7 +44,10 @@ def detect_mountpoints():
     [('SanDisk', '/media/pi/SanDisk')]
 
     """
-    mountpoints = [(dir, "/media/pi/" + dir) for dir in os.listdir(MOUNTDIR) if dir != "CIRCUITPY"]
+    if os.path.exists(MOUNTDIR):
+        mountpoints = [(dir, "/media/pi/" + dir) for dir in os.listdir(MOUNTDIR) if dir != "CIRCUITPY"]
+    else:
+        mountpoints = [("data", "/home/pi/data")]
     return mountpoints
     
 def save_click(b):

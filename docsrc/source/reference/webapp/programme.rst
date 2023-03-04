@@ -6,6 +6,24 @@ webapp.programme
 
 .. automodule:: webapp.programme
 
+   Widget layout
+   ^^^^^^^^^^^^^
+
+   .. figure:: ../../images/programme.png
+      :align: center
+      :scale: 50%
+      :alt: Web app UI module structure
+
+   |
+   
+   Widget objects
+   ^^^^^^^^^^^^^^
+
+   |
+
+   .. autodata:: app
+      :annotation: <webapp.programme.ProgrammeTab>
+
    .. jupyter-execute::
        :hide-code:
 
@@ -21,10 +39,8 @@ webapp.programme
 
    |
 
-   Widget definitions
-   ^^^^^^^^^^^^^^^^^^
-
-   |
+   Helper classes
+   ^^^^^^^^^^^^^^
 
    .. autoclass:: ProgrammeTab
       :members: new_tab_callback, add_tab, reset
@@ -64,9 +80,6 @@ webapp.programme
        display(ControlSlider(stage={'R': 100}, target='R'))
 
    |
-
-   .. autodata:: app
-      :annotation: <webapp.programme.ProgrammeTab>
 
 |
 

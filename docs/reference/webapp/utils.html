@@ -12,9 +12,6 @@
     <link rel="stylesheet" type="text/css" href="../../_static/jupyter-sphinx.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/thebelab.css" />
     <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
     <script src="../../_static/doctools.js"></script>
     <script src="../../_static/sphinx_highlight.js"></script>
     <script src="../../_static/thebelab-helper.js"></script>
@@ -45,14 +42,16 @@
 <p>Functional module: Defines the <a class="reference internal" href="#webapp.utils.ResponsiveDict" title="webapp.utils.ResponsiveDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponsiveDict</span></code></a> and 
 class:<cite>ResponsiveList</cite> classes, used to implement ‘responsive’ callbacks
 when configuration values are modified.</p>
-<p>Also defines the <code class="xref py py-class docutils literal notranslate"><span class="pre">Programme</span></code> class, which encapsulates information 
+<p>Also defines the <a class="reference internal" href="#webapp.utils.Programme" title="webapp.utils.Programme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Programme</span></code></a> class, which encapsulates information 
 relating to a heating run, including number of stages, target temperatures,
 heating rate and hold times.</p>
+<section id="helper-classes">
+<h2>Helper classes<a class="headerlink" href="#helper-classes" title="Permalink to this heading">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="webapp.utils.ResponsiveDict">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dict_value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">{}</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveDict" title="Permalink to this definition">¶</a></dt>
-<dd><p>Extension of Python <code class="docutils literal notranslate"><span class="pre">dict</span></code>, provides assignable callbacks that are called
-when a <code class="docutils literal notranslate"><span class="pre">dict</span></code> item is modified.</p>
+<dd><p>Extension of Python <code class="docutils literal notranslate"><span class="pre">dict</span></code>, provides assignable callbacks that are 
+called when a <code class="docutils literal notranslate"><span class="pre">dict</span></code> item is modified.</p>
 <p><a class="reference internal" href="#webapp.utils.ResponsiveDict" title="webapp.utils.ResponsiveDict"><code class="xref py py-class docutils literal notranslate"><span class="pre">ResponsiveDict</span></code></a> is an extension of the Python dictionary, which 
 adds a ‘responsive’ callback behaviour for dictionary items, that occurs
 when the items are modified.</p>
@@ -60,7 +59,7 @@ when the items are modified.</p>
 encode a programme, or routine’s ‘state’, and where modification of
 this state should automatically result in some corresponding behaviour,
 in response to the modification.</p>
-<p>This is achieved by overriding the <code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code> function of the 
+<p>This is achieved by overriding the <a class="reference internal" href="#webapp.utils.ResponsiveDict.__setitem__" title="webapp.utils.ResponsiveDict.__setitem__"><code class="xref py py-meth docutils literal notranslate"><span class="pre">__setitem__()</span></code></a> function of the 
 Python <code class="xref py py-class docutils literal notranslate"><span class="pre">UserDict</span></code> class, which this class inherits from.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Example<span class="colon">:</span></dt>
@@ -85,30 +84,16 @@ Python <code class="xref py py-class docutils literal notranslate"><span class="
 <span class="go">&#39;RGB channel R changed to 255&#39;</span>
 </pre></div>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.callbacks">
-<span class="sig-name descname"><span class="pre">callbacks</span></span><a class="headerlink" href="#webapp.utils.ResponsiveDict.callbacks" title="Permalink to this definition">¶</a></dt>
-<dd><p>Dictionary of callback functions, one for each item in 
-<code class="xref py py-attr docutils literal notranslate"><span class="pre">self.data</span></code>. Initially set to <code class="docutils literal notranslate"><span class="pre">None</span></code> for all items.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.data">
-<span class="sig-name descname"><span class="pre">data</span></span><a class="headerlink" href="#webapp.utils.ResponsiveDict.data" title="Permalink to this definition">¶</a></dt>
-<dd><p>Internal dictionary attribute</p>
-</dd></dl>
-
 <dl class="py method">
-<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.set_callback">
-<span class="sig-name descname"><span class="pre">set_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveDict.set_callback" title="Permalink to this definition">¶</a></dt>
-<dd><p>Assign a callback function to the item corresponding to <a href="#id2"><span class="problematic" id="id3">:arg:`key`</span></a></p>
+<dt class="sig sig-object py" id="webapp.utils.ResponsiveDict.__setitem__">
+<span class="sig-name descname"><span class="pre">__setitem__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.11)"><span class="pre">None</span></a></span></span><a class="headerlink" href="#webapp.utils.ResponsiveDict.__setitem__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Same as Python <code class="xref py py-meth docutils literal notranslate"><span class="pre">dict.__setitem__`()</span></code>, but also calls the associated
+item’s callback function, if it exists.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<em>_type_</em>) – The dict item’s key</p></li>
-<li><p><strong>callback</strong> (<em>function</em>) – A function handle of the form 
-<code class="docutils literal notranslate"><span class="pre">callback(key,</span> <span class="pre">value)</span></code> where <code class="docutils literal notranslate"><span class="pre">key</span></code> is the item’s key,
-and <code class="docutils literal notranslate"><span class="pre">value</span></code> is the item’s new value.</p></li>
+<li><p><strong>key</strong> (<em>_type_</em>) – The item’s key</p></li>
+<li><p><strong>value</strong> (<em>_type_</em>) – The item’s new value to be assigned</p></li>
 </ul>
 </dd>
 </dl>
@@ -117,10 +102,24 @@ and <code class="docutils literal notranslate"><span class="pre">value</span></c
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="webapp.utils.ResponsiveList">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">ResponsiveList</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">initialdata</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#webapp.utils.ResponsiveList" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dt class="sig sig-object py" id="webapp.utils.Programme">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">webapp.utils.</span></span><span class="sig-name descname"><span class="pre">Programme</span></span><a class="headerlink" href="#webapp.utils.Programme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Python object representation of a heating programme.</p>
+<p><a class="reference internal" href="#webapp.utils.Programme" title="webapp.utils.Programme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Programme</span></code></a> is a Python object representation of a heating
+programme for a DTA run. The programme is specified as a sequence
+of heating ‘stages’, with variable target temperature, heating rate
+and hold times, which collectively define the heating programme.</p>
+<p>These ‘stages’ are represented by a <a class="reference internal" href="#webapp.utils.Programme" title="webapp.utils.Programme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Programme</span></code></a> object’s
+attribute <code class="xref py py-attr docutils literal notranslate"><span class="pre">Programme:stages</span></code>, which is just a dictionary containing
+the variable parameters mentioned above, for each stage.</p>
+<p>An important function performed by the <a class="reference internal" href="#webapp.utils.Programme" title="webapp.utils.Programme"><code class="xref py py-class docutils literal notranslate"><span class="pre">Programme</span></code></a> class is to
+convert the specified heating programme into a graph of temperature
+against time, which can be displayed for the user. This is performed
+by the <code class="xref py py-meth docutils literal notranslate"><span class="pre">Programme:update_xy()</span></code> method, which is called whenever
+the parameters for a stage are changed.</p>
+</dd></dl>
 
+</section>
 <section id="code-listing">
 <h2>Code listing<a class="headerlink" href="#code-listing" title="Permalink to this heading">¶</a></h2>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot; </span>
@@ -137,9 +136,8 @@ and <code class="docutils literal notranslate"><span class="pre">value</span></c
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">UserDict</span><span class="p">,</span> <span class="n">UserList</span>
 
 <span class="k">class</span> <span class="nc">ResponsiveDict</span><span class="p">(</span><span class="n">UserDict</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Extension of Python ``dict``, provides assignable callbacks that are called</span>
-<span class="sd">    when a ``dict`` item is modified.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extension of Python ``dict``, provides assignable callbacks that are </span>
+<span class="sd">    called when a ``dict`` item is modified.</span>
 
 <span class="sd">    :class:`ResponsiveDict` is an extension of the Python dictionary, which </span>
 <span class="sd">    adds a &#39;responsive&#39; callback behaviour for dictionary items, that occurs</span>
@@ -245,6 +243,23 @@ and <code class="docutils literal notranslate"><span class="pre">value</span></c
             <span class="k">pass</span>
 
 <span class="k">class</span> <span class="nc">Programme</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Python object representation of a heating programme.</span>
+
+<span class="sd">    :class:`Programme` is a Python object representation of a heating</span>
+<span class="sd">    programme for a DTA run. The programme is specified as a sequence</span>
+<span class="sd">    of heating &#39;stages&#39;, with variable target temperature, heating rate</span>
+<span class="sd">    and hold times, which collectively define the heating programme.</span>
+
+<span class="sd">    These &#39;stages&#39; are represented by a :class:`Programme` object&#39;s</span>
+<span class="sd">    attribute :attr:`Programme:stages`, which is just a dictionary containing</span>
+<span class="sd">    the variable parameters mentioned above, for each stage.</span>
+
+<span class="sd">    An important function performed by the :class:`Programme` class is to</span>
+<span class="sd">    convert the specified heating programme into a graph of temperature</span>
+<span class="sd">    against time, which can be displayed for the user. This is performed</span>
+<span class="sd">    by the :meth:`Programme:update_xy` method, which is called whenever</span>
+<span class="sd">    the parameters for a stage are changed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stages</span> <span class="o">=</span> <span class="n">ResponsiveList</span><span class="p">(</span>
@@ -421,7 +436,7 @@ and <code class="docutils literal notranslate"><span class="pre">value</span></c
       &copy;2023, Tom Fahey.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 5.3.0</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.13</a>
       
       |

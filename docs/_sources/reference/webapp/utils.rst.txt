@@ -4,9 +4,14 @@ webapp.utils
 ------------
 
 .. automodule:: webapp.utils
-   :members:
-   :private-members: __setitem__
 
+   Helper classes
+   ^^^^^^^^^^^^^^
+
+   .. autoclass:: ResponsiveDict
+      :private-members: __setitem__
+
+   .. autoclass:: Programme
 
 
 Code listing
