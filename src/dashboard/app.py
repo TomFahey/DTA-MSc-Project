@@ -1,3 +1,9 @@
+"""Top-level widget definition module: Handles setup and arrangement of
+widgets defined in submodules, as well as connection of dashboard app
+to microcontroller.
+"""
+
+from ipywidgets.widgets import VBox, Layout, Label, Select, Text, Button, HBox
 ### Import external libraries
 import asyncio # Needed for asynchronous, non-blocking processing
 from IPython.core.display import display, HTML # IPython Notebook functions
@@ -12,16 +18,13 @@ from importlib import reload
 import copy
 from asyncio import sleep as asleep
 
-### Import local modules - the pages of the UI app
+### Import widget definition modules - the pages of the UI app
 from webapp import graph     # Main tab, with controls and graph of deltaT
 from webapp import programme # Tab for specifying the DTA programme
 from webapp import settings  # Tab for configuring PID parameters and time interval
 from webapp import export    # Tab for saving and exporting data to attached filestorage
-#import imaging  # Displays view from thermal imaging camera
-#import shared
-from webapp.shared import appState        # Not a page - this module holds the global variables 
-                                   # (data, config) accessed by the other ones
-from webapp.utils import Programme, ResponsiveList
+### Import utility modules
+from webapp.shared import appState  # Global variable used to share data between modules
                 
 # Some annoying CSS settings to make sure the UI fills the entire screen, without margins
 display(HTML("<style>.jp-Cell { padding: 0 !important; }</style>"))
@@ -31,8 +34,17 @@ display(HTML("<style>.html { margin: 0 !important; }</style>"))
 
 
 tab = Tab(
-            layout=Layout(margin='0 0 0 0',width="100%",height="100%"), # Tab widget - allows switching between children 'tabs'
-            children = [graph.app, programme.app, settings.app, export.app]
+            layout=Layout(
+                margin='0 0 0 0',
+                width="100%",
+                height="100%"
+                ), # Tab widget - allows switching between children 'tabs'
+            children = [
+                graph.app, 
+                programme.app, 
+                settings.app, 
+                export.app
+                ] # Add widgets from submodules to the dashboard app
             )
 # Set the titles for each page
 tab.set_title(0, 'Main')
@@ -42,12 +54,13 @@ tab.set_title(3, 'Save')
 
 display(tab)
 
-# This is the routine that handles the datastream from the microcontroller,
-# reading in uploaded sensor data and storing it in the global variables,
-# as well as monitoring the microcontroller configuration, to ensure it
-# is in sync with the DTA Programme that has been programmed.
     
 async def work(reader, writer):
+    """This is the routine that handles the datastream from the microcontroller,
+    reading in uploaded sensor data and storing it in the global variables,
+    as well as monitoring the microcontroller configuration, to ensure it
+    is in sync with the user interface software.
+    """
     global appState
     config = copy.deepcopy(appState.config)
     while appState.connected:
@@ -82,15 +95,20 @@ async def work(reader, writer):
 
 async def main():
     global appState
-    # This main function is called when the program is run, and sets up the
-    # TCP connection to the forwarding server that reads the data from the
-    # microcontroller over the serial port and forwards it over a TCP connection.
+    """This main function is called when the program is run, and sets up the
+    TCP connection to the forwarding server that reads the data from the
+    microcontroller over the serial port and forwards it over a TCP connection.
+    """
     while True:
+        # Wait for the connection to the forwarding server to be established
         reader, writer = await asyncio.open_connection('localhost', 10501)
+
+        # Once connected, start work()
         appState.connected = True
         print('Connected to server')
         print('Entered main')
         await work(reader, writer)
+
         appState.programme.__init__()
         appState.data['PID'] = np.array([0.])
         appState.data['TEMPA'] = np.array([0.]) 
@@ -108,8 +126,6 @@ async def main():
         appState.config['INTERVAL'] = 0.5
         tab.children[1].reset()
         tab.children[2].reset()
-    
-
 
 try:
     loop = asyncio.get_running_loop()

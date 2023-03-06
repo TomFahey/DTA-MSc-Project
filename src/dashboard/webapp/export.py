@@ -1,8 +1,9 @@
-""" 
-Widget definition module: Defines UI elements used for exporting recorded data
-to local or mounted storage devices, including file names and save location.
+"""Widget definition module: Defines UI elements used for exporting recorded 
+data to local or mounted storage devices, including file names and save
+location.
 
-Use the following code to import and display the widgets defined in this module:
+Use the following code to import and display the widgets defined in this
+module:
 
 :example:
 
