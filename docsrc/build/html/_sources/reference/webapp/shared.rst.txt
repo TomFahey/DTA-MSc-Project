@@ -4,9 +4,18 @@ webapp.shared
 -------------
 
 .. automodule:: webapp.shared
-   :members:
+
+   Helper classes
+   ^^^^^^^^^^^^^^
+
+   .. autoclass:: AppState
+      :members: work
    
-   .. autodata:: webapp.appState
+
+   Helper objects
+   ^^^^^^^^^^^^^^
+
+   .. autodata:: appState
 
 
 

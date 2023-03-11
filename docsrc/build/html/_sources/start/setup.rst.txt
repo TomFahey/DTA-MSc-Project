@@ -15,7 +15,7 @@ following commands:
    $ cd DTA-MSC-Project
    $ pip install -r requirements.txt
    $ sudo mkdir -p /usr/local/bin/DTA/dashboard
-   $ sudo cp -r src/dashboard /usr/local/bin/DTA/dashboard
+   $ sudo cp -r src/dashboard /usr/local/bin/DTA/
    $ sudo cp src/receive.py /usr/local/bin/DTA/
    $ sudo cp etc/systemd/* /etc/systemd/system/
    $ sudo systemctl daemon-reload

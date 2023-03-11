@@ -6,6 +6,24 @@ webapp.settings
 
 .. automodule:: webapp.settings
 
+    Widget layout
+    ^^^^^^^^^^^^^
+
+    .. figure:: ../../images/settings.png
+       :align: center
+       :scale: 50%
+       :alt: Web app UI module structure
+
+    |
+
+    Widget objects
+    ^^^^^^^^^^^^^^
+
+    |
+
+    .. autodata:: app
+        :annotation: = ConfigTab(config=appState.config)
+
     .. jupyter-execute::
         :hide-code:
     
@@ -19,10 +37,10 @@ webapp.settings
         from webapp.settings import *
         display(app)
 
-    Widget definitions
-    ^^^^^^^^^^^^^^^^^^
-
     |
+
+    Helper classes
+    ^^^^^^^^^^^^^^
 
     .. autoclass:: ConfigTab
 
@@ -47,11 +65,6 @@ webapp.settings
 
         app = ControlSlider(appState.config, 'KP')
         display(app)
-
-    |
-
-    .. autodata:: app
-        :annotation: = ConfigTab(config=appState.config)
 
 |
 

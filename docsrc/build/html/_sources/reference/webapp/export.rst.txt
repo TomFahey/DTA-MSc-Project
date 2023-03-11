@@ -6,6 +6,25 @@ webapp.export
 
 .. automodule:: webapp.export
 
+   Widget layout
+   ^^^^^^^^^^^^^
+
+   .. figure:: ../../images/export.png
+      :align: center
+      :scale: 50%
+      :alt: Web app UI module structure
+
+   |
+
+   Widget objects
+   ^^^^^^^^^^^^^^
+
+   |
+
+   .. autodata:: app
+      :annotation: <ipywidgets.widgets.VBox>
+
+
    .. jupyter-execute::
         :hide-code:
    
@@ -18,24 +37,6 @@ webapp.export
    
         from webapp.export import *
         display(app)
-
-   |
-
-   Helper functions
-   ^^^^^^^^^^^^^^^^
-
-   |
-
-   .. autofunction:: detect_mountpoints
-
-   .. autofunction:: save_click
-
-   .. autofunction:: eject_click
-
-   |
-
-   Widget definitions
-   ^^^^^^^^^^^^^^^^^^^
 
    |
 
@@ -115,9 +116,16 @@ webapp.export
 
    |
 
-   .. autodata:: app
-      :annotation: <ipywidgets.widgets.VBox>
+   Helper functions
+   ^^^^^^^^^^^^^^^^
 
+   |
+
+   .. autofunction:: detect_mountpoints
+
+   .. autofunction:: save_click
+
+   .. autofunction:: eject_click
 
 |
 
