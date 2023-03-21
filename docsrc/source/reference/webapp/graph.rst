@@ -1,4 +1,4 @@
-.. _webapp_graph:
+.. _ref_webapp_graph:
 
 webapp.graph
 ------------

@@ -1,7 +1,7 @@
 Basic Usage
 ===========
 
-.. _web_app:
+.. _usage_basic_background:
 
 Background
 ------------
@@ -12,7 +12,7 @@ to render the notebook as a web application. More details on this can be found i
 
 This automatically launches within the web browser, presenting the user interface on the touchscreen display.
 
-.. _web_interface:
+.. _usage_basic_ui:
 
 User Interface
 --------------
@@ -40,17 +40,12 @@ are accessed by the tab bar at the top.
 Each tab provides a different set of widgets for either controlling or
 configuring the system.
 
-.. _web_interface_main:
+.. _usage_basic_ui_main:
 
 Main tab
 ^^^^^^^^
 
 .. figure:: ../images/UserInterfaceMainHighlight.png
-   :align: center
-   :scale: 50%
-   :alt: Web app interface
-
-.. figure:: ../images/UserInterfaceMainRun.png
    :align: center
    :scale: 50%
    :alt: Web app interface
@@ -66,6 +61,13 @@ The main tab features the following user interface elements:
 3. The status bar, which features a real-time readout of the
    system temperature, as well as the progress of an active heating run.
 
+.. figure:: ../images/UserInterfaceMainRun.png
+   :align: center
+   :scale: 50%
+   :alt: Web app interface
+
+.. _usage_basic_ui_programme:
+
 Programme tab
 ^^^^^^^^^^^^^
 
@@ -74,24 +76,22 @@ Programme tab
    :scale: 50%
    :alt: Web app interface
 
-.. figure:: ../images/UserInterfaceProgrammeStages.png
-   :align: center
-   :scale: 50%
-   :alt: Web app interface
-
 The programme tab features the following user interface elements:
 
-1. List of programme *stages*. A *stage* consists of a temperature ramp,
-   from the previous stage's *target temperature*, to that of the current
-   stage. This ramp is carried out at the specified *heating rate*. Once
-   the target temperature is reached, the system will maintain this for The
-   specified 'hold time', before moving onto the next stage. Additional stages
-   can be added by clicking the '+' button, with multiple stages making up the
-   heating *programme*.
-2. Drop-down sliders, for selecting the *target temperature*, *heating rate*
-   and *hold time* for the current stage. Heating rate should always be non-zero.
-   For cooling, a positive heating rate is entered, with a target temperature lower
-   than that of the previous stage.
+1. List of programme **stages**. Additional **stages** can be added by clicking 
+   the '+' button.
+   
+2. Adjustable sliders for the selected stage's parameters
+
+A given heating run **programme** consists of a number of heating **stages**,
+each of which are defined by a *target temperature*, *heating rate* and
+*hold time*. Each **stage** consists of:
+
+1. A heating ramp, starting from the previous stage's target temperature,
+   till the current stage's *target temperature* is reached. This proceeds
+   at the specified *heating rate*.
+2. A hold period, where the temperature is maintained at the *target temperature*
+   for the *hold time*.
 
 After setting up a heating programme, a preview of the programme is
 displayed in the graph figure of the main tab.
@@ -100,6 +100,8 @@ displayed in the graph figure of the main tab.
    :align: center
    :scale: 50%
    :alt: Web app interface
+
+.. _usage_basic_ui_settings:
 
 Settings tab
 ^^^^^^^^^^^^
@@ -121,6 +123,8 @@ following system parameters:
 * The microcontroller tick rate. This is the rate at which the temperature sensors
   are sampled, and the PID controller updated. The default value of 0.25s is recommended.
 
+.. _usage_basic_ui_export:
+
 Export tab
 ^^^^^^^^^^
 
@@ -129,28 +133,8 @@ Export tab
    :scale: 50%
    :alt: Web app interface
 
-   The export tab is used for saving temperature data after a heating run. 
-   When a heating run is finished, the recorded data is stored, after which
-   the system will revert to the idle state. To save the recorded data of a
-   run, the user should specify a filename and storage location in the export
-   tab, and click the 'Save' button
-
-
-..
-   Creating recipes
-   ----------------
-   
-   To retrieve a list of random ingredients,
-   you can use the ``lumache.get_random_ingredients()`` function:
-   
-   .. autofunction:: lumache.get_random_ingredients
-   
-   The ``kind`` parameter should be either ``"meat"``, ``"fish"``,
-   or ``"veggies"``. Otherwise, :autofunction`lumache.get_random_ingredients`
-   will raise an exception.
-   
-   .. autoexception:: lumache.InvalidKindError
-   
-   >>> import lumache
-   >>> lumache.get_random_ingredients()
-   ['shells', 'gorgonzola', 'parsley']
+The export tab is used for saving temperature data after a heating run. 
+When a heating run is finished, the recorded data is stored, after which
+the system will revert to the idle state. To save the recorded data of a
+run, the user should specify a filename and storage location in the export
+tab, and click the 'Save data' button

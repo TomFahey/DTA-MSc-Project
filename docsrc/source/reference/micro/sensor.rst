@@ -1,4 +1,4 @@
-.. _micro_sensor:
+.. _ref_micro_sensor:
 
 sensor
 ------

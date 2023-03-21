@@ -6,7 +6,7 @@ Dashboard (UI) software reference
 Overview
 --------
 
-As previously mentioned in the the :doc:`basic` section, the dashboard-style 
+As previously mentioned in the the :doc:`/usage/basic` section, the dashboard-style 
 user interface for the system is built using a `widget 
 <https://ipywidgets.readthedocs.io/en/stable/>`_ based approach, that relies 
 on the `Jupyter <https://jupyter.org/>`_ interactive computing platform.

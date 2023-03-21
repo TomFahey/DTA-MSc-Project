@@ -42,48 +42,55 @@
             
   <section id="building">
 <h1>Building<a class="headerlink" href="#building" title="Permalink to this heading">¶</a></h1>
-<p>Assuming that you have all of the required components listed in the <a class="reference internal" href="components.html"><span class="doc">Components</span></a> sections, building the system is
-relatively straightforward.</p>
+<p>Assuming that you have all of the required components listed in the
+<a class="reference internal" href="components.html"><span class="doc">Components</span></a> sections, building the system is relatively
+straightforward.</p>
 <section id="setting-the-solder-jumpers">
-<span id="solder-jumpers"></span><h2>Setting the solder jumpers<a class="headerlink" href="#setting-the-solder-jumpers" title="Permalink to this heading">¶</a></h2>
-<p>Before using the interface boards for the first time, you will need to set the four solder jumpers on the <a class="reference internal" href="components.html#microcontroller-interface-board"><span class="std std-ref">microcontroller
-interface board</span></a>, according to the temperature sensing breakout boards you intend to use.</p>
-<p>Each solder jumper has three pads, which collectively form a switch. To use the Adafruit <em>MAX31865</em> (RTD sensors) at Header 1,
-for example, you should solder the middle pad to the ‘RTD’ pad on the right. Likewise, for the <em>MAX31856</em> (Thermocouple sensors),
-solder the middle pad to the ‘TC’ pad on the left. All four solder jumpers can be continuously reconfigured, as required.</p>
-<figure class="align-center" id="id1">
+<span id="start-build-solder-jumpers"></span><h2>Setting the solder jumpers<a class="headerlink" href="#setting-the-solder-jumpers" title="Permalink to this heading">¶</a></h2>
+<p>Before using the interface boards for the first time, you will need to set the
+four solder jumpers on the
+<span class="xref std std-ref">microcontroller interface board</span>,
+according to the temperature sensing breakout boards you intend to use.</p>
+<p>Each solder jumper has three pads, which collectively form a switch. To use the
+Adafruit MAX31865 (RTD sensors) at Header 1, for example, you should solder the
+middle pad to the ‘RTD’ pad on the right. Likewise, for the MAX31856
+(Thermocouple sensors), solder the middle pad to the ‘TC’ pad on the left. All
+four solder jumpers can be continuously reconfigured, as required.</p>
+<figure class="align-center">
 <a class="reference internal image-reference" href="../_images/SolderJumperCloseup.png"><img alt="Solder jumpers on the interface board, with SJ2 configured for RTD sensors." src="../_images/SolderJumperCloseup.png" style="width: 800px;" /></a>
-<figcaption>
-<p><span class="caption-text"><strong>Solder jumpers on the interface board, with example of SJ2 configured for RTD sensors.</strong></span><a class="headerlink" href="#id1" title="Permalink to this image">¶</a></p>
-</figcaption>
 </figure>
 </section>
 <section id="connecting-up-the-boards">
-<span id="connections"></span><h2>Connecting up the boards<a class="headerlink" href="#connecting-up-the-boards" title="Permalink to this heading">¶</a></h2>
+<span id="start-build-connecting"></span><h2>Connecting up the boards<a class="headerlink" href="#connecting-up-the-boards" title="Permalink to this heading">¶</a></h2>
 <section id="inter-board-connections">
 <h3>Inter-board connections<a class="headerlink" href="#inter-board-connections" title="Permalink to this heading">¶</a></h3>
 <p>The figure below shows the connections for the interface boards:</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/BoardConnectionDiagram.png"><img alt="Connections for the interface boards" src="../_images/BoardConnectionDiagram.png" style="width: 800px;" /></a>
 </figure>
-<p>For the wires connecting the DC Power Supply, make sure to use an appropriate gauge, keeping in mind the current draw the
-thermoelectric module is likely to have (5A is a safe, if slightly overly overcautious, assumption).</p>
+<p>For the wires connecting the DC Power Supply, make sure to use an appropriate
+gauge, keeping in mind the current draw the thermoelectric module is likely to
+have (5A is a safe, if slightly overly overcautious, assumption).</p>
 </section>
 <section id="motor-controller-interface-board">
 <h3>Motor controller interface board<a class="headerlink" href="#motor-controller-interface-board" title="Permalink to this heading">¶</a></h3>
-<p>After connecting the HAT-MDD10A to the <a class="reference internal" href="components.html#motor-controller-interface-board"><span class="std std-ref">motor controller interface board</span></a>, via the
-the 40-pin header, the vertically stacked terminal blocks should be connected together like so (once again taking into
-consideration the current draw):</p>
+<p>After connecting the HAT-MDD10A to the
+<span class="xref std std-ref">motor controller interface board</span>,
+via the the 40-pin header, the vertically stacked terminal blocks should be
+connected together like so (once again taking into consideration the current
+draw):</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/MotorHatWiring.png"><img alt="Stacked terminal blocks" src="../_images/MotorHatWiring.png" style="width: 800px;" /></a>
 </figure>
-<p>It’s a good idea to use slightly longer wires for the connections between the terminals, so that the motor controller can
-be lifted off the interface board, without having to continuously disconnect and reconnect the wires.</p>
+<p>It’s a good idea to use slightly longer wires for the connections between the
+terminals, so that the motor controller can be lifted off the interface board,
+without having to continuously disconnect and reconnect the wires.</p>
 </section>
 <section id="temperature-breakout-boards">
 <h3>Temperature breakout boards<a class="headerlink" href="#temperature-breakout-boards" title="Permalink to this heading">¶</a></h3>
-<p>The temperature breakout boards connect to the microcontroller interface board via the female 8-pin headers. In the case of the MAX31856,
-which has a 9-pin male header, the 9th pin (DRDY) is not used, so can be left unconnected.</p>
+<p>The temperature breakout boards connect to the microcontroller interface board
+via the female 8-pin headers. In the case of the MAX31856, which has a 9-pin
+male header, the 9th pin (DRDY) is not used, so can be left unconnected.</p>
 </section>
 </section>
 </section>
@@ -121,7 +128,7 @@ which has a 9-pin male header, the 9th pin (DRDY) is not used, so can be left un
 <li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">Debugging</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/hardware.html">Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/hardware.html">Hardware reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/ui-software.html">Dashboard (UI) software reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/micro-software.html">Microcontroller software reference</a></li>
 </ul>

@@ -1,7 +1,7 @@
 Components
 ==========
 
-.. _ShelfParts:
+.. _start_components_shelf:
 
 Off-the-Shelf Parts
 -------------------
@@ -34,7 +34,7 @@ The system utilises the following components:
 * An adjustable DC Power Supply, capable of providing up to 20V at 5A or greater
 * A capable thermoelectric module (TEC) device, able to pump >10W of heat
 
-.. _CustomParts:
+.. _start_components_custom:
 
 Interface boards
 ----------------
@@ -44,7 +44,7 @@ files of which are available in the `Github repository. <https://github.com/TomF
 
 These consist of the following:
 
-.. _microcontroller_interface_board:
+.. _start_components_custom_microcontroller_board:
 
 * Microcontroller and temperature sensor interface board
 
@@ -56,7 +56,7 @@ These consist of the following:
     Interfaces with the Raspberry Pi Pico microcontroller and the temperature sensor
     breakout boards.
 
-.. _motor_controller_interface_board:
+.. _start_components_custom_motor_board:
 
 * Motor controller interface board
 
@@ -68,7 +68,7 @@ These consist of the following:
     Interfaces with the HAT-MDD10 motor controller board, via the 40-pin GPIO header, as
     well as the DC power supply.
 
-.. _tem_interface_board:
+.. _start_components_custom_tem_board:
 
 * Thermoelectric module interface board
 

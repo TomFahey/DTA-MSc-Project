@@ -43,34 +43,65 @@
   <section id="advanced-usage">
 <h1>Advanced Usage<a class="headerlink" href="#advanced-usage" title="Permalink to this heading">¶</a></h1>
 <section id="the-jupyter-environment">
-<span id="web"></span><h2>The Jupyter environment<a class="headerlink" href="#the-jupyter-environment" title="Permalink to this heading">¶</a></h2>
-<p>As mentioned in <span class="xref std std-ref">_web_app</span>, the python code used for the user interface
-runs inside a Jupyter environment.</p>
-<p>The way this works, is that a Jupyter server is started in the root directory
-of the project folder, which contains an IPython notebook called
-<code class="docutils literal notranslate"><span class="pre">webapp.ipynb</span></code>, under the directory <code class="docutils literal notranslate"><span class="pre">PROJECT_DIR/src/dashboard/</span></code>. This notebook
-features a single cell, which uses the magic command <code class="docutils literal notranslate"><span class="pre">%run</span></code> to execute the top-level
-python widget module, <code class="docutils literal notranslate"><span class="pre">app.py</span></code>, which then loads the rest of the user interface
-programme.</p>
+<span id="usage-advanced-jupyter"></span><h2>The Jupyter environment<a class="headerlink" href="#the-jupyter-environment" title="Permalink to this heading">¶</a></h2>
+<p>As mentioned in <span class="xref std std-ref">_usage_basic_background</span>, the python code used for the
+user interface runs inside a Jupyter environment.</p>
+<p>This works in the following manner:</p>
+<ul>
+<li><p>A <strong>Jupyter Server</strong> is started in the <code class="docutils literal notranslate"><span class="pre">/src/dashboard/</span></code> folder, under the
+root installation directory for the project.</p></li>
+<li><p>This folder contains the following files:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">webapp.ipynb</span></code> (a
+<a class="reference external" href="https://ipython.org/ipython-doc/3/notebook/notebook.html">IPython notebook</a>
+file)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">app.py</span></code> - a regular python file, that acts as the <code class="docutils literal notranslate"><span class="pre">__main__.py</span></code> file
+for the dashboard app</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">/src/dashboard/webapp</span></code> folder - this contains the python modules defining
+the interactive UI widgets used by the dashboard app, as well as additional
+utility modules.</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>The <strong>Jupyter Server</strong> automatically starts up a <strong>Jupyter environment</strong> (see
+picture below), which is accessible as a webpage on the Raspberry Pi’s local network.
+This environment allows users to open <code class="docutils literal notranslate"><span class="pre">*.ipynb</span></code> files and execute python code
+contained within the notebook’s cells, within a python kernel.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">webapp.iypnb</span></code> features a single cell, containing the IPython notebook
+magic command <code class="docutils literal notranslate"><span class="pre">%run</span> <span class="pre">app.py</span></code>. This instructs Jupyter to run all the code in
+the file <code class="docutils literal notranslate"><span class="pre">app.py</span></code> when the cell is executed.</p></li>
+<li><p>The python code in <code class="docutils literal notranslate"><span class="pre">app.py</span></code> sets up the dashboard application, which is composed
+of UI widgets such as buttons, graphs, tabs, sliders etc. which is then rendered
+underneath the cell.</p></li>
+</ul>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/UserInterfaceJupyter.png"><img alt="Jupyter notebook environment" src="../_images/UserInterfaceJupyter.png" style="width: 828.0px; height: 581.5px;" /></a>
 </figure>
-<p>The standalone browser application is then deployed using the voila Jupyter
-extension, which converts the notebook into html and javascript, allowing it
-to be viewed as a standalone web application.</p>
+<p>Clearly, rendering the dashboard app as a notebook cell’s output results in a
+sub-optimal user interface, due to the space taken by the <strong>Jupyter
+environment</strong> itself.</p>
+<p>To get around this, a Jupyter Server extension called
+<a class="reference external" href="https://voila.readthedocs.io/en/stable/index.html">voila</a>
+is used to render the app as a standalone web application, resulting in the
+final UI shown on the touchscreen.</p>
 </section>
 <section id="using-the-jupyter-environment">
-<h2>Using the Jupyter environment<a class="headerlink" href="#using-the-jupyter-environment" title="Permalink to this heading">¶</a></h2>
-<p>The dashboard-style web application is intended to provide a straightforward
-graphical user interface to control the system with, approximating those used
-by commercial systems.</p>
-<p>However, this comes with the limitations that the user is restricted to the
-controls and features included by the interface, preventing them from directly
-accessing the full details of the system.</p>
-<p>For users wishing to access the deeper details of the system, the notebook
-environment represents a potent tool, allowing users to interact directly
-with system components in a Python environnment, equipped with the full
-suite of graphical visualisation tools that Jupyter is known for.</p>
+<span id="usage-advanced-using-jupyter"></span><h2>Using the Jupyter environment<a class="headerlink" href="#using-the-jupyter-environment" title="Permalink to this heading">¶</a></h2>
+<p>As mentioned above, the dashboard-style web application is intended to provide
+a streamlined user interface which approximates those found on existing commercial
+DTA/DSC instruments, with the idea that it should be similarly easy to use in the lab.</p>
+<p>However, for those interested in getting more direct access to data, or system
+behaviour, the Jupyter environment provides an excellent means to do so, owing to
+the live, interactive nature of Jupyter notebooks.</p>
+<p>With direct access to the Python kernel which the application runs in, users can
+directly interact with data structures relating to sensor measurements or the
+application’s state itself. And because this is all within a regular Python kernel,
+any external libraries that users wish to make use of can be imported, such as
+NumPy/SciPy, Matplotlib, Pandas etc. with the benefit of rich, graphical output,
+right within the notebook itself.</p>
+<p>This facilitates rapid development of new features, allowing users to type in
+python code and see the effect immediately.</p>
 <figure class="align-center" id="id1">
 <a class="reference internal image-reference" href="../_images/UserInterfaceJupyterUse.png"><img alt="Jupyter notebook environment" src="../_images/UserInterfaceJupyterUse.png" style="width: 828.0px; height: 824.0px;" /></a>
 <figcaption>
@@ -120,7 +151,7 @@ using the Numpy library.</span><a class="headerlink" href="#id2" title="Permalin
 <li class="toctree-l1"><a class="reference internal" href="debugging.html">Debugging</a></li>
 </ul>
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="../reference/hardware.html">Hardware</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../reference/hardware.html">Hardware reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/ui-software.html">Dashboard (UI) software reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../reference/micro-software.html">Microcontroller software reference</a></li>
 </ul>

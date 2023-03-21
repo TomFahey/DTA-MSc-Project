@@ -1,4 +1,4 @@
-.. _app:
+.. _ref_app:
 
 app
 ---

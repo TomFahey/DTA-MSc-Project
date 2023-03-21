@@ -1,7 +1,7 @@
 Debugging
 =========
 
-.. _web:
+.. _usage_debugging_systemd:
 
 Checking systemd service units
 ------------------------------
@@ -41,6 +41,8 @@ These should return messages that look like the following:
 The above output shows that the service is running (``Active: active (running)``) and provides the
 ``STDOUT`` and ``STDERR`` streams from the service. If the service is not running, the ``STDOUT``
 messages should provide a clue to what the problem might be.
+
+.. _usage_debugging_jupyter:
 
 Jupyter Lab Debugging
 ---------------------

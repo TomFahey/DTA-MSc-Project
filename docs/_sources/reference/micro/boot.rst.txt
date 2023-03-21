@@ -1,4 +1,4 @@
-.. _micro_boot:
+.. _ref_micro_boot:
 
 boot
 ----

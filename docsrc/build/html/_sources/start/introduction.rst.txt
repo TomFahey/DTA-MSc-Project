@@ -1,7 +1,7 @@
 Introduction
 ============
 
-.. _dta:
+.. _start_intro_dta:
 
 Differential Thermal Analysis
 -----------------------------
@@ -27,7 +27,7 @@ When plotted as a function of the sample's temperature, one can evaluate both th
 as well as the enthalpy of the transition, by accounting for the heat capacities of the sample and
 reference.
 
-.. _dta_instrument:
+.. _start_intro_instrument:
 
 DTA Instrument
 --------------

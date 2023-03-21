@@ -56,5 +56,6 @@ epub_show_urls = 'footnote'
 # -- Options for Intersphinx -------------------------------------------------
 intersphinx_mapping = {
     'python': ('https://docs.python.org/3', None),
-    'ipywidgets': ('https://ipywidgets.readthedocs.io/en/latest/', 'ipywidgets-inv.inv'),
+    'ipywidgets': ('https://ipywidgets.readthedocs.io/en/latest/', 'ipywidgets.inv'),
+    'serial_asyncio': ('https://pyserial-asyncio.readthedocs.io/en/latest/', 'serial_asyncio.inv'),
 }

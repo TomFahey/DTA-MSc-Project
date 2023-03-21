@@ -1,46 +1,76 @@
 Advanced Usage
 ==============
 
-.. _web:
+.. _usage_advanced_jupyter:
 
 The Jupyter environment
 -----------------------
 
-As mentioned in :ref:`_web_app`, the python code used for the user interface
-runs inside a Jupyter environment.
+As mentioned in :ref:`_usage_basic_background`, the python code used for the 
+user interface runs inside a Jupyter environment.
 
-The way this works, is that a Jupyter server is started in the root directory
-of the project folder, which contains an IPython notebook called
-``webapp.ipynb``, under the directory ``PROJECT_DIR/src/dashboard/``. This notebook
-features a single cell, which uses the magic command ``%run`` to execute the top-level
-python widget module, ``app.py``, which then loads the rest of the user interface
-programme.  
+This works in the following manner:
+
+* A **Jupyter Server** is started in the ``/src/dashboard/`` folder, under the
+  root installation directory for the project. 
+* This folder contains the following files:
+
+   *  ``webapp.ipynb`` (a 
+      `IPython notebook <https://ipython.org/ipython-doc/3/notebook/notebook.html>`_
+      file)
+   * ``app.py`` - a regular python file, that acts as the ``__main__.py`` file
+     for the dashboard app
+   * ``/src/dashboard/webapp`` folder - this contains the python modules defining
+     the interactive UI widgets used by the dashboard app, as well as additional
+     utility modules.
+
+* The **Jupyter Server** automatically starts up a **Jupyter environment** (see
+  picture below), which is accessible as a webpage on the Raspberry Pi's local network.
+  This environment allows users to open ``*.ipynb`` files and execute python code
+  contained within the notebook's cells, within a python kernel.
+* ``webapp.iypnb`` features a single cell, containing the IPython notebook
+  magic command ``%run app.py``. This instructs Jupyter to run all the code in
+  the file ``app.py`` when the cell is executed.
+* The python code in ``app.py`` sets up the dashboard application, which is composed
+  of UI widgets such as buttons, graphs, tabs, sliders etc. which is then rendered
+  underneath the cell.
 
 .. figure:: ../images/UserInterfaceJupyter.png
    :align: center
    :scale: 50%
    :alt: Jupyter notebook environment
 
-The standalone browser application is then deployed using the voila Jupyter
-extension, which converts the notebook into html and javascript, allowing it
-to be viewed as a standalone web application.
+Clearly, rendering the dashboard app as a notebook cell's output results in a
+sub-optimal user interface, due to the space taken by the **Jupyter
+environment** itself.
+
+To get around this, a Jupyter Server extension called 
+`voila <https://voila.readthedocs.io/en/stable/index.html>`_
+is used to render the app as a standalone web application, resulting in the
+final UI shown on the touchscreen.
+
+.. _usage_advanced_using_jupyter:
 
 Using the Jupyter environment
 -----------------------------
 
-The dashboard-style web application is intended to provide a straightforward 
-graphical user interface to control the system with, approximating those used
-by commercial systems.
+As mentioned above, the dashboard-style web application is intended to provide 
+a streamlined user interface which approximates those found on existing commercial
+DTA/DSC instruments, with the idea that it should be similarly easy to use in the lab.
 
-However, this comes with the limitations that the user is restricted to the
-controls and features included by the interface, preventing them from directly
-accessing the full details of the system.
+However, for those interested in getting more direct access to data, or system
+behaviour, the Jupyter environment provides an excellent means to do so, owing to
+the live, interactive nature of Jupyter notebooks.
 
-For users wishing to access the deeper details of the system, the notebook
-environment represents a potent tool, allowing users to interact directly
-with system components in a Python environnment, equipped with the full
-suite of graphical visualisation tools that Jupyter is known for. 
+With direct access to the Python kernel which the application runs in, users can
+directly interact with data structures relating to sensor measurements or the
+application's state itself. And because this is all within a regular Python kernel,
+any external libraries that users wish to make use of can be imported, such as
+NumPy/SciPy, Matplotlib, Pandas etc. with the benefit of rich, graphical output,
+right within the notebook itself.
 
+This facilitates rapid development of new features, allowing users to type in
+python code and see the effect immediately.
 
 .. figure:: ../images/UserInterfaceJupyterUse.png
    :align: center

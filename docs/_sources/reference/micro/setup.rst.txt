@@ -1,4 +1,4 @@
-.. _micro_setup:
+.. _ref_micro_setup:
 
 setup
 -----

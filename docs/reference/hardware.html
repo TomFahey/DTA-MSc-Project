@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Hardware &#8212; DIY DTA 0.1 documentation</title>
+    <title>Hardware reference &#8212; DIY DTA 0.1 documentation</title>
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
     <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
     <link rel="stylesheet" type="text/css" href="../_static/jupyter-sphinx.css" />
@@ -40,8 +40,127 @@
 
           <div class="body" role="main">
             
-  <section id="hardware">
-<h1>Hardware<a class="headerlink" href="#hardware" title="Permalink to this heading">¶</a></h1>
+  <section id="hardware-reference">
+<h1>Hardware reference<a class="headerlink" href="#hardware-reference" title="Permalink to this heading">¶</a></h1>
+<section id="overview">
+<span id="ref-hardware-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>A high-level overview of the system, indicating the respective roles of the
+components, is shown below:</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/HardwareDetailView.png"><img alt="Microcontroller software block diagram" src="../_images/HardwareDetailView.png" style="width: 951.5px; height: 544.5px;" /></a>
+</figure>
+<p>The <em>left</em> side of the diagram shows the components associated with high-level
+system functions, such as:</p>
+<ul class="simple">
+<li><p>Displaying information and receiving user input</p></li>
+<li><p>Defining heating programmes, based on user input and initiating/stopping
+these based on user commands</p></li>
+<li><p>Communicating with the microcontroller program, updating it with the
+appropriate programed parameters and receiving sensor data sent by it.</p></li>
+</ul>
+<p>The <em>right</em> side of the diagram shows the components associated with the low-level
+integration of electronics components and control processes, such as:</p>
+<ul class="simple">
+<li><p>Reading values from attached temperature sensors</p></li>
+<li><p>Regulating heat output of the thermoelectric module, based on parameters specified
+by the current heating programme, as well as the current temperature readings</p></li>
+<li><p>Communicating with the web app program running on the Raspberry Pi, sending
+temperature data as requested and receiving parameters related to the heating
+programme.</p></li>
+</ul>
+</section>
+<section id="electronics">
+<span id="ref-hardware-electronics"></span><h2>Electronics<a class="headerlink" href="#electronics" title="Permalink to this heading">¶</a></h2>
+<section id="temperature-sensors">
+<h3>Temperature Sensors<a class="headerlink" href="#temperature-sensors" title="Permalink to this heading">¶</a></h3>
+<p>As previously shown in <span class="xref std std-doc">components</span>, the temperature sensors that can be
+used with the system include restistance temperature detectors (RTDs) or
+thermocouples.</p>
+<p>For absolute temperature measurements, the details of how RTDs and thermocouples
+function, and their differences are not particularly important. In general, RTDs
+will achieve greater precision, up to 0.1 degrees Celsius, compared to
+thermocouples, which are typically limited to approximately 0.5 degrees Celsius
+precision - however, these will be subject to the specific type of RTD/thermocouple
+used.</p>
+<p>However, in the case of differential temperature measurements, thermocouple
+temperature sensors are able to provide a unique advantage over RTDs, due to
+their ability to be wired in a ‘differential’ setup, as shown below:</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/DifferentialThermocouple.png"><img alt="Thermocouple wiring" src="../_images/DifferentialThermocouple.png" style="width: 484.2px; height: 240.6px;" /></a>
+</figure>
+<p>The voltage produced at the open terminals of the differentially wired thermocouple
+is approximately proportional <a class="footnote-reference brackets" href="#t-type" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> to the difference in temperature between
+the two probes <a class="footnote-reference brackets" href="#non-linearity" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a> . For sufficiently high-resolution voltage sensors,
+this can allow a differential thermocouple to achieve precision in the tens of
+mK.</p>
+<p>Because the temperature-dependent voltage values produced by the sensors is typically
+very small (in the mV, or less), the use of amplification, or high-resolution voltage
+sensors (or both) is necessary to extract the temperature readings.</p>
+<p>Unsurprisingly, integrated chips providing exactly these features are available, such
+as Analog’s MAX31865 (RTD) and MAX31856 (Thermocouple) products. These ICs both feature
+high-resolution ADCs, precision voltage/current references, built-in amplification and
+SPI communication, allowing them to be easily integrated with a microcontroller over
+the SPI bus.</p>
+<p>The Adafruit breakout boards used for the system integrate these ICs, allowing any
+combination of up to 4 RTDs/Thermocouples to be used for temperature measurements.</p>
+</section>
+<section id="temperature-actuators">
+<h3>Temperature Actuators<a class="headerlink" href="#temperature-actuators" title="Permalink to this heading">¶</a></h3>
+<p>The temperature control of the sample and reference is handled with the use of
+a thermoelectric module (TEM). This is a type of solid state device, which acts
+like a heat pump, in response to an applied electrical current - heating on one
+side, whilst cooling on the other.</p>
+<p>This heat pump effect can be reversed by reversing the direction of the electric
+curent, causing the previously heated side to cool and vice versa. This allows
+TEMs to achieve very precise temperature control, by applying corrective
+heating/cooling to an attached object, in order to maintain a target temperature.</p>
+<p>In order to apply the reversible current needed to drive the TEM, an electronic
+circuit called a H-Bridge is used, consisting of four switching transistors,
+which selectively allow current to flow in one direction, or the opposing one,
+based on the input applied to their control terminals (e.g voltage applied
+to the gate terminal, in the case of MOSFET transistors).</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/HBridge.png"><img alt="H Bridge" src="../_images/HBridge.png" style="width: 459.75px; height: 251.5px;" /></a>
+</figure>
+<p>This type of circuit is often used to drive reversible electronic loads, such
+as brushless DC motors, or speakers - typically with the use of a pulse-width
+modulated (PWM) signal to control the switching of the MOSFETs. These very
+common usecases mean that existing implementations of H-Bridge circuits are
+both plentiful and relatively cheap, allowing off-the-shelf parts, like the
+HAT MDD10A to be used for our purposes.</p>
+<p>Additional care is needed in the case of TEMs when it comes to PWM control,
+however, due to issues such as thermal cylcing <a class="footnote-reference brackets" href="#te-tech" id="id3" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a> and reduced
+efficiency <a class="footnote-reference brackets" href="#thermicool" id="id4" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a> . For these reasons, a low-pass LC filter is used,
+as shown below, to smooth the PWM output of the H-Bridge, which is present
+on the
+<span class="xref std std-ref">Thermoelectric module interface board</span>.</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/ClassDAmp.png"><img alt="Class D Amplifier" src="../_images/ClassDAmp.png" style="width: 459.75px; height: 251.5px;" /></a>
+</figure>
+<p class="rubric">Footnotes</p>
+<aside class="footnote-list brackets">
+<aside class="footnote brackets" id="t-type" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://srdata.nist.gov/its90/download/type_t.tab">NIST Temperature-Voltage chart for T-type thermocouple</a></p>
+</aside>
+<aside class="footnote brackets" id="non-linearity" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+<p>In practice, the non-linearity in the temperature-voltage
+relationship is accounted for either by use of the Callendar-Van Dusen
+equation, or interpolation of a lookup table.</p>
+</aside>
+<aside class="footnote brackets" id="te-tech" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id3">3</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://tetech.com/faqs/#11">TE-Tech Technical Information</a></p>
+</aside>
+<aside class="footnote brackets" id="thermicool" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id4">4</a><span class="fn-bracket">]</span></span>
+<p><a class="reference external" href="https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&amp;arnumber=7862124">Active Thermoelectric Cooling Solutions for Airspace
+Applications: the THERMICOOL Project</a></p>
+</aside>
+</aside>
+</section>
+</section>
 </section>
 
 
@@ -73,7 +192,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../usage/debugging.html">Debugging</a></li>
 </ul>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Hardware</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hardware reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#electronics">Electronics</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#temperature-sensors">Temperature Sensors</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#temperature-actuators">Temperature Actuators</a></li>
+</ul>
+</li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="ui-software.html">Dashboard (UI) software reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="micro-software.html">Microcontroller software reference</a></li>
 </ul>

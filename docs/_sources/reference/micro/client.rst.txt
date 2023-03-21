@@ -1,4 +1,4 @@
-.. _micro_client:
+.. _ref_micro_client:
 
 client
 ------

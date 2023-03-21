@@ -1,4 +1,4 @@
-.. _webapp_settings:
+.. _ref_webapp_settings:
 
 webapp.settings
 ---------------

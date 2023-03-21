@@ -1,4 +1,4 @@
-.. _micro_log:
+.. _ref_micro_log:
 
 log
 ---

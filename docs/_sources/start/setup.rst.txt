@@ -1,7 +1,7 @@
 Setup
 =====
 
-.. _installation:
+.. _start_setup_installation:
 
 Installation
 ------------

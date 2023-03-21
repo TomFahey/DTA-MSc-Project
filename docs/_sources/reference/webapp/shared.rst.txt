@@ -1,4 +1,4 @@
-.. _webapp_shared:
+.. _ref_webapp_shared:
 
 webapp.shared
 -------------
