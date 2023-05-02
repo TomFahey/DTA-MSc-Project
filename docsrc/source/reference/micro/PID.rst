@@ -4,8 +4,10 @@ PID
 ---
 
 .. py:module:: pid
-    :synopsis: Defines the :class:`PIDState` class, used for regulating PWM output to 
-        the heating component.
+    :synopsis: This module defines the :class:`PIDState` class, which is 
+        responsible for controlling the heat output of the Peltier module
+        based on a target temperature or heating rate, using a PID control
+        loop.
 
     Defines the :class:`PIDState` class, which is responsible for controlling
     and regulating the PWM output to the H-bridge, based on the system mode, target

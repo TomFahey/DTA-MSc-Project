@@ -42,8 +42,8 @@
             
   <section id="microcontroller-software-reference">
 <h1>Microcontroller software reference<a class="headerlink" href="#microcontroller-software-reference" title="Permalink to this heading">¶</a></h1>
-<section id="overview">
-<span id="ref-micro-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<section id="introduction">
+<span id="ref-micro-intro"></span><h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading">¶</a></h2>
 <p>In line with the project aim to provide a python-based implementation
 that is relevant to a wide audience, the software developed for the
 microcontroller uses
@@ -59,14 +59,220 @@ mass storage, allowing the microcontroller’s python code to be updated easily.
 friendly, familiar environment for Python programmers to engage in microcontroller
 programming.</p>
 </section>
-<section id="structure">
-<span id="ref-micro-structure"></span><h2>Structure<a class="headerlink" href="#structure" title="Permalink to this heading">¶</a></h2>
-<p>The basic structure of the microcontroller python code is illustrated below:</p>
+<section id="overview">
+<span id="ref-micro-overview"></span><h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">¶</a></h2>
+<p>The high-level behaviour of the microcontroller is shown in the following picture:</p>
+<figure class="align-center">
+<a class="reference internal image-reference" href="../_images/MicroLogic.png"><img alt="Microcontroller logical block diagram" src="../_images/MicroLogic.png" style="width: 867.0px; height: 384.0px;" /></a>
+</figure>
+<section id="components">
+<h3>Components<a class="headerlink" href="#components" title="Permalink to this heading">¶</a></h3>
+<p>Focusing on the MCU, we can see that it is involved with three
+primary interactions:</p>
+<ul>
+<li><p><strong>Data aquisition</strong>: The MCU interacts with the temperature sensing
+components, consisting of:</p>
+<ul class="simple">
+<li><p>the physical temperature measuring sensors themselves (RTD/Thermocouple),
+which are connected to</p></li>
+<li><p>the integrated chips (MAX31865/56) used to convert the voltages produced by the
+sensors into digital temperature readings.</p></li>
+</ul>
+<p>The communication between the MCU and ICs is carried out over the SPI
+bus.</p>
+</li>
+<li><p><strong>PID Control</strong>: As described in the <a class="reference internal" href="hardware.html#ref-hardware-electronics-actuators"><span class="std std-ref">Temperature Actuators</span></a>
+section, the heat output of the thermoelectric module is controlled by the
+H-Bridge electronic circuit. The H-Bridge driver takes two control input signals:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>A PWM signal, controlling the <em>magnitude</em> of current supplied to the
+thermoelectric module (and thus <em>quantity</em> of heat pumped by
+the module), as well as</p></li>
+<li><p>A HIGH/LOW direction signal, controlling the <em>polarity</em> of the current
+as +ve or -ve (and therefore <em>direction</em> of heat pumping i.e cooling or
+heating)</p></li>
+</ul>
+</div></blockquote>
+<p>The MCU adjusts these two signals using a PID control loop,
+which takes into account the specified temperature or heat rate provided by
+the user and actual measured temperature or heat rate, adjusting the control
+signals so that the measured values move towards the target values.</p>
+</li>
+<li><p><strong>Serial communication with Raspberry Pi</strong>: Because control of the
+system is done via the user interface program running on the Raspberry Pi,
+when a user carries out any command such as</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>specifying a target temperature or heat rate,</p></li>
+<li><p>initiating/stopping a heating run,</p></li>
+<li><p>modifying system parameters such as the PID gain,</p></li>
+</ul>
+</div></blockquote>
+<p>this information needs to be communicated from the Pi to the MCU.
+This is done via <em>“configuration messages”</em>, which are sent over a serial
+connection from the Pi to the MCU. The same connection is also used to
+send the temperature readings captured by the MCU back to the Pi, which are
+displayed on the temperature-time chart of the UI.</p>
+</li>
+</ul>
+</section>
+<section id="supervisor">
+<h3>Supervisor<a class="headerlink" href="#supervisor" title="Permalink to this heading">¶</a></h3>
+<p>In practice, the specific details of the interactions described above do not
+stay fixed. Consider the following examples:</p>
+<blockquote>
+<div><ul>
+<li><p>When the system is idle (i.e not carrying out a heating run), the PID
+controller’s output should be switched off, to prevent the thermoelectric
+module from heating the sample and reference. The MCU should still capture
+temperature data, as the UI program running on the Pi will need to know the
+<em>starting temperature</em> for a heating run, however these temperature readings
+do not need to be timestamped and can be updated relatively infrequently.</p></li>
+<li><p>When the system is active, the PID controller’s output needs to be enabled.
+When capturing temperature data, the MCU must timestamp this, referenced to
+the time the heating run started, so that the heating rates can be verified
+later on.</p></li>
+<li><p>As was discussed in the <a class="reference internal" href="../usage/basic.html#usage-basic-ui-programme"><span class="std std-ref">Programme tab</span></a> section, heating
+runs consist of individual heating <strong>stages</strong>, which have two parts, a
+<em>heating ramp</em> and a <em>hold period</em>. The former consists of a constant <em>heat
+rate</em> temperature increase up to a <em>target temperature</em>, whilst the
+latter involves holding the temperature constant at the <em>target temperature</em>
+for a given <em>hold time</em>.</p>
+<p>The method used by the PID controller to determine the value of its
+output control signal will need to change, depending on whether it is
+controlling a heat ramp or hold period.</p>
+</li>
+</ul>
+</div></blockquote>
+<p>This variable behaviour explains the need for <em>configuration messages</em>,
+passed from the Raspberry Pi to the MCU, which allow it to carry out the
+correct behaviour that matches the state of the UI program.</p>
+<p>These configuration messages are parsed by a <strong>Supervisor</strong>
+on the MCU, which is responsible for keeping the microcontroller state
+(or “configuration”) in sync with that of the UI program on the
+Raspberry Pi.</p>
+</section>
+</section>
+<section id="program-structure">
+<h2>Program Structure:<a class="headerlink" href="#program-structure" title="Permalink to this heading">¶</a></h2>
+<p>The basic logical structure of the microcontroller python code is therefore
+illustrated below:</p>
 <figure class="align-center">
 <a class="reference internal image-reference" href="../_images/MicroBlockDiagram.png"><img alt="Microcontroller software block diagram" src="../_images/MicroBlockDiagram.png" style="width: 684.0px; height: 554.5px;" /></a>
 </figure>
-<section id="main-programme">
-<h3>Main programme<a class="headerlink" href="#main-programme" title="Permalink to this heading">¶</a></h3>
+<section id="component-classes">
+<h3>Component classes<a class="headerlink" href="#component-classes" title="Permalink to this heading">¶</a></h3>
+<p>Looking at the three (orange shaded) <strong>Component</strong> classes, the three
+interactions discussed above form the basis for three program
+classes, with each class handling one of the interactions.</p>
+<ul class="simple">
+<li><p><strong>log</strong> - handles logging of data, such as temperature values, time, etc.</p></li>
+<li><p><strong>PID</strong> - handles temperature control, using a PID control loop</p></li>
+<li><p><strong>client</strong> - handles serial communication with UI program running on the Raspberry Pi</p></li>
+</ul>
+<p>All three classes adopt a similar interface, in the form of their <strong>update()</strong> methods,
+which, when called, will handle the tasks detailed above.</p>
+</section>
+<section id="supervisor-classes">
+<h3>Supervisor classes<a class="headerlink" href="#supervisor-classes" title="Permalink to this heading">¶</a></h3>
+<p>The (green shaded) <strong>Supervisor</strong> class adopts the three component objects when it’s created,
+(<code class="code highlight python docutils literal highlight-python"><span class="n">main</span><span class="o">.</span><span class="n">py</span></code>)</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">28</span><span class="k">class</span> <span class="nc">Supervisor</span><span class="p">:</span>
+<span class="linenos">29</span><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="linenos">30</span><span class="sd">    ...</span>
+<span class="linenos">31</span><span class="sd">    &quot;&quot;&quot;</span>
+<span class="linenos">32</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">serial_client</span><span class="p">,</span> <span class="n">PID</span><span class="p">,</span> <span class="n">log</span><span class="p">):</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span>     <span class="bp">self</span><span class="o">.</span><span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">serial_client</span><span class="p">,</span> <span class="n">PID</span><span class="p">,</span> <span class="n">log</span><span class="p">]</span>
+<span class="linenos">35</span>     <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">serial_client</span>
+</pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">103</span><span class="n">thisSupervisor</span> <span class="o">=</span> <span class="n">Supervisor</span><span class="p">(</span><span class="n">thisClient</span><span class="p">,</span> <span class="n">thisPid</span><span class="p">,</span> <span class="n">thisLog</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>calling their <code class="code highlight python docutils literal highlight-python"><span class="n">update</span><span class="p">()</span></code> methods, as part of its <code class="code highlight python docutils literal highlight-python"><span class="n">run</span><span class="p">()</span></code> routine.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">83</span><span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="hll"><span class="linenos">84</span>    <span class="n">_</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="o">.</span><span class="n">update</span><span class="p">()</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">components</span><span class="p">]</span>
+</span><span class="linenos">85</span>    <span class="bp">self</span><span class="o">.</span><span class="n">pull_config</span><span class="p">()</span>
+<span class="linenos">86</span>    <span class="bp">self</span><span class="o">.</span><span class="n">push_data</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The other two routines on lines 85 and 86 are used for the following:</p>
+<ul class="simple">
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">pull_config</span><span class="p">()</span></code> involves the <code class="code highlight python docutils literal highlight-python"><span class="n">Supervisor</span></code> instance reading any
+configuration messages sent to the MCU by the Pi and adjusting the
+corresponding <code class="code highlight python docutils literal highlight-python">config`</code> parameters for each of the three components</p></li>
+<li><p><code class="code highlight python docutils literal highlight-python"><span class="n">push_data</span><span class="p">()</span></code> involves the <code class="code highlight python docutils literal highlight-python"><span class="n">Supervisor</span></code> ‘popping’ data from the
+<code class="code highlight python docutils literal highlight-python"><span class="n">Log</span></code> component and sending it to the Pi.</p></li>
+</ul>
+</section>
+<section id="sensor-classes">
+<h3>Sensor classes<a class="headerlink" href="#sensor-classes" title="Permalink to this heading">¶</a></h3>
+<p>The class <code class="code highlight python docutils literal highlight-python"><span class="n">Sensor</span></code> basically functions as a wrapper class for the
+different data readings that the MCU captures.</p>
+<p>Wrapper classes essentially take existing programming classes and “wrap” them
+in a common interface, so that the same functions can be called on all of them.</p>
+<p>The <code class="code highlight python docutils literal highlight-python"><span class="n">Sensor</span></code> class simply provides a common <code class="code highlight python docutils literal highlight-python"><span class="n">read</span><span class="p">()</span></code> method, which
+allows the <code class="code highlight python docutils literal highlight-python"><span class="n">Log</span></code> and <code class="code highlight python docutils literal highlight-python"><span class="n">PIDState</span></code> classes to treat data generating
+objects in the same manner:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">30</span><span class="k">class</span> <span class="nc">TempSensor</span><span class="p">(</span><span class="n">Sensor</span><span class="p">)</span>
+<span class="linenos">31</span>
+<span class="linenos">32</span><span class="o">...</span>
+<span class="linenos">33</span>
+<span class="hll"><span class="linenos">34</span><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="hll"><span class="linenos">35</span>   <span class="k">return</span> <span class="nb">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">temperature</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">precision</span><span class="p">)</span>
+</span></pre></div>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">40</span><span class="k">class</span> <span class="nc">TimeSensor</span><span class="p">(</span><span class="n">Sensor</span><span class="p">)</span>
+<span class="linenos">41</span>
+<span class="linenos">42</span><span class="o">...</span>
+<span class="linenos">43</span>
+<span class="hll"><span class="linenos">44</span><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+</span><span class="hll"><span class="linenos">45</span>   <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">time</span>
+</span></pre></div>
+</div>
+<p>For example, when the <code class="code highlight python docutils literal highlight-python"><span class="n">Log</span></code> class - which takes <code class="code highlight python docutils literal highlight-python"><span class="n">Sensor</span></code> type objects
+when its created, in much the same way the <code class="code highlight python docutils literal highlight-python"><span class="n">Supervisor</span></code> class takes
+component classes - has its <code class="code highlight python docutils literal highlight-python"><span class="n">update</span><span class="p">()</span></code> method called, this is what happens
+underneath:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">73</span><span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">74</span>
+<span class="linenos">75</span><span class="o">...</span>
+<span class="linenos">76</span>
+<span class="hll"><span class="linenos">77</span><span class="k">for</span> <span class="n">nth_sensor</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">:</span>
+</span><span class="hll"><span class="linenos">78</span>   <span class="bp">self</span><span class="o">.</span><span class="n">readings</span><span class="p">[</span><span class="n">nth_sensor</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sensors</span><span class="p">[</span><span class="n">nth_sensor</span><span class="p">]</span><span class="o">.</span><span class="n">read</span><span class="p">())</span>
+</span></pre></div>
+</div>
+<p>In summary, the <code class="code highlight python docutils literal highlight-python"><span class="n">Sensor</span></code> class basically just provides a modular way to
+treat potential data sources such as temperature sensors, time-stamping etc.
+This would be equally applicable for other potential data sources, such as
+the MCU’s ADC etc.</p>
+</section>
+<section id="configuration-messages">
+<h3>Configuration Messages<a class="headerlink" href="#configuration-messages" title="Permalink to this heading">¶</a></h3>
+<p>As discussed above, configuration messages are passed from the Pi to the MCU
+in order to change the behaviour of some of the component classes, in response
+to the user’s use of the system.</p>
+<p>The actual format of the configuration messages is UTF-8 byte-encoded string
+representations of Python dictionaries, where the following key:value pairs
+can be used:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">CONFIG</span> <span class="o">=</span> <span class="p">{</span>
+   <span class="s1">&#39;RUN&#39;</span>       <span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># Specifies system idle / active</span>
+   <span class="s1">&#39;MODE&#39;</span>      <span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># Specifies heat ramp / temp hold mode</span>
+   <span class="s1">&#39;LOG&#39;</span>       <span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="c1"># Initiates time-stamping when enabled</span>
+   <span class="s1">&#39;TARGET&#39;</span>    <span class="p">:</span> <span class="mi">23</span><span class="p">,</span>    <span class="c1"># Target heat rate / target temperature</span>
+   <span class="s1">&#39;KP&#39;</span>        <span class="p">:</span> <span class="mf">35.0</span><span class="p">,</span>  <span class="c1"># Proportional gain for PID control loop</span>
+   <span class="s1">&#39;KD&#39;</span>        <span class="p">:</span> <span class="mf">2.0</span><span class="p">,</span>   <span class="c1"># Derivative gain for PID control loop</span>
+   <span class="s1">&#39;KI&#39;</span>        <span class="p">:</span> <span class="mf">3.5</span><span class="p">,</span>   <span class="c1"># Integral gain for PID control loop</span>
+   <span class="s1">&#39;INTERVAL&#39;</span>  <span class="p">:</span> <span class="mf">0.25</span>   <span class="c1"># Time interval between successive readings (s)</span>
+   <span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="api-reference">
+<h2>API Reference:<a class="headerlink" href="#api-reference" title="Permalink to this heading">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="micro/main.html">main</a><ul>
@@ -75,9 +281,9 @@ programming.</p>
 </li>
 </ul>
 </div>
-</section>
-<section id="components">
-<h3>Components<a class="headerlink" href="#components" title="Permalink to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="micro/client.html">client</a><ul>
@@ -98,9 +304,9 @@ programming.</p>
 </li>
 </ul>
 </div>
-</section>
-<section id="wrapper-classes">
-<h3>Wrapper classes<a class="headerlink" href="#wrapper-classes" title="Permalink to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="micro/sensor.html">sensor</a><ul>
@@ -109,9 +315,9 @@ programming.</p>
 </li>
 </ul>
 </div>
-</section>
-<section id="utilities">
-<h3>Utilities<a class="headerlink" href="#utilities" title="Permalink to this heading">¶</a></h3>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="micro/boot.html">boot</a><ul>
@@ -129,7 +335,6 @@ programming.</p>
 </li>
 </ul>
 </div>
-</section>
 </section>
 </section>
 
@@ -165,12 +370,28 @@ programming.</p>
 <li class="toctree-l1"><a class="reference internal" href="hardware.html">Hardware reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ui-software.html">Dashboard (UI) software reference</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Microcontroller software reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#structure">Structure</a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#main-programme">Main programme</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#components">Components</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#wrapper-classes">Wrapper classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#utilities">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supervisor">Supervisor</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#program-structure">Program Structure:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#component-classes">Component classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#supervisor-classes">Supervisor classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sensor-classes">Sensor classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#configuration-messages">Configuration Messages</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#api-reference">API Reference:</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="micro/main.html">main</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/client.html">client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/log.html">log</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/PID.html">PID</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/sensor.html">sensor</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/boot.html">boot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/setup.html">setup</a></li>
+<li class="toctree-l3"><a class="reference internal" href="micro/utils.html">utils</a></li>
 </ul>
 </li>
 </ul>

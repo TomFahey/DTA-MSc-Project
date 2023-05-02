@@ -6,7 +6,7 @@ Hardware reference
 Overview
 --------
 
-A high-level overview of the system, indicating the respective roles of the 
+A top-down overview of the system, indicating the respective roles of the 
 components, is shown below:
 
 .. figure:: ../images/HardwareDetailView.png
@@ -40,6 +40,7 @@ Electronics
 
 
 
+.. _ref_hardware_electronics_sensors:
 
 Temperature Sensors
 ^^^^^^^^^^^^^^^^^^^
@@ -83,6 +84,7 @@ the SPI bus.
 The Adafruit breakout boards used for the system integrate these ICs, allowing any 
 combination of up to 4 RTDs/Thermocouples to be used for temperature measurements.
 
+.. _ref_hardware_electronics_actuators:
 
 Temperature Actuators
 ^^^^^^^^^^^^^^^^^^^^^

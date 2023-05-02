@@ -34,8 +34,6 @@ class Supervisor:
         
         self.components = [serial_client, PID, log]
         self.client = serial_client
-        self.PID = PID
-        self.log = log
     
         self.config = {
              'RUN': False,

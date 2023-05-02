@@ -143,7 +143,10 @@ heat rate / hold temperature and PID parameters.</p></li>
             <span class="s1">&#39;KD&#39;</span><span class="p">:</span><span class="mf">2.0</span>            <span class="c1"># Derivative gain</span>
         <span class="p">}</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot; Configuration dictionary for the PID controller.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration dictionary for the PID controller. As a ResponsiveDict,</span>
+<span class="sd">    whenever the value of any of the dictionary items in changed, a function</span>
+<span class="sd">    will be called in response. See the `set_callback` lines in the `__init__`</span>
+<span class="sd">    method.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1">#: Error</span>
@@ -156,44 +159,79 @@ heat rate / hold temperature and PID parameters.</p></li>
     <span class="n">delta_u</span> <span class="o">=</span> <span class="mf">0.</span>
 
     
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor</span><span class="p">,</span> <span class="n">kp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ki</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">kd</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">Ts</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sensor</span><span class="p">,</span> <span class="n">kp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">ki</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">kd</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">sample_time</span><span class="o">=</span><span class="mf">0.25</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_sensor</span> <span class="o">=</span> <span class="n">sensor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ResponsiveDict</span><span class="p">({</span><span class="s1">&#39;RUN&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span><span class="s1">&#39;MODE&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> <span class="s1">&#39;TARGET&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> <span class="s1">&#39;KP&#39;</span><span class="p">:</span> <span class="n">kp</span><span class="p">,</span> <span class="s1">&#39;KI&#39;</span><span class="p">:</span><span class="n">ki</span><span class="p">,</span> <span class="s1">&#39;KD&#39;</span><span class="p">:</span><span class="n">kd</span><span class="p">})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">ResponsiveDict</span><span class="p">(</span>
+            <span class="p">{</span>
+                <span class="s1">&#39;RUN&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+                <span class="s1">&#39;MODE&#39;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span> 
+                <span class="s1">&#39;TARGET&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span><span class="p">,</span> 
+                <span class="s1">&#39;KP&#39;</span><span class="p">:</span> <span class="n">kp</span><span class="p">,</span> 
+                <span class="s1">&#39;KI&#39;</span><span class="p">:</span><span class="n">ki</span><span class="p">,</span> 
+                <span class="s1">&#39;KD&#39;</span><span class="p">:</span><span class="n">kd</span>
+                <span class="p">}</span>
+            <span class="p">)</span>
 
-        <span class="c1"># Debugging</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span><span class="s1">&#39;MODE&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">,</span> <span class="n">args</span> <span class="p">:</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;MODE&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;MODE&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># When &#39;MODE&#39; value changes, call self.reset(&#39;MODE&#39;) if </span>
+        <span class="c1"># new value != old value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span><span class="s1">&#39;KP&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">,</span> <span class="n">args</span> <span class="p">:</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;KP&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;KP&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># When &#39;KP&#39; value changes, call self.reset(&#39;MODE&#39;) if </span>
+        <span class="c1"># new value != old value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span><span class="s1">&#39;KD&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">,</span> <span class="n">args</span> <span class="p">:</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;KD&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;KD&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># When &#39;KD&#39; value changes, call self.reset(&#39;MODE&#39;) if </span>
+        <span class="c1"># new value != old value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">set_callback</span><span class="p">(</span><span class="s1">&#39;KI&#39;</span><span class="p">,</span> <span class="k">lambda</span> <span class="n">vals</span><span class="p">,</span> <span class="n">args</span> <span class="p">:</span>
-                                 <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;KI&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+                             <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">(</span><span class="s1">&#39;KI&#39;</span><span class="p">)</span> <span class="k">if</span> <span class="n">vals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">!=</span><span class="n">vals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="c1"># When &#39;KI&#39; value changes, call self.reset(&#39;MODE&#39;) if </span>
+        <span class="c1"># new value != old value</span>
 
+        <span class="c1">### Set initial values</span>
+
+        <span class="c1"># Error values</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e1</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e2</span> <span class="o">=</span> <span class="mf">0.</span>
+
+        <span class="c1"># Output value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="c1"># Change in output value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delta_u</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k1</span> <span class="o">=</span> <span class="n">kp</span> <span class="o">+</span> <span class="p">(</span><span class="n">ki</span><span class="o">*</span><span class="n">Ts</span><span class="p">)</span> <span class="o">+</span><span class="n">kd</span><span class="o">/</span><span class="n">Ts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="o">-</span><span class="n">kp</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">kd</span><span class="o">/</span><span class="n">Ts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">k3</span> <span class="o">=</span> <span class="n">kd</span><span class="o">/</span><span class="n">Ts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Ts</span> <span class="o">=</span> <span class="n">Ts</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time1</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time0</span> <span class="o">=</span> <span class="mf">0.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Temp0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
+
+        <span class="c1"># Sample time</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Ts</span> <span class="o">=</span> <span class="n">sample_time</span>
+
+        <span class="c1"># PID algorithm pre-factors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k1</span> <span class="o">=</span> <span class="n">kp</span> <span class="o">+</span> <span class="p">(</span><span class="n">ki</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span><span class="p">)</span> <span class="o">+</span> <span class="n">kd</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="o">-</span><span class="n">kp</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="n">kd</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">k3</span> <span class="o">=</span> <span class="n">kd</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="mf">0.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
         
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">temp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Current temperature value measured by sensor</span>
+
+<span class="sd">        :return: Current temperature value</span>
+<span class="sd">        :rtype: float</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_sensor</span><span class="o">.</span><span class="n">temperature</span>
     
-    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">callback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trigger</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reset PID controller values to defaults</span>
+
+<span class="sd">        Can specify optional string `trigger`, to print which config</span>
+<span class="sd">        value changed, for debugging</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="s1">&#39;Reset!&#39;</span>
-        <span class="k">if</span> <span class="n">callback</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39; Due to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">callback</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">trigger</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">+=</span> <span class="s1">&#39; Due to </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">trigger</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="mf">0.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e1</span> <span class="o">=</span> <span class="mf">0.</span>
@@ -203,47 +241,75 @@ heat rate / hold temperature and PID parameters.</p></li>
         <span class="bp">self</span><span class="o">.</span><span class="n">k1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KP&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KI&#39;</span><span class="p">]</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span> <span class="o">+</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KD&#39;</span><span class="p">],</span><span class="mf">0.001</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k2</span> <span class="o">=</span> <span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KP&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">2</span><span class="o">*</span><span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KD&#39;</span><span class="p">],</span><span class="mf">0.001</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">k3</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KD&#39;</span><span class="p">],</span><span class="mf">0.001</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">Ts</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start_temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
+
+        <span class="c1"># Print values of Kp, Ki and Kd (useful for debugging)</span>
         <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KP&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KI&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;KD&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time0</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Temp0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
 
     <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Calculate updated values for PWM output</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This function updates the frequency of the PWM output, as well as</span>
+<span class="sd">        the direction pin, using the PID algorithm. </span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Temp1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">time1</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+        <span class="c1"># Update current temperature and time values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_temperature</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">temp</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">monotonic</span><span class="p">()</span>
+
+        <span class="c1"># Set e2 &lt;= e1, e1 &lt;= e</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e1</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">e1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">e</span>
+    
+        <span class="c1"># For temperature ramp mode, calculate error as</span>
+        <span class="c1"># e = start_temperature + (ramp_time * heat_rate) - current_temperature</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;MODE&#39;</span><span class="p">]:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">time1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">time0</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">60.</span><span class="p">)</span> <span class="o">-</span>  \
-                     <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Temp1</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">Temp0</span><span class="p">)</span>
+            <span class="n">ramp_time</span> <span class="o">=</span> <span class="nb">max</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">current_time</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_time</span><span class="p">),</span> <span class="mf">0.1</span><span class="p">)</span>
+            <span class="n">heat_rate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">60.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">start_temperature</span> <span class="o">+</span> <span class="p">(</span><span class="n">ramp_time</span> <span class="o">*</span> <span class="n">heat_rate</span><span class="p">)</span> <span class="o">-</span> \
+                                <span class="bp">self</span><span class="o">.</span><span class="n">current_temperature</span>
+
+        <span class="c1"># For temperature hold mode, calculate error as</span>
+        <span class="c1"># e = target_temp - current_temp</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">Temp1</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;TARGET&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_temperature</span>
+
+        <span class="c1"># Calculate required change in output based on PID algorithm</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">delta_u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">k1</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span> <span class="o">+</span> \
                        <span class="bp">self</span><span class="o">.</span><span class="n">k2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">e1</span> <span class="o">+</span> \
                        <span class="bp">self</span><span class="o">.</span><span class="n">k3</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">e2</span>
+        
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;RUN&#39;</span><span class="p">]:</span>
+            <span class="c1"># If active, modify output</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">delta_u</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If idle, set output to 0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Print error value (useful for debugging)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Error: </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">e</span><span class="p">))</span>
+
+        <span class="c1"># PID output limits, bounding output between +100% and -100%</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">&gt;</span> <span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="mf">100.</span>
         <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">100</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="o">-</span><span class="mf">100.</span>
+
+        <span class="c1"># Set PWM duty cycle and direction pins according to output value</span>
         <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># Direction pin set HIGH for positive u</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin1</span><span class="o">.</span><span class="n">duty_cycle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65535</span><span class="p">)</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin2</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin3</span><span class="o">.</span><span class="n">duty_cycle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65535</span><span class="p">)</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin4</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">elif</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">&lt;</span><span class="mi">0</span><span class="p">):</span>
+            <span class="c1"># Direction pin set LOW for negative u</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin1</span><span class="o">.</span><span class="n">duty_cycle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65535</span><span class="p">)</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin2</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin3</span><span class="o">.</span><span class="n">duty_cycle</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="o">-</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="o">/</span><span class="mf">100.0</span><span class="p">)</span> <span class="o">*</span> <span class="mi">65535</span><span class="p">)</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin4</span><span class="o">.</span><span class="n">value</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If u=0, set duty cycle to zero</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin1</span><span class="o">.</span><span class="n">duty_cycle</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="n">setup</span><span class="o">.</span><span class="n">enPin3</span><span class="o">.</span><span class="n">duty_cycle</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
@@ -283,12 +349,12 @@ heat rate / hold temperature and PID parameters.</p></li>
 <li class="toctree-l1"><a class="reference internal" href="../hardware.html">Hardware reference</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ui-software.html">Dashboard (UI) software reference</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../micro-software.html">Microcontroller software reference</a><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="../micro-software.html#overview">Overview</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../micro-software.html#structure">Structure</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="../micro-software.html#main-programme">Main programme</a></li>
-<li class="toctree-l3 current"><a class="reference internal" href="../micro-software.html#components">Components</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../micro-software.html#introduction">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../micro-software.html#overview">Overview</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../micro-software.html#main-program">Main program</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../micro-software.html#component-classes">Component classes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../micro-software.html#wrapper-classes">Wrapper classes</a></li>
-<li class="toctree-l3"><a class="reference internal" href="../micro-software.html#utilities">Utilities</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../micro-software.html#miscellaneous">Miscellaneous</a></li>
 </ul>
 </li>
 </ul>
