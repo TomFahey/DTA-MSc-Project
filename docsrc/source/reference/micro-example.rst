@@ -1,5 +1,5 @@
-Microcontroller example
-=======================
+Microcontroller software example
+================================
 
 .. role:: pyc(code)
    :language: python
@@ -11,14 +11,10 @@ This document describes a stripped-down version of the python code developed
 for the DTA system, intended to provide a more easy to follow demonstration
 of the underlying processes going on in the full implementation.
 
-The stripped-down version of the code is contained within a single file,
+The stripped-down version of the code is (mostly) contained within a single file,
 main.py, which carries out an approximately equivalent routine to the
-full implementation, with the exception that the data generated on the
-MCU is printed to the interactive Python REPL, rather than being written
-to the serial connection.
-
-The idea is that, by executing different parts of the python code, 
-
+full microcontroller code, without the use of programming abstractions
+such as separate classes and modules. 
 
 Requirements
 ------------
@@ -80,7 +76,7 @@ previously cold side now hot etc.
 For the MAX31865 amplifier board, you may need to short some of the solder
 bridges arranged on the board, depending on the number of wires used for
 your RTD sensor. You can find more information about this in the Adafruit
-`online instructions<https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/rtd-wiring-config>`_.
+`online instructions <https://learn.adafruit.com/adafruit-max31865-rtd-pt100-amplifier/rtd-wiring-config>`_.
 
 Software setup
 --------------
@@ -233,7 +229,7 @@ Ports (COM & LPT) heading, as in the picture below:
 
 .. figure:: ../images/DeviceManagerCOMPort.png
    :align: center
-   :scale: 50%
+   :scale: 70%
    :alt: Microcontroller logical block diagram
    
 We can see that two serial devices are listed, COM6 and COM7. Looing back
@@ -267,7 +263,7 @@ Now open the application PuTTY. You should see something like the following:
 
 .. figure:: ../images/PuttyInitial.png
    :align: center
-   :scale: 50%
+   :scale: 80%
    :alt: Microcontroller logical block diagram
    
 Change the connection type to Serial, entering the COM port that isn't
@@ -276,7 +272,7 @@ being used for the REPL interpreter and setting the "Speed" value to
 
 .. figure:: ../images/PuttySerial.png
    :align: center
-   :scale: 50%
+   :scale: 80%
    :alt: Microcontroller logical block diagram
    
 Now press "Open". You should see a black window appear similar to the
@@ -284,35 +280,37 @@ following:
 
 .. figure:: ../images/PuttySerialWindow.png
    :align: center
-   :scale: 50%
+   :scale: 70%
    :alt: Microcontroller logical block diagram
    
 Going back to Thonny, enter the following code in the interpreter shell:
 
 .. code-block:: python
    
-   serial.write(b'Hello, World!\n')
+   >>> serial.write(b'Hello, World!\n')
    
+Looking in the PuTTY window, you should notice that the following text
+is now present:
 
 .. figure:: ../images/PuttySerialSend.png
    :align: center
-   :scale: 50%
+   :scale: 80%
    :alt: Microcontroller logical block diagram
    
-Now, going back to the PuTTY window, right click the top of the window
+Now, right click the top of the PuTTY window
 and select "Change Settings". Select the category "Terminal", then set
 the options "Local echo" and "Local line editing" to "Force on", before
 clicking "Apply":
 
 .. figure:: ../images/PuttySerialSettings.png
    :align: center
-   :scale: 50%
+   :scale: 80%
    :alt: Microcontroller logical block diagram
    
 
 .. figure:: ../images/PuttySerialSettingsTerminal.png
    :align: center
-   :scale: 50%
+   :scale: 80%
    :alt: Microcontroller logical block diagram
    
 Now, try typing "Goodbye, World!" into the **PuTTY** window, then press
@@ -320,14 +318,14 @@ Enter on your keyboard:
 
 .. figure:: ../images/PuttySerialReceive.png
    :align: center
-   :scale: 50%
+   :scale: 80%
    :alt: Microcontroller logical block diagram
    
 Going back to Thonny, now type into the REPL prompt:
 
 .. code-block:: python
    
-   serial.readline()
+   >>> serial.readline()
 
 You should see the following message:
 
@@ -339,14 +337,102 @@ You should see the following message:
 Putting it all together
 -----------------------
 
-By now, you've basically seen all of the python code used by the MCU to
-interact with its counterparts, such as the breakout boards, H-Bridge
-and computer.
+By now, you've basically seen all of the core library functions used to
+control the the MCU, when it interacts with the other system components,
+such as the temperature sensors, H-Bridge and Raspberry Pi. 
 
-The remainder of the code, from line 167 onwards, simply uses these techniques
-with the right parametes and appropriate time, such that the MCU does what we
-need it to do.
+The remainder of the code, from line 167 onwards, simply utilises these
+library functions in an organised manner, such that the individual, simple 
+interactions come together to achieve more sophisticated behaviour.
 
-We can observe this by calling the function :pyc:`main.py`, which is defined
-from line 383-442. 
-  
+To demonstrate this, try calling the function :pyc:`main.py`, in the REPL
+prompt:
+
+.. code-block:: python
+
+   >>> main()
+   
+You should see a stream of messages printing out to the REPL shell, similar
+to the following:
+
+.. figure:: ../images/ThonnyMain.png
+   :align: center
+   :scale: 50%
+   :alt: Microcontroller logical block diagram
+   
+Can you notice anything about the timestamps - in particular, the time
+difference between each one?
+
+Try looking at the function definition of :pyc:`main.py`, in lines 383-392.
+In the function argument, a default argument is specified, consisting
+of a python dictionary called :pyc:`config`:
+
+.. code-block:: python
+   :lineno-start: 383
+
+   def main(
+      config={
+        'RUN'       : False,  # Start heating run
+        'MODE'      : False,  # Switch between heat ramp / temperature hold
+        'LOG'       : False,  # Start time-stamping
+        'TARGET'    : 23,     # Target heat rate / hold temperature
+        'KP'        : 35.0,   # PID proportional gain constant
+        'KD'        : 2.0,    # PID derivative gain constant
+        'KI'        : 3.5,    # PID integral gain constant
+        'INTERVAL'  : 0.25    # Time interval between readings
+   )
+   
+Can you see anything interesting about the dictionary element :pyc:`'INTERVAL'`?
+Now, going back to the PuTTY window, try typing in the following
+
+.. code-block:: python
+
+   {'INTERVAL':2}
+
+
+.. figure:: ../images/PuttyIntervalChange.png
+   :align: center
+   :scale: 80%
+   :alt: Microcontroller logical block diagram
+   
+and hit Return on your keyboard. What do you notice now about the messages
+printing to the REPL?
+
+You might want to try entering different commands in the Putty window -
+however you should take care whenever enabling any options that will
+result in the TEM heating up:
+
+The config value :pyc:`'MODE'` specifies whether the PID control loop will
+attempt to maintain a constant temperature (in degrees Celsius) or a constant 
+heat rate (in degrees Celsius per minute).
+
+The config value :pyc:`'TARGET'` is used in **both** cases, to specify either
+the set point temperature, or set point heat rate. Therefore, you will see 
+a big difference in the TEM's response, depending on the value of :pyc:`'MODE'`,
+when setting the value of :pyc:`'TARGET'` to say:
+
+.. code-block:: python
+
+   {'TARGET':55}
+
+If the value of :pyc:`{'MODE:False'}`, the TEM should heat the hot side until
+it detects that the attached temperature sensors have reached a temperature
+of 55 degrees celsius, at which point it will attempt to maintain that
+temperature.
+
+However, if the value of :pyc:`{'MODE':True}`, the TEM will attempt to heat 
+the hot side at a rate of 55 degrees Celsius per minute, which is almost a
+degree per second. Not only will this result in dangerous temperatures for
+contact with skin in less than a minute, but the microcontroller will
+attempt to constantly maintain that heat rate, up to a 100% duty cycle. 
+
+For DC power supplies with current supplies greater than 2 Amps, this can
+lead to thermoelectrc modules heating up to 120-150 degrees Celsius before they
+self-destruct, due to the internal solder melting.
+
+Therefore, care should be taken when experimenting, and it would be a good
+idea to not power the TEMs for longer than a couple minutes at most.
+
+
+   
+

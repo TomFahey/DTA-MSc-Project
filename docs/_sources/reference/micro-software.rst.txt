@@ -58,8 +58,8 @@ primary interactions:
   bus.
 
 - **PID Control**: As described in the :ref:`ref_hardware_electronics_actuators`
-  section, the heat output of the thermoelectric module is controlled by the
-  H-Bridge electronic circuit. The H-Bridge driver takes two control input signals:
+  section, the heat output of the thermoelectric module is controlled by a
+  H-Bridge electronic circuit. This H-Bridge driver takes two control input signals:
   
     - A PWM signal, controlling the *magnitude* of current supplied to the
       thermoelectric module (and thus *quantity* of heat pumped by
@@ -272,6 +272,7 @@ can be used:
       'KI'        : 3.5,   # Integral gain for PID control loop
       'INTERVAL'  : 0.25   # Time interval between successive readings (s)
       }
+      
 
 API Reference:
 --------------

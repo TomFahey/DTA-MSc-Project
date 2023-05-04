@@ -272,6 +272,7 @@ can be used:
       'KI'        : 3.5,   # Integral gain for PID control loop
       'INTERVAL'  : 0.25   # Time interval between successive readings (s)
       }
+      
 
 API Reference:
 --------------
