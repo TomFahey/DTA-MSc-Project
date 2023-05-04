@@ -19,28 +19,31 @@ such as separate classes and modules.
 Requirements
 ------------
 
-In order to properly familiarise yourself with the actual effect of each
-part of the code, you will need, at a minimum, a few things:
+In order to properly familiarise yourself with the effects of each
+part of the code you will need the following items:
 
 - A Raspberry Pi Pico, with headers attached, running CircuitPython (7.3.3,
-  preferably)
-- A Windows or Linux computer, with Thonny installed. On Windows, you can
-  install a piece of software called PuTTY, to interact with the Pico
-  using serial communications. On Linux, there are many serial communication
-  programs available, such as screen, cu (terminal based), cutecom (graphical)
+  preferably). Instructions on how to install CircuitPython 
+  `here <https://learn.adafruit.com/welcome-to-circuitpython/installing-circuitpython>`_.
+- A Windows or Linux computer, with the Python editor 
+  `Thonny <https://thonny.org/>`_  installed. Also needed is a serial client
+  application. `PuTTY <https://www.putty.org/>`_, available on both Windows
+  and Linux, is an excellent choice for this and is the client used in this
+  tutorial. 
 - A Micro USB cable to attach the Pico to the computer
-- At least one Adafruit MAX31865 RTD amplifier breakout board and an
-  accompanying RTD temperature sensor
-- At least one Adafruit MAX31856 Thermocouple amplifier breakout board and
-  an accompanying thermocouple temperature sensor
+- At least one `Adafruit MAX31865 RTD amplifier <https://www.adafruit.com/product/3328>`_ 
+  breakout board and an accompanying RTD temperature sensor
+- At least one `Adafruit MAX31856 Thermocouple amplifier <https://www.adafruit.com/product/3263>`_ 
+  breakout board and an accompanying thermocouple temperature sensor
 - For proper demonstration of temperature control, a thermoelectric module
-  (TEM), DC power supply and HAT-MDD10A H-Bridge motor controller are strongly
-  recommended. 
-- It is feasible to substitute the H-Bridge controller with a simple
-  appropriately spec'd high-side or low-side logic-level MOSFET, using 
-  the PWM output of the MCU to control the MOSFET's gate terminal,
-  however you **must** edit lines 459 and 461, setting the value
-  of the PWM pin's duty cycle to zero.
+  (TEM), DC power supply and 
+  `HAT-MDD10A <https://www.cytron.io/p-10amp-6v-24v-dc-motor-driver-hat-for-rpi-2-channels>`_ 
+  H-Bridge motor controller are strongly recommended. 
+- It is feasible to substitute the H-Bridge controller with an appropriately 
+  spec'd high-side or low-side logic-level MOSFET - such as the FQP30N06L -
+  using the PWM output of the MCU to control the MOSFET's gate terminal.
+  However, if doing so, you **must** edit lines 435 and 437, making sure to
+  set the value of both PWM pin's duty cycle to zero, when :pyc:`u<0`.
 - Wires and preferably a small breadboard to connect everything
 
 Hardware setup
